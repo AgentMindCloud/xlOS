@@ -1,16 +1,21 @@
-"""Safety scanning for xlOS."""
+"""xlOS safety subsystem — Constitution scanner and supporting checks."""
 
 from __future__ import annotations
 
-from typing import Any
+from xlos.safety.scanner import (
+    CONSTITUTION_VERSION,
+    Finding,
+    ScanResult,
+    SEVERITIES,
+    SEVERITY_RANK,
+    scan_manifest,
+)
 
-__all__ = ["scan_manifest"]
-
-
-def scan_manifest(manifest: dict[str, Any]) -> None:
-    """Scan a manifest for safety violations.
-
-    Stub for Phase 3a. Phase 3b will port the Constitution scanner from
-    ``grok-agent/safety/``.
-    """
-    return None
+__all__ = [
+    "CONSTITUTION_VERSION",
+    "Finding",
+    "ScanResult",
+    "SEVERITIES",
+    "SEVERITY_RANK",
+    "scan_manifest",
+]
