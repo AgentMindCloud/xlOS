@@ -139,7 +139,7 @@ describe('parseVisuals', () => {
     expect(parseVisuals(input)).toBeNull();
   });
 
-  it('accepts plasma accent (Spectral Tier 4)', () => {
+  it('accepts plasma accent', () => {
     const input = {
       style: 'futuristic',
       accent_color: 'plasma',
@@ -150,7 +150,7 @@ describe('parseVisuals', () => {
     expect(parsed?.accent_color).toBe('plasma');
   });
 
-  it('accepts aurora accent (Spectral Tier 4)', () => {
+  it('accepts aurora accent', () => {
     const input = {
       style: 'premium',
       accent_color: 'aurora',
