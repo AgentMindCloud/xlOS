@@ -1,0 +1,163 @@
+name: release
+
+# Tag-only trigger. release.yml never runs on PR or push-to-main.
+# Cutting a release: see RELEASING.md.
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: read
+
+jobs:
+  build-wheels:
+    name: Build wheels (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install uv
+        run: python -m pip install --upgrade pip uv
+
+      - name: Build wheel + sdist
+        run: uv build
+
+      - name: List built artifacts
+        run: ls -la dist/
+
+      - name: Smoke install
+        run: python -m pip install dist/*.whl
+
+      - name: Smoke run — xlos --version
+        run: xlos --version
+
+      - name: Smoke run — xlos doctor (advisory)
+        run: xlos doctor || echo "xlos doctor returned non-zero (advisory at build-time; not gating)"
+
+      - name: Upload dist artifact (3.11 only — pure-Python wheel is universal)
+        if: matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-py3.11
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
+
+  publish-pypi:
+    name: Publish to PyPI
+    needs: build-wheels
+    runs-on: ubuntu-latest
+    # Belt-and-suspenders: trigger config already enforces tag-only, but assert
+    # here too so accidental future-edits cannot silently broaden the scope.
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    environment:
+      name: pypi-production
+      url: https://pypi.org/project/xlos/
+    permissions:
+      contents: read
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-py3.11
+          path: dist/
+
+      # Relying on pypa/gh-action-pypi-publish's built-in retry/backoff for
+      # transient HTTP 5xx errors from PyPI. See PR body for rationale.
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          verbose: true
+          print-hash: true
+
+  attach-to-release:
+    name: Attach artifacts to GitHub Release
+    needs: build-wheels
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-py3.11
+          path: dist/
+
+      - name: Create GitHub Release with artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+
+  redeploy-marketplace:
+    name: Redeploy marketplace (Vercel production)
+    needs: publish-pypi
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # GitHub Actions cannot reference `secrets.*` in a job-level `if:`.
+      # Use the same env-presence pattern as marketplace.yml's deploy job
+      # so the workflow skips cleanly when VERCEL_TOKEN is not configured.
+      - name: Check Vercel token
+        id: token
+        run: |
+          if [ -n "${VERCEL_TOKEN}" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "VERCEL_TOKEN secret not configured — skipping marketplace redeploy."
+          fi
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Set up Node.js
+        if: steps.token.outputs.available == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: marketplace/package-lock.json
+
+      - name: Install marketplace dependencies
+        if: steps.token.outputs.available == 'true'
+        working-directory: marketplace
+        run: npm ci
+
+      - name: Pull Vercel production environment
+        if: steps.token.outputs.available == 'true'
+        working-directory: marketplace
+        run: npx vercel pull --yes --environment=production --token="${VERCEL_TOKEN}"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build marketplace for production
+        if: steps.token.outputs.available == 'true'
+        working-directory: marketplace
+        run: npx vercel build --prod --token="${VERCEL_TOKEN}"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy prebuilt marketplace to Vercel production
+        if: steps.token.outputs.available == 'true'
+        working-directory: marketplace
+        run: npx vercel deploy --prebuilt --prod --token="${VERCEL_TOKEN}"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
