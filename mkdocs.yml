@@ -1,0 +1,165 @@
+site_name: xlOS docs
+site_description: Cross-platform developer runtime for Grok agents on X. CLI reference, agent authoring guide, schema reference, and Constitution articles.
+site_url: https://agentmindcloud.github.io/xlOS/
+site_author: AgentMindCloud
+repo_url: https://github.com/AgentMindCloud/xlOS
+repo_name: AgentMindCloud/xlOS
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; 2026 AgentMindCloud. Apache 2.0 licensed.
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: en
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+  palette:
+    - media: "(prefers-color-scheme)"
+      scheme: slate
+      primary: black
+      accent: cyan
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.action.edit
+    - content.action.view
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/AgentMindCloud/xlOS
+      name: AgentMindCloud on GitHub
+
+plugins:
+  - search
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      permalink_title: Link to this section
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.details
+  - pymdownx.keys
+  - pymdownx.smartsymbols
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      auto_title: false
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - getting-started/index.md
+      - Install the CLI: getting-started/installation.md
+      - Your first agent: getting-started/first-agent.md
+      - Deploy to production: getting-started/deploy.md
+  - CLI reference:
+      - cli/reference.md
+  - Guides:
+      - guides/index.md
+      - Multi-agent swarms: guides/multi-agent-swarms.md
+      - Tool schemas: guides/tool-schemas.md
+      - Safety profiles: guides/safety-profiles.md
+      - Deployment: guides/deployment.md
+      - X integration: guides/x-integration.md
+  - Constitution:
+      - constitution/index.md
+  - v2.14 (latest):
+      - v2.14/index.md
+      - Visuals reference: v2.14/visuals.md
+      - Migration from v2.13: v2.14/migration.md
+      - Accessibility (WCAG 2.2 AA): v2.14/accessibility.md
+  - v2.13:
+      - v2.13/index.md
+      - Migration from v2.12: v2.13/migration-from-v2.12.md
+      - Release notes: v2.13/release-notes.md
+      - Spec:
+          - v2.13/spec/index.md
+          - grok-agent.yaml: v2.13/spec/grok-agent-yaml.md
+          - grok-analytics.yaml: v2.13/spec/grok-analytics-yaml.md
+          - grok-config.yaml: v2.13/spec/grok-config-yaml.md
+          - grok-deploy.yaml: v2.13/spec/grok-deploy-yaml.md
+          - grok-docs.yaml: v2.13/spec/grok-docs-yaml.md
+          - grok-prompts.yaml: v2.13/spec/grok-prompts-yaml.md
+          - grok-security.yaml: v2.13/spec/grok-security-yaml.md
+          - grok-test.yaml: v2.13/spec/grok-test-yaml.md
+          - grok-tools.yaml: v2.13/spec/grok-tools-yaml.md
+          - grok-ui.yaml: v2.13/spec/grok-ui-yaml.md
+          - grok-update.yaml: v2.13/spec/grok-update-yaml.md
+          - grok-workflow.yaml: v2.13/spec/grok-workflow-yaml.md
+  - v2.12 (pinned):
+      - v2.12/index.md
+      - Spec:
+          - v2.12/spec/index.md
+          - grok-install.yaml: v2.12/spec/grok-install-yaml.md
+          - grok-agent.yaml: v2.12/spec/grok-agent-yaml.md
+          - grok-workflow.yaml: v2.12/spec/grok-workflow-yaml.md
+          - grok-security.yaml: v2.12/spec/grok-security-yaml.md
+          - grok-prompts.yaml: v2.12/spec/grok-prompts-yaml.md
+  - Ecosystem:
+      - ecosystem/index.md
+      - xAI SDK: ecosystem/xai-sdk.md
+      - LiteLLM: ecosystem/litellm.md
+      - Semantic Kernel: ecosystem/semantic-kernel.md
+  - Migration:
+      - migration/v215-to-v214-extensions.md
