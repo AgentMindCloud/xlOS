@@ -22,7 +22,7 @@ export default function SubmitPage() {
             description="Fill in the details below and we’ll open a pre-populated pull request on awesome-grok-agents. Review is weekly."
           />
         </div>
-        <div className="spectral-divider" aria-hidden />
+        <div className="plate-divider" aria-hidden />
       </section>
 
       <Section>

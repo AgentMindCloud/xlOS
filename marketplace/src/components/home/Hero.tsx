@@ -17,7 +17,7 @@ export function Hero() {
 
         <h1 className="max-w-4xl font-display text-4xl font-semibold leading-[0.95] tracking-tightest text-ink sm:text-5xl md:text-6xl lg:text-7xl">
           The community marketplace for{' '}
-          <span className="text-spectral chromatic-aberration">Grok-native</span> agents on X.
+          <span className="text-plate chromatic-aberration">Grok-native</span> agents on X.
         </h1>
 
         <p className="max-w-2xl text-base text-ink-muted sm:text-lg">
@@ -51,7 +51,7 @@ export function Hero() {
           <StatPill value="One-click" label="Install on X" tone="plasma" />
         </div>
       </div>
-      <div className="spectral-divider" />
+      <div className="plate-divider" />
     </section>
   );
 }

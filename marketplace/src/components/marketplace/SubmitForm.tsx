@@ -180,7 +180,7 @@ export function SubmitForm() {
 
       <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">
         <GlassCard padding="lg" className="relative overflow-hidden flex flex-col gap-3">
-          <div className="absolute inset-x-0 top-0 spectral-divider" aria-hidden />
+          <div className="absolute inset-x-0 top-0 plate-divider" aria-hidden />
           <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-aurora">Preview</p>
           <h3 className="font-display text-xl tracking-tight text-ink">
             {form.name || 'Your agent name'}

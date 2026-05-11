@@ -4,7 +4,7 @@
  * use Tailwind utilities backed by these tokens (`bg-bg`, `text-plasma`, etc.)
  * so the locked brand system stays the single source of truth.
  *
- * Spectral palette (Tier 4): Plasma + Aurora are the primary identity now;
+ * Brand palette: Plasma + Aurora are the primary identity now;
  * Cyan + Green stay as legacy accents for safety / success / data states.
  */
 export const BRAND = {

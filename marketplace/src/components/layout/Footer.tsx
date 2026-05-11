@@ -129,7 +129,7 @@ export function Footer() {
         </div>
 
         <div className="relative mt-10 pt-6 sm:flex sm:items-center sm:justify-between sm:gap-4">
-          <div className="absolute inset-x-0 top-0 spectral-divider" aria-hidden />
+          <div className="absolute inset-x-0 top-0 plate-divider" aria-hidden />
           <p className="text-xs text-ink-subtle max-w-xl">{DISCLAIMER}</p>
           <p className="text-xs text-ink-subtle mt-4 sm:mt-0">
             © {year} GrokInstall · Built by{' '}

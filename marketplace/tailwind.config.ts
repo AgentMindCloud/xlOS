@@ -55,7 +55,7 @@ const config: Config = {
         cyanGlow: '0 0 24px rgba(0,240,255,0.30)',
         greenGlow: '0 0 24px rgba(0,255,157,0.30)',
         cyanGlowSoft: '0 0 12px rgba(0,240,255,0.18)',
-        spectral: '0 0 36px rgba(255,30,112,0.22), 0 0 60px rgba(0,224,213,0.18)',
+        plate: '0 0 36px rgba(255,30,112,0.22), 0 0 60px rgba(0,224,213,0.18)',
       },
       backdropBlur: {
         gi: '20px',

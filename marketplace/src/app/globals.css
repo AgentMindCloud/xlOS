@@ -8,7 +8,7 @@
   --ink-muted: #e5e5e5;
   --ink-subtle: rgba(255, 255, 255, 0.5);
 
-  /* Spectral palette — Tier 4 primary identity */
+  /* Brand palette */
   --plasma: #ff1e70;
   --plasma-glow: rgba(255, 30, 112, 0.3);
   --plasma-soft: rgba(255, 30, 112, 0.18);
@@ -115,7 +115,7 @@
     );
   }
 
-  /* Spectral nebula — Plasma + Aurora soft circles on a deep field */
+  /* Nebula backdrop — Plasma + Aurora soft circles on a deep field */
   .bg-nebula {
     background-color: var(--bg);
     background-image: radial-gradient(
@@ -169,7 +169,7 @@
   }
 
   /* Hairline divider that gradients Plasma → Aurora */
-  .spectral-divider {
+  .plate-divider {
     height: 1px;
     background: linear-gradient(
       90deg,
@@ -180,8 +180,8 @@
     );
   }
 
-  /* Spectral gradient text — Plasma → Aurora */
-  .text-spectral {
+  /* Gradient text — Plasma → Aurora */
+  .text-plate {
     background: linear-gradient(90deg, #ff1e70 0%, #00e0d5 100%);
     -webkit-background-clip: text;
     background-clip: text;

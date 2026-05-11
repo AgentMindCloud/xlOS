@@ -175,10 +175,10 @@ export function MarketplaceGrid({ agents }: { agents: AgentWithStats[] }) {
           padding="lg"
           className="relative mt-6 overflow-hidden flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between"
         >
-          <div className="absolute inset-x-0 top-0 spectral-divider" aria-hidden />
+          <div className="absolute inset-x-0 top-0 plate-divider" aria-hidden />
           <div>
             <h3 className="font-display text-xl text-ink">
-              Shipping a <span className="text-spectral">Grok-native</span> agent?
+              Shipping a <span className="text-plate">Grok-native</span> agent?
             </h3>
             <p className="text-sm text-ink-muted mt-1 max-w-xl">
               Open a PR against awesome-grok-agents with your YAML manifest. We review weekly and

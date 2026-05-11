@@ -46,7 +46,7 @@ export default async function MarketplacePage() {
             description="Search, filter by certification, and compare install counts. New certifications ship weekly."
           />
         </div>
-        <div className="spectral-divider" aria-hidden />
+        <div className="plate-divider" aria-hidden />
       </section>
 
       <Section>

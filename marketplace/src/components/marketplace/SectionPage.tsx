@@ -48,7 +48,7 @@ export async function SectionPage({
             />
           </div>
         </div>
-        <div className="spectral-divider" aria-hidden />
+        <div className="plate-divider" aria-hidden />
       </section>
 
       <Section>

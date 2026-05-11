@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 
 /**
- * Spectral nebula backdrop — soft Plasma + Aurora radial circles + halftone dots.
+ * Nebula backdrop — soft Plasma + Aurora radial circles + halftone dots.
  * Pure SVG + CSS, no runtime JS. Pair with sparse <CircuitTrace /> for premium hero strips.
  */
 export function NebulaBackdrop({
@@ -64,7 +64,7 @@ export function NebulaBackdrop({
           <circle cx="980" cy="180" r="220" fill="url(#nb-plasma-soft)" />
         </g>
 
-        {/* Spectral hairline at the bottom */}
+        {/* Hairline at the bottom */}
         <line
           x1="0"
           y1="780"
