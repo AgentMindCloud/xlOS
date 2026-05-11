@@ -67,3 +67,6 @@ disable_error_code = ["untyped-decorator"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.uv.workspace]
+members = ["packages/grok_paradoxes"]

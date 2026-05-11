@@ -36,7 +36,19 @@ def test_install_imports_platformdirs_and_filelock() -> None:
     assert "from filelock import" in text or "import filelock" in text
 
 
-SKIP_DIRS = {".git", ".venv", "venv", "env", "ENV", "node_modules", "build", "dist", ".tox", ".nox"}
+SKIP_DIRS = {
+    ".git",
+    ".venv",
+    "venv",
+    "env",
+    "ENV",
+    "node_modules",
+    "build",
+    "dist",
+    ".tox",
+    ".nox",
+    ".scratch",
+}
 
 
 def test_no_powershell_files() -> None:
