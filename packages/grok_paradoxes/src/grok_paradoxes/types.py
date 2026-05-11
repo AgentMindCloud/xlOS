@@ -15,7 +15,7 @@ filters can rely on a closed enumeration.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -49,7 +49,7 @@ class Source(BaseModel):
         le=1.0,
         description="Authority weight in [0.0, 1.0]; higher means more trustworthy.",
     )
-    scope: Optional[str] = Field(
+    scope: str | None = Field(
         default=None,
         description="Optional scope label (for example a domain or topic area).",
     )
@@ -81,7 +81,7 @@ class Claim(BaseModel):
         le=1.0,
         description="Parser confidence in the value, in [0.0, 1.0].",
     )
-    timestamp: Optional[datetime] = Field(
+    timestamp: datetime | None = Field(
         default=None,
         description="Optional moment the claim was extracted or observed.",
     )
@@ -126,7 +126,9 @@ class ReconciliationSuggestion(BaseModel):
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
-    preferred_claim: Claim = Field(description="The claim ranked highest by authority * confidence.")
+    preferred_claim: Claim = Field(
+        description="The claim ranked highest by authority * confidence."
+    )
     rationale: str = Field(
         min_length=1,
         description="Short human-readable explanation of the ranking.",

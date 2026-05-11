@@ -15,6 +15,7 @@ Two sources disagree on ACME's quarterly revenue. One is an SEC filing
 (authority=0.9), the other is an anonymous rumor account (authority=0.4).
 ``weight_authorities`` prefers the higher-authority claim and explains why.
 """
+
 from __future__ import annotations
 
 from grok_paradoxes import Claim, Source, weight_authorities

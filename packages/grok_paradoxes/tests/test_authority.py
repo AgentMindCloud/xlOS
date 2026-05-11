@@ -59,9 +59,9 @@ def test_equal_authorities_picks_by_confidence() -> None:
     suggestion = weight_authorities([lower, higher])
 
     assert isinstance(suggestion, ReconciliationSuggestion)
-    assert suggestion.preferred_claim.value == "rising", (
-        "equal authority → higher-confidence claim must be preferred"
-    )
+    assert (
+        suggestion.preferred_claim.value == "rising"
+    ), "equal authority → higher-confidence claim must be preferred"
 
 
 @pytest.mark.smoke
@@ -76,9 +76,9 @@ def test_dominant_authority_wins_regardless_of_confidence() -> None:
 
     suggestion = weight_authorities([weak_claim, strong_claim])
 
-    assert suggestion.preferred_claim.value == "rising", (
-        "dominant authority must win even when the other claim has higher confidence"
-    )
+    assert (
+        suggestion.preferred_claim.value == "rising"
+    ), "dominant authority must win even when the other claim has higher confidence"
     assert suggestion.preferred_claim.source.name == "semantic_scholar"
 
 
@@ -96,9 +96,9 @@ def test_fractional_authorities_picks_from_higher_pair() -> None:
 
     suggestion = weight_authorities([c1, c2, c3])
 
-    assert suggestion.preferred_claim.source.authority >= 0.5, (
-        "preferred claim must come from a non-zero authority source"
-    )
+    assert (
+        suggestion.preferred_claim.source.authority >= 0.5
+    ), "preferred claim must come from a non-zero authority source"
 
 
 @pytest.mark.smoke
@@ -111,9 +111,9 @@ def test_single_source_returns_self_with_zero_delta() -> None:
     suggestion = weight_authorities([only])
 
     assert suggestion.preferred_claim.value == "rising"
-    assert suggestion.confidence_delta == 0, (
-        f"single-claim suggestion must report zero delta, got {suggestion.confidence_delta!r}"
-    )
+    assert (
+        suggestion.confidence_delta == 0
+    ), f"single-claim suggestion must report zero delta, got {suggestion.confidence_delta!r}"
 
 
 @pytest.mark.smoke
@@ -123,10 +123,12 @@ def test_rationale_is_human_readable_string() -> None:
     s1 = _src("newsapi", authority=0.7)
     s2 = _src("gnews", authority=0.7)
 
-    suggestion = weight_authorities([
-        _claim("rising", s1, confidence=0.9),
-        _claim("falling", s2, confidence=0.4),
-    ])
+    suggestion = weight_authorities(
+        [
+            _claim("rising", s1, confidence=0.9),
+            _claim("falling", s2, confidence=0.4),
+        ]
+    )
 
     assert isinstance(suggestion.rationale, str)
     assert suggestion.rationale.strip(), "rationale must not be blank"

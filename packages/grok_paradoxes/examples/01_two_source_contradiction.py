@@ -15,6 +15,7 @@ Two independent sources report different prices for BTC with similar
 self-reported confidence. The detector surfaces the disagreement instead
 of silently picking one.
 """
+
 from __future__ import annotations
 
 from grok_paradoxes import Claim, ContradictionDetector, Source

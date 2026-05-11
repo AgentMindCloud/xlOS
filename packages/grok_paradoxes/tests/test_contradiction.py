@@ -19,7 +19,7 @@ source files in a parallel swarm), the whole module skips cleanly via
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime
 
 import pytest
 
@@ -76,7 +76,9 @@ def test_simple_two_source_contradiction_flagged() -> None:
 
     claims = [
         _claim(subject="grok-os", predicate="adoption", value="rising", source=s1, confidence=0.8),
-        _claim(subject="grok-os", predicate="adoption", value="falling", source=s2, confidence=0.78),
+        _claim(
+            subject="grok-os", predicate="adoption", value="falling", source=s2, confidence=0.78
+        ),
     ]
 
     detector = ContradictionDetector()
@@ -162,9 +164,9 @@ def test_low_confidence_caps_severity_at_minor() -> None:
     # OR it is surfaced with severity strictly less than 'major'.
     if result:
         for cd in result:
-            assert cd.severity != "major", (
-                f"low-confidence claim must not produce major severity, got {cd.severity!r}"
-            )
+            assert (
+                cd.severity != "major"
+            ), f"low-confidence claim must not produce major severity, got {cd.severity!r}"
 
 
 @pytest.mark.smoke

@@ -39,7 +39,7 @@ time.
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Iterable
+from collections.abc import Iterable
 
 from .types import Claim, ReconciliationSuggestion
 
@@ -75,10 +75,7 @@ def _select_group(grouped: dict[tuple[str, str], list[Claim]]) -> list[Claim]:
     for key, group in grouped.items():
         size = len(group)
         top_score = max(_composite_score(c) for c in group)
-        if (
-            size > best_size
-            or (size == best_size and top_score > best_top_score)
-        ):
+        if size > best_size or (size == best_size and top_score > best_top_score):
             best_key = key
             best_size = size
             best_top_score = top_score

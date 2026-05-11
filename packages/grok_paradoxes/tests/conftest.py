@@ -29,7 +29,6 @@ from pathlib import Path
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # sys.path injection — make ``import grok_paradoxes`` resolve even without
 # ``pip install -e``. The package layout is:
@@ -53,6 +52,7 @@ if _SRC.is_dir():
 # ---------------------------------------------------------------------------
 # Marker registration — required because pyproject.toml uses --strict-markers
 # ---------------------------------------------------------------------------
+
 
 def pytest_configure(config: pytest.Config) -> None:
     """Register custom markers so ``--strict-markers`` does not reject them."""

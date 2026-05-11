@@ -16,6 +16,7 @@ returns zero contradictions, which is the consensus signal. The
 ``summary`` helper reports the empty bucket counts for downstream
 dashboards.
 """
+
 from __future__ import annotations
 
 from grok_paradoxes import Claim, ContradictionDetector, Source

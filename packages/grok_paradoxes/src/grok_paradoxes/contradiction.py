@@ -18,8 +18,8 @@ are returned so the caller can surface them verbatim.
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Iterable
 from itertools import combinations
-from typing import Iterable
 
 from .types import Claim, Contradiction, Severity
 
@@ -138,8 +138,7 @@ class ContradictionDetector:
                 authority_spread = abs(claim_a.source.authority - claim_b.source.authority)
                 confidence_spread = abs(claim_a.confidence - claim_b.confidence)
                 score = (
-                    _AUTHORITY_WEIGHT * authority_spread
-                    + _CONFIDENCE_WEIGHT * confidence_spread
+                    _AUTHORITY_WEIGHT * authority_spread + _CONFIDENCE_WEIGHT * confidence_spread
                 )
                 severity = _bucket_severity(score)
                 if not _severity_at_least(severity, self._min_severity):
