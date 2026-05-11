@@ -53,9 +53,7 @@ def install_command(manifest: str | None, from_stdin: bool) -> None:
     scan = scan_manifest(data)
     if scan.has_high_severity:
         details = "; ".join(
-            f"[{f.article}] {f.code}: {f.message}"
-            for f in scan.findings
-            if f.severity == "error"
+            f"[{f.article}] {f.code}: {f.message}" for f in scan.findings if f.severity == "error"
         )
         raise click.ClickException(f"Constitution scanner refused install: {details}")
 

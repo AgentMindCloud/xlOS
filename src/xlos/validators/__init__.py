@@ -52,9 +52,7 @@ def _load_schema() -> dict[str, Any]:
                 if isinstance(data, dict):
                     return data
         except (OSError, json.JSONDecodeError) as exc:
-            raise RuntimeError(
-                f"Could not read v2.14 schema at {candidate}: {exc}"
-            ) from exc
+            raise RuntimeError(f"Could not read v2.14 schema at {candidate}: {exc}") from exc
     raise RuntimeError(
         "v2.14 schema not found. Looked for an importlib.resources "
         "'xlos/schema.json' and for 'spec/v2.14/schema.json' next to the "

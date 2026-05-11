@@ -340,7 +340,7 @@ def _check_article_vi(m: dict[str, Any]) -> list[Finding]:
 # ---------------------------------------------------------------------------
 
 
-_ABSOLUTE_DRIVE_PATTERNS = ("C:\\", "D:\\", "/usr/", "/etc/", "/var/")
+_ABSOLUTE_DRIVE_PATTERNS = (r"C:" + chr(92), r"D:" + chr(92), "/usr/", "/etc/", "/var/")
 _TRACKER_DOMAINS = (
     "google-analytics.com",
     "googletagmanager.com",
