@@ -1,0 +1,154 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: self-evolving-personal-os
+description: Personal second brain on Windows — morning briefings, long-term personal
+  + X memory, auto-evolving workflows, full rewind, and explicit-consent gates on
+  every real-world action.
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - ide
+category: super-agent
+tools:
+- name: morning_brief
+- name: remember_personal
+- name: recall_personal
+- name: evolve_workflow
+- name: apply_workflow_change
+- name: rewind_briefing
+- name: flag_pattern
+- name: export_personal_log
+- name: x_personal_fetch
+- name: gcal_fetch
+- name: gmail_fetch
+- name: local_notes_fetch
+- name: weather_fetch
+- name: news_personal_fetch
+cost_limits:
+  usd_per_session_max: 1.5
+  usd_per_day_max: 5.0
+  tokens_per_session_max: 300000
+extensions:
+  constitution:
+    articles:
+    - II
+    - III
+    - IV
+    - V
+    - VI
+    - VII
+    - VIII
+    - IX
+    - X
+    rules:
+    - User data is sacred — PII never leaves the machine without explicit consent
+      (Article II).
+    - Self-improvement is conservative — every workflow change requires human approval
+      (Article III).
+    - Personal memory is versioned and rewindable (Article IV).
+    - Provenance is append-only — no mutations, no deletes (Article V).
+    - The 4-metric Briefing Trust Score formula is locked (Article VI).
+    - Every emitted briefing carries ≥3 cross-template bridges (Article VII).
+    - Audit triggers fire on memory drift, recall miss, or trust drop below 50 (Article
+      VIII).
+    - Every real-world action (calendar, files, scheduling, X post) requires explicit
+      consent (Article IX).
+    - All user data lives under $env:LOCALAPPDATA, encrypted at rest where the OS
+      supports it (Article X).
+    consent_gates:
+    - publish_briefing
+    - modify_calendar
+    - send_email
+    - post_to_x
+    - send_dm
+    - modify_local_files_outside_appdata
+    - apply_workflow_change
+    - export_personal_log
+    - sync_to_cloud
+    hard_refusals:
+    - Send any user PII to a public API beyond what the connector explicitly declares.
+    - Auto-apply workflow changes without explicit user approval.
+    - Mutate or delete provenance events.
+    - Take any real-world action without an explicit user click.
+    - Post to X impersonating the user without per-post consent.
+  multi_agent_roles:
+    role: orchestrator
+    delegates_to:
+    - living-narrative-fabric
+    - cross-reality-action-fabric
+    shared_memory: mem0://grok-agent-shared
+    message_bus: null
+    max_concurrent_workers: 2
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\self-evolving-personal-os\provenance\events.jsonl
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    append_only: true
+    redact_pii_before_langfuse: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  demo_metadata:
+    storyboard: templates/super-agents/self-evolving-personal-os/DEMO.md
+    status: deferred
+    note: Actual video has not yet been recorded; once recorded, it will be uploaded
+      as a release asset under tag 'super-agent-demos-v1'.
+    deferred_reason: URL returned non-2xx at migration HEAD check
+    original_url: https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/self-evolving-personal-os-demo.mp4
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 1825
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - auto_apply_workflow_change
+    - leak_pii_to_langfuse
+    - mutate_provenance_events
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - publish_briefing
+      - modify_calendar
+      - send_email
+      - post_to_x
+      - send_dm
+      - apply_workflow_change
+      - export_personal_log
+      - modify_local_files_outside_appdata
+      - any cost above $0.50
+  runtime_dispatch:
+    type: python_module
+    module: self_evolving_personal_os.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Self-Evolving Personal OS
+    tagline: Your second brain on Windows — auto-improving, never leaks.
+    categories:
+    - super-agent
+    - personal
+    - second-brain
+    - productivity
+    tags:
+    - streamlit
+    - mem0
+    - qdrant
+    - langfuse
+    - promptfoo
+    - deepeval
+    - windows-first
+    - privacy-first
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/super-agents/self-evolving-personal-os/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

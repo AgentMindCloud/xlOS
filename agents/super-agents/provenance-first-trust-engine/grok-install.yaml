@@ -1,0 +1,80 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: provenance-first-trust-engine
+description: Every response comes with a complete clickable provenance report including
+  all sources, confidence scores, and alternative viewpoints for maximum trust and
+  transparency.
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - ide
+category: super-agent
+tools:
+- name: trace_claims
+- name: verify_source
+- name: render_provenance_report
+cost_limits:
+  usd_per_session_max: 0.8
+  usd_per_day_max: 4.0
+extensions:
+  constitution:
+    rules:
+    - Every claim must have a traceable, append-only provenance record.
+    - A confidence score is required for every statement.
+    - Alternative viewpoints must be presented when available.
+    - Users can click any source to verify.
+    consent_gates:
+    - export_provenance_log
+    - publish_synthesis
+    hard_refusals:
+    - Emit a claim with empty source_id.
+    - Mutate or delete provenance events.
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 3
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\provenance-first-trust-engine\provenance\events.jsonl
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    append_only: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 365
+    scanner_severity_floor: warn
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - export_provenance_log
+      - publish_synthesis
+  runtime_dispatch:
+    type: python_module
+    module: provenance_first_trust_engine.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Provenance-First Trust Engine
+    tagline: Verifiable answers — every claim, every source, every score.
+    categories:
+    - super-agent
+    - trust
+    tags:
+    - super-agent
+    - provenance
+    - trust
+    - transparency
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/super-agents/provenance-first-trust-engine/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

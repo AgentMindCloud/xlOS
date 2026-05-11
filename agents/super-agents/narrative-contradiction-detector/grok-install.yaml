@@ -1,0 +1,73 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: narrative-contradiction-detector
+description: Actively detects and surfaces contradictions across X, news, government,
+  academic, and personal sources with full evidence and user-guided narrative exploration.
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - ide
+category: super-agent
+tools:
+- name: scan_sources
+- name: find_contradictions
+- name: render_contradiction_report
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+extensions:
+  constitution:
+    rules:
+    - Never hide contradictions across sources.
+    - Present every side with equal rigour.
+    - Always include a primary source link for each claim.
+    - The user chooses which narrative to explore further.
+    consent_gates:
+    - publish_synthesis
+    - export_provenance_log
+    hard_refusals:
+    - Silently resolve contradictions across sources.
+    - Emit a claim with empty source_id.
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 4
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\narrative-contradiction-detector\provenance\events.jsonl
+    cite_sources: true
+    contradiction_detection: true
+    append_only: true
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 365
+    scanner_severity_floor: warn
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - publish_synthesis
+      - export_provenance_log
+  runtime_dispatch:
+    type: python_module
+    module: narrative_contradiction_detector.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Narrative Contradiction Detector
+    tagline: Surfaces conflicts across sources — never silently picks a side.
+    categories:
+    - super-agent
+    - intelligence
+    tags:
+    - super-agent
+    - contradiction
+    - truth
+    - critical-thinking
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/super-agents/narrative-contradiction-detector/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator
