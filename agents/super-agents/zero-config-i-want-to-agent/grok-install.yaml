@@ -1,0 +1,131 @@
+version: '2.14'
+name: zero-config-i-want-to-agent
+description: User states a goal in natural language and the agent assembles tools,
+  APIs, memory, and workflows with zero configuration.
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - ide
+category: super-agent
+tools:
+- name: parse_intent
+  type: local_function
+  module: orchestrator
+  function: ZeroConfigAgent.parse_intent
+  description: Parses a natural-language goal into a structured plan.
+  parameters:
+    schema:
+      type: object
+      properties:
+        goal:
+          type: string
+      required:
+      - goal
+- name: assemble_plan
+  type: local_function
+  module: orchestrator
+  function: ZeroConfigAgent.assemble_plan
+  description: Assembles the tool + API + workflow plan and returns it for HITL approval.
+  parameters:
+    schema:
+      type: object
+      properties:
+        intent_id:
+          type: string
+      required:
+      - intent_id
+- name: execute_with_consent
+  type: local_function
+  module: orchestrator
+  function: ZeroConfigAgent.execute_with_consent
+  description: Executes an approved plan one step at a time, gating each external
+    action behind a consent prompt.
+  parameters:
+    schema:
+      type: object
+      properties:
+        plan_id:
+          type: string
+      required:
+      - plan_id
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+extensions:
+  constitution:
+  - I
+  - II
+  - III
+  - IV
+  - VI
+  - VII
+  - VIII
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 5
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\zero-config-i-want-to-agent\provenance\events.jsonl
+    cite_sources: true
+    append_only: true
+  constitution_v215:
+    rules:
+    - Always confirm understanding before acting on a goal.
+    - Show the proposed plan and tool list before any external action.
+    - Every external action requires explicit user approval.
+    - Maintain a full append-only audit trail of how the goal was achieved.
+    consent_gates:
+    - publish_synthesis
+    - any_real_world_action
+    - export_provenance_log
+    hard_refusals:
+    - Take any real-world action without an explicit user click.
+    - Mutate or delete provenance events.
+  safety_v215:
+    pii_handling: local-only
+    data_retention_days: 365
+    scanner_severity_floor: warn
+    cost_limits:
+      usd_per_session_max: 1.0
+      usd_per_day_max: 5.0
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - publish_synthesis
+      - any_real_world_action
+      - any cost above $0.50
+    disclaimers:
+      not_financial_advice: false
+      not_tax_advice: false
+      real_world_action_consent: true
+      not_medical_advice: false
+  bridges:
+    min_count: 2
+    links:
+    - cross-reality-action-fabric
+    - living-narrative-fabric
+  memory:
+    enabled: true
+    provider: mem0
+    vector_store:
+      backend: qdrant
+      collection_prefix: zero-config-i-want-to-agent
+    episodic: true
+    semantic: true
+    retention_days: 365
+    encryption_at_rest: true
+  windows_legacy:
+    appdata_folder: grok-agent/zero-config-i-want-to-agent
+    log_folder: grok-agent/zero-config-i-want-to-agent/logs
+    cache_folder: grok-agent/zero-config-i-want-to-agent/cache
+    default_port: 8513
+    chrome_only: true
+    requires_admin: false
+    min_powershell_version: '5.1'
+  runtime_dispatch:
+    type: python_module
+    module: orchestrator
+  original_kind: super-agent
