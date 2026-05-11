@@ -28,6 +28,7 @@ article references from rule text). Agents without ``extensions.constitution``
 are skipped entirely (scan_manifest returns an empty result for them) -- they
 are not Constitution-checked agents.
 """
+
 from __future__ import annotations
 
 import re
@@ -299,9 +300,7 @@ def check_publish_consent_gate(m: Dict[str, Any]) -> List[Finding]:
 @_register("II.action-gate-confirm-list", ("II",))
 def check_action_gate_confirm_list(m: Dict[str, Any]) -> List[Finding]:
     gates = _get(m, "extensions.constitution.consent_gates", []) or []
-    confirm_before = (
-        _get(m, "extensions.safety_policy.human_in_the_loop.confirm_before", []) or []
-    )
+    confirm_before = _get(m, "extensions.safety_policy.human_in_the_loop.confirm_before", []) or []
     findings: List[Finding] = []
     for gate in gates:
         if not isinstance(gate, str):
@@ -411,9 +410,7 @@ def check_finance_disclaimer(m: Dict[str, Any]) -> List[Finding]:
     cat = m.get("category")
     if cat not in FINANCE_CATEGORIES:
         return []
-    if not _get(
-        m, "extensions.x_money_specific.disclaimers.not_financial_advice", False
-    ):
+    if not _get(m, "extensions.x_money_specific.disclaimers.not_financial_advice", False):
         return [
             Finding(
                 "error",

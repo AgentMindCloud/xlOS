@@ -43,7 +43,8 @@ def load_schema() -> Dict[str, Any]:
     here = Path(__file__).resolve()
     candidate = here.parent.parent.parent.parent / "spec" / "v2.14" / "schema.json"
     if candidate.is_file():
-        return json.loads(candidate.read_text(encoding="utf-8"))
+        parsed: Dict[str, Any] = json.loads(candidate.read_text(encoding="utf-8"))
+        return parsed
 
     raise FileNotFoundError(
         "Could not locate spec/v2.14/schema.json. Looked under xlos._spec/v2.14/ "

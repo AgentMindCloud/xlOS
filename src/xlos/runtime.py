@@ -119,9 +119,7 @@ def run_command(name: str) -> None:
 
     dispatch = (manifest.get("extensions") or {}).get("runtime_dispatch")
     if not isinstance(dispatch, dict):
-        console.print(
-            f"error: agent {name!r} has no extensions.runtime_dispatch declaration"
-        )
+        console.print(f"error: agent {name!r} has no extensions.runtime_dispatch declaration")
         sys.exit(3)
 
     dtype = dispatch.get("type")
@@ -138,9 +136,7 @@ def run_command(name: str) -> None:
     if dtype == "streamlit_app":
         entrypoint = dispatch.get("entrypoint")
         if not isinstance(entrypoint, str) or not entrypoint:
-            console.print(
-                f"error: agent {name!r} runtime_dispatch.entrypoint is missing"
-            )
+            console.print(f"error: agent {name!r} runtime_dispatch.entrypoint is missing")
             sys.exit(5)
         ep_path = Path(entrypoint)
         if not ep_path.is_absolute():
@@ -151,7 +147,5 @@ def run_command(name: str) -> None:
         )
         sys.exit(completed.returncode)
 
-    console.print(
-        f"error: runtime_dispatch.type={dtype!r} not yet implemented for agent {name!r}"
-    )
+    console.print(f"error: runtime_dispatch.type={dtype!r} not yet implemented for agent {name!r}")
     sys.exit(6)

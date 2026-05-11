@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 from pathlib import Path
+from typing import Any
 
 import pytest
 import yaml
@@ -20,9 +21,20 @@ def _patch_user_data_dir(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Non
     )
 
 
+def _valid_manifest(name: str) -> dict[str, Any]:
+    """A minimal v2.14-compliant manifest for install path-mechanics tests."""
+    return {
+        "version": "2.14",
+        "name": name,
+        "description": "Minimal test manifest used by install path-mechanics tests.",
+        "runtime": {"engine": "grok", "model": "grok-4"},
+        "deploy": {"targets": ["ide"]},
+    }
+
+
 def test_install_from_file(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     _patch_user_data_dir(monkeypatch, tmp_path)
-    manifest = {"name": "test-agent", "version": "1.0.0"}
+    manifest = _valid_manifest("test-agent")
     yaml_path = tmp_path / "manifest.yaml"
     yaml_path.write_text(yaml.safe_dump(manifest), encoding="utf-8")
 
@@ -35,7 +47,7 @@ def test_install_from_file(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> N
 
 def test_install_from_stdin(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     _patch_user_data_dir(monkeypatch, tmp_path)
-    manifest = {"name": "stdin-agent", "version": "1.0.0"}
+    manifest = _valid_manifest("stdin-agent")
     yaml_text = yaml.safe_dump(manifest)
     monkeypatch.setattr("sys.stdin", io.StringIO(yaml_text))
 
