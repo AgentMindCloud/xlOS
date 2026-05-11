@@ -1,0 +1,56 @@
+[project]
+name = "xlos"
+version = "1.0.0-alpha.1"
+description = "Cross-platform developer runtime for Grok agents on X."
+authors = [{ name = "AgentMindCloud" }]
+license = { text = "Apache-2.0" }
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7,<3",
+    "pyyaml>=6.0",
+    "jsonschema>=4.21",
+    "click>=8.1",
+    "platformdirs>=4.2",
+    "rich>=13.7",
+    "colorama>=0.4 ; sys_platform == 'win32'",
+    "filelock>=3.13",
+]
+
+[project.optional-dependencies]
+xai = ["xai-sdk>=0.5"]
+marketplace = ["streamlit>=1.32", "pandas>=2.2", "requests>=2.31"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.1",
+    "hypothesis>=6.99",
+    "ruff>=0.4",
+    "black>=24.0",
+    "mypy>=1.10",
+    "types-PyYAML>=6.0",
+]
+
+[project.scripts]
+xlos = "xlos.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xlos"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

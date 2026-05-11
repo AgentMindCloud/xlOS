@@ -1,0 +1,56 @@
+name: validate
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install jsonschema pyyaml
+      - name: Validate manifests
+        shell: bash
+        run: |
+          python <<'PYEOF'
+          import sys
+          from pathlib import Path
+
+          schema_path = Path("spec/v2.14/schema.json")
+          if not schema_path.exists():
+              print("spec not yet vendored - Phase 3b")
+              sys.exit(0)
+
+          import json
+          import jsonschema
+          import yaml
+
+          schema = json.loads(schema_path.read_text(encoding="utf-8"))
+          yamls = sorted(
+              list(Path("agents").rglob("*.yaml"))
+              + list(Path("spec/v2.14").rglob("*.yaml"))
+          )
+
+          if not yamls:
+              print("no manifests to validate yet")
+              sys.exit(0)
+
+          failed = False
+          for y in yamls:
+              try:
+                  data = yaml.safe_load(y.read_text(encoding="utf-8"))
+                  jsonschema.validate(data, schema)
+                  print(f"OK   {y}")
+              except Exception as exc:
+                  print(f"FAIL {y}: {exc}")
+                  failed = True
+
+          sys.exit(1 if failed else 0)
+          PYEOF
