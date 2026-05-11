@@ -1,8 +1,8 @@
 {
-  "name": "grok-agents-marketplace",
+  "name": "xlos-marketplace",
   "version": "0.1.0",
   "private": true,
-  "description": "The community marketplace for Grok-native agents on X.",
+  "description": "xlOS marketplace — discovery surface for grok-install agents.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +11,8 @@
     "format": "biome format --write .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "@octokit/rest": "^22.0.1",
