@@ -56,5 +56,15 @@ target-version = ["py311"]
 python_version = "3.11"
 strict = true
 
+# Click 8.1 (which some pip resolutions pull in on Python 3.11 transitive
+# constraints) lacks a py.typed marker, so every click decorator -- group(),
+# command(), option(), argument() -- is reported as `untyped-decorator`
+# under strict mypy. We pin click>=8.2 in the project deps, but suppress the
+# decorator-noise on the CLI module so a future pip resolver hiccup does not
+# silently turn the lint job red.
+[[tool.mypy.overrides]]
+module = "xlos.cli"
+disable_error_code = ["untyped-decorator"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
