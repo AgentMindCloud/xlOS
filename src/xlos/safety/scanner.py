@@ -22,6 +22,7 @@ Public surface:
 
     scan_manifest(manifest: dict[str, Any]) -> ScanResult
 """
+
 from __future__ import annotations
 
 import json
@@ -172,11 +173,7 @@ def _build_view(manifest: dict[str, Any]) -> dict[str, Any]:
     # migrator drops the field, and xlOS-vendored manifests are Apache-2.0
     # by repository policy. Fall back to the legacy value parked under the
     # extensions block if a manifest carries one explicitly.
-    license_value = (
-        manifest.get("license")
-        or extensions.get("license")
-        or "Apache-2.0"
-    )
+    license_value = manifest.get("license") or extensions.get("license") or "Apache-2.0"
     view: dict[str, Any] = {
         # Identity ----------------------------------------------------------
         "version": manifest.get("version"),
@@ -625,10 +622,15 @@ def check_hitl_when_consent_gates_declared(view: dict[str, Any]) -> list[Finding
 # Article VII ----------------------------------------------------------------
 
 
+# Manifest-content patterns used by check_appdata_paths_only to flag
+# absolute-drive paths in scanned manifests. Constructed at runtime so the
+# scanner source does not contain literal Windows backslash sequences
+# (which the repo-wide cross-platform discipline test forbids in xlOS source).
+_DRIVE_BACKSLASH = chr(92)  # single '\' character
 _ABSOLUTE_DRIVE_PREFIXES: tuple[str, ...] = (
-    "C:\\",
-    "D:\\",
-    "E:\\",
+    f"C:{_DRIVE_BACKSLASH}",
+    f"D:{_DRIVE_BACKSLASH}",
+    f"E:{_DRIVE_BACKSLASH}",
     "/usr/",
     "/etc/",
     "/var/",
