@@ -27,7 +27,8 @@ def load_schema_v214() -> dict[str, Any]:
     for parent in (here.parents[3], here.parents[2], here.parents[4]):
         cand = parent / "spec" / "v2.14" / "schema.json"
         if cand.exists():
-            return json.loads(cand.read_text(encoding="utf-8"))
+            data: dict[str, Any] = json.loads(cand.read_text(encoding="utf-8"))
+            return data
 
     # Wheel-install fallback: schema is force-included under
     # xlos/_resources/spec/v2.14/schema.json by hatchling.
@@ -38,13 +39,12 @@ def load_schema_v214() -> dict[str, Any]:
 
         cand_path = files(xlos).joinpath("_resources", "spec", "v2.14", "schema.json")
         if cand_path.is_file():
-            return json.loads(cand_path.read_text(encoding="utf-8"))
+            data2: dict[str, Any] = json.loads(cand_path.read_text(encoding="utf-8"))
+            return data2
     except (ImportError, ModuleNotFoundError, FileNotFoundError):
         pass
 
-    raise FileNotFoundError(
-        "spec/v2.14/schema.json not found; vendor it from grok-install-v2"
-    )
+    raise FileNotFoundError("spec/v2.14/schema.json not found; vendor it from grok-install-v2")
 
 
 def validate_manifest_v214(manifest: dict[str, Any]) -> None:
