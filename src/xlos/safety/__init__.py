@@ -1,16 +1,14 @@
-"""Safety scanning for xlOS."""
+"""Safety scanning for xlOS.
+
+The Constitution scanner (ported from AgentMindCloud/grok-agent) lives in
+:mod:`xlos.safety.scanner`. Agents declare which Constitution articles they
+are bound to via ``extensions.constitution`` in their manifest; the scanner
+runs only those checks. Agents without ``extensions.constitution`` are
+skipped (``scan_manifest`` returns an empty result for them).
+"""
 
 from __future__ import annotations
 
-from typing import Any
+from xlos.safety.scanner import Finding, ScanResult, scan_manifest
 
-__all__ = ["scan_manifest"]
-
-
-def scan_manifest(manifest: dict[str, Any]) -> None:
-    """Scan a manifest for safety violations.
-
-    Stub for Phase 3a. Phase 3b will port the Constitution scanner from
-    ``grok-agent/safety/``.
-    """
-    return None
+__all__ = ["Finding", "ScanResult", "scan_manifest"]

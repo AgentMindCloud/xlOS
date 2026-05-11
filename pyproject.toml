@@ -40,6 +40,10 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/xlos"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"spec/v2.14/schema.json" = "xlos/_spec/v2.14/schema.json"
+"src/xlos/safety/constitution.md" = "xlos/safety/constitution.md"
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
