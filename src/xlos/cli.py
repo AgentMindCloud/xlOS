@@ -34,9 +34,10 @@ def run(name: str) -> None:
 
 
 @main.command(name="list")
-def list_agents() -> None:
+@click.option("--json", "as_json", is_flag=True, help="Emit JSON instead of a table.")
+def list_agents(as_json: bool) -> None:
     """List installed agents."""
-    list_command()
+    list_command(as_json=as_json)
 
 
 @main.command()

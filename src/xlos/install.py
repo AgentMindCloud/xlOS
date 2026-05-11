@@ -1,7 +1,7 @@
 """Manifest installation for xlOS.
 
-Path mechanics are real here; the validator and safety scanner are stubs that
-Phase 3b will fill in.
+Validates against the vendored spec/v2.14 schema and runs the Constitution
+scanner before writing the manifest into the per-user agents directory.
 """
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 import click
+import jsonschema
 import yaml
 from filelock import FileLock
 from platformdirs import user_data_dir
@@ -41,8 +42,22 @@ def _load_manifest(manifest: str | None, from_stdin: bool) -> tuple[dict[str, An
 def install_command(manifest: str | None, from_stdin: bool) -> None:
     """Install a manifest by writing it under the per-user agents directory."""
     data, text = _load_manifest(manifest, from_stdin)
-    validate_manifest_v214(data)
-    scan_manifest(data)
+    try:
+        validate_manifest_v214(data)
+    except jsonschema.ValidationError as exc:
+        path = "/".join(map(str, exc.absolute_path)) or "<root>"
+        raise click.ClickException(
+            f"manifest failed v2.14 validation at {path}: {exc.message}"
+        ) from exc
+
+    scan = scan_manifest(data)
+    if scan.has_high_severity:
+        details = "; ".join(
+            f"[{f.article}] {f.code}: {f.message}"
+            for f in scan.findings
+            if f.severity == "error"
+        )
+        raise click.ClickException(f"Constitution scanner refused install: {details}")
 
     name = data.get("name")
     if not isinstance(name, str) or not name:
