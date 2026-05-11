@@ -1,0 +1,40 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: growth-experiment-runner
+description: Local-first growth experiment runner for X creators — reads creator-supplied
+  hypothesis + audience signals (or seeded demo signals) and emits a 7/8-section structured
+  experiment plan with 4 official Experiment Plan Score metrics (Hypothesis specificity
+  / Single-axis isolation / Sample power / Risk avoidance), small-n paradox detection
+  in BOTH the Plan Score AND Red Flags sections (avg Sample power < 40 AND avg Hypothesis
+  specificity > 70), multi-variable guard (any experiment varying > 1 axis...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_growth_experiment_plan
+  type: local_function
+  description: Produce a 7-section structured growth experiment plan (or 8-section
+    when small-n paradox fires, multi-variable guard fires, or window=7d) with 4 official
+    Experiment Plan Score metrics, weighted Plan Score, small-n paradox detection
+    in BOTH the Plan Score section AND the Red Flags section, multi-variable guard
+    (any experiment varying > 1 axis → excluded + Red Flag), 3-6 experiment cards
+    each with hypothesis + axis + expected effect size + sample required + runtime
+    + primary metric + success criteria, and mandatory bridges to analytics-summarizer
+    + ab-test-suggester + content-idea-generator. Never auto-runs experiments. Refuses
+    financial / cashtag / investment / sponsorship / harassment / unsafe-experiment
+    content.
+  module: growth_experiment_runner.run
+  function: generate
+extensions:
+  xlos_runtime:
+    type: python_module
+    module: growth_experiment_runner

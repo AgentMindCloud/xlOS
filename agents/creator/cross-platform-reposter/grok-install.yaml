@@ -1,0 +1,37 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: cross-platform-reposter
+description: Local-first cross-platform repost helper for X creators — turns a single
+  X post into 2-3 variants per target platform (LinkedIn / Threads / Bluesky / Newsletter)
+  with 4 official Variant Score metrics (Voice fidelity / Platform fit / Engagement
+  potential / Attribution clarity), platform adaptations, voice-drift paradox detection,
+  and >= 3 cross-template bridges. Drafts only — never auto-publishes
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_cross_platform_variants
+  type: local_function
+  description: Produce a 6-section structured cross-platform repost report (or 7-section
+    when red-flag count > 3 OR target_platforms count > 3) with 2-3 variants per requested
+    platform, 4-row Variant Score table per variant, platform-specific adaptation
+    notes, engagement tips, voice-drift paradox detection, and >= 3 cross-template
+    bridges. Drafts only — never auto-publishes anywhere.
+  module: cross_platform_reposter.run
+  function: generate
+extensions:
+  constitution:
+  - II
+  - V.1
+  xlos_runtime:
+    type: python_module
+    module: cross_platform_reposter

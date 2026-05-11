@@ -1,0 +1,39 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: dm-triager
+description: Local-first DM triager for X creators — reads creator-supplied X DM data
+  (or seeded demo DMs) and emits a 7/8-section structured triage report with 4 official
+  Triage Health metrics (Triage urgency rate / Opportunity ratio / Spam pressure /
+  Authentic sender share), opportunity-flood paradox detection in both Triage Health
+  and Red Flags sections, 4-bucket distribution (Urgent / Opportunity / Routine /
+  Spam), suggested-action queue (max 6) with spam-burst guard (≥5 spam DMs + >60%
+  token overlap...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_dm_triage
+  type: local_function
+  description: Produce a 7-section structured DM triage report (or 8-section when
+    spam-burst detected OR window=7d) with 4 official Triage Health metrics, weighted
+    Triage Health score, opportunity-flood paradox detection in BOTH the Triage Health
+    section AND the Red Flags section, 4-bucket distribution (Urgent / Opportunity
+    / Routine / Spam), suggested-action queue (max 6 — spam-burst members excluded
+    and consolidated as a Red Flag), and mandatory bridges to reply-drafter + mention-summarizer
+    in every output. Never auto-replies. DM content never leaves the local Windows
+    machine.
+  module: dm_triager.run
+  function: generate
+extensions:
+  xlos_runtime:
+    type: python_module
+    module: dm_triager

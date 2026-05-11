@@ -1,0 +1,52 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: monetization-optimizer
+description: Local-first monetization optimizer for X creators — reads a creator's
+  X performance + revenue signals (or seeded demo signals) and emits a 7/8-section
+  structured monetization plan with 4 official Monetization Plan Score metrics on
+  a 0-100 scale (Forecast Confidence / Diversification Score / Sponsor Fit Density
+  / Tax Readiness), weighted Performance score (0.30·Diversification + 0.25·TaxReadiness
+  + 0.25·ForecastConfidence + 0.20·SponsorFitDensity), the Concentration-Confidence
+  paradox (top cha...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_monetization_plan
+  type: local_function
+  description: 'Produce a 7-section structured monetization plan (or 8-section Plan
+    Audit when ANY of: Concentration-Confidence paradox firing / count >= 8 / revenue_file
+    unset (data_source=''demo'') / jurisdiction unset OR not ''US'' / projection_horizon=''365d'')
+    with 4-row Monetization Plan Score table on a 0-100 scale (Forecast Confidence
+    / Diversification Score / Sponsor Fit Density / Tax Readiness), weighted Performance
+    score (0.30·Diversification + 0.25·TaxReadiness + 0.25·ForecastConfidence + 0.20·SponsorFitDensity),
+    prioritized recommendations across the 5-channel mix (paid_tier / creator_fund
+    / sponsorships / digital_products / affiliate), sponsorship fit analysis (paraphrased
+    archetypes — never specific brand names), tax/expense reserve notes with strong
+    jurisdiction caveats (Article V.2 verbatim with Vietnam-resident-creator addendum),
+    the Concentration-Confidence paradox surfaced in BOTH Plan Performance AND Red
+    Flags when top_channel_share >= 60% AND Forecast Confidence > 70/100, mandatory
+    cross-template bridges to analytics-summarizer + content-idea-generator (plus
+    1+ rotating bridge for a minimum of 3 bridges total), and a structured diagnostic-mode
+    refusal stub when allow_monetization=false (the default). Drafts only — never
+    auto-publishes; never fabricates dollar amounts; never gives financial or tax
+    advice. When allow_monetization=true every monetization-touching line carries
+    the Article V.1 banner verbatim.'
+  module: monetization_optimizer.run
+  function: generate
+extensions:
+  constitution:
+  - V.1
+  - V.2
+  xlos_runtime:
+    type: python_module
+    module: monetization_optimizer

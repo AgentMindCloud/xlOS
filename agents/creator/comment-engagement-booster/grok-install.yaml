@@ -1,0 +1,38 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: comment-engagement-booster
+description: Local-first comment engagement booster for X creators — turns a single
+  post into 3-5 comment variants tuned to a chosen boost angle (question / controversy
+  / story / poll / all) with 4 official Comment Plan Score metrics (Hook strength
+  / Conversation potential / Voice fidelity / Distinct angle), hook-without-substance
+  paradox detection, anti-spam refusal, and >= 3 cross-template bridges. Drafts only
+  — never auto-publishes
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_comment_variants
+  type: local_function
+  description: Produce a 6-section structured comment-engagement plan (or 7-section
+    when red-flag count > 3 OR boost_focus='all') with 3-5 comment variants spanning
+    the chosen angle, 4-row Comment Plan Score table per variant, hook-without-substance
+    paradox detection, anti-spam refusal, and >= 3 cross-template bridges. Drafts
+    only — never auto-publishes.
+  module: comment_engagement_booster.run
+  function: generate
+extensions:
+  constitution:
+  - II
+  - V.1
+  xlos_runtime:
+    type: python_module
+    module: comment_engagement_booster

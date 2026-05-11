@@ -1,0 +1,39 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: thread-builder
+description: Local-first thread builder for X creators — reads a topic / goal (and
+  optional voice samples + analytics signals) and emits a 6/7-section structured thread
+  plan with 3-5 ready-to-post thread variants, 4 standard Thread Plan Score metrics
+  (Hook strength / Narrative arc coherence / Voice fidelity / Predicted engagement),
+  hook-without-payoff paradox detection, 4-6 alternate hook variations, content-engagement
+  prediction bands (never absolute numbers), and >= 3 cross-template bridges that
+  always...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_thread_plan
+  type: local_function
+  description: Produce a 6-section structured thread plan (or 7-section when red-flag
+    count > 3 OR variant_count >= 5 OR data_source='demo') with 3-5 ready-to-post
+    thread variants, 4-row Thread Plan Score table (Hook strength / Narrative arc
+    coherence / Voice fidelity / Predicted engagement) with weighted score, 4-6 alternate
+    hook variations, hook-without-payoff paradox detection, content-engagement prediction
+    bands (range only — never absolute counts), and >= 3 cross-template bridges that
+    always include analytics-summarizer and content-idea-generator. Drafts only —
+    never auto-publishes.
+  module: thread_builder.run
+  function: generate
+extensions:
+  xlos_runtime:
+    type: python_module
+    module: thread_builder

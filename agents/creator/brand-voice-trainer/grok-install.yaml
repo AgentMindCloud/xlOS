@@ -1,0 +1,38 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: brand-voice-trainer
+description: Local-first brand voice trainer for X creators — reads a sample of the
+  creator's own past posts and emits a 6/7-section voice profile (tone consistency
+  / structure consistency / vocabulary distinctiveness / voice cohesion), tone/structure/vocabulary
+  signatures, 3-5 training prompts the creator can paste into other templates, generic-polish
+  paradox detection, and >= 3 cross-template bridges. Refuses to train on another
+  account's voice
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_voice_profile
+  type: local_function
+  description: Produce a 6-section structured voice-profile report (or 7-section when
+    red-flag count > 3 OR sample size < 10) with 4 official Voice Profile metrics
+    (Tone consistency / Structure consistency / Vocabulary distinctiveness / Voice
+    cohesion), tone / structure / vocabulary signature subsections, 3-5 training prompts,
+    generic-polish paradox detection, and >= 3 cross-template bridges. Trains only
+    on the creator's own posts.
+  module: brand_voice_trainer.run
+  function: generate
+extensions:
+  constitution:
+  - V.1
+  xlos_runtime:
+    type: python_module
+    module: brand_voice_trainer

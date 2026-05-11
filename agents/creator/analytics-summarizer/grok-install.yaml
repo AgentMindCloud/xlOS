@@ -1,0 +1,41 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: analytics-summarizer
+description: Local-first analytics summarizer for X creators — reads creator-supplied
+  X analytics (or seeded demo metrics) and emits a 6/7-section period summary with
+  4 official Period Performance metrics (Reach Score / Engagement Velocity / Audience
+  Quality / Content Resonance), the vanity-reach paradox (Reach Score > 80 AND Audience
+  Quality < 50), weighted Performance score (0.30·AudienceQuality + 0.25·EngagementVelocity
+  + 0.25·ContentResonance + 0.20·ReachScore), top-performing-content archetypes, tren...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_analytics_summary
+  type: local_function
+  description: Produce a 6-section structured analytics period summary (or 7-section
+    when red-flag count >= 3, time_range='7d', count >= 8, OR data_source='demo' with
+    no anchors) with 4 official Period Performance metrics (Reach Score / Engagement
+    Velocity / Audience Quality / Content Resonance), weighted Performance score (0.30·AQ
+    + 0.25·EV + 0.25·CR + 0.20·RS), the vanity-reach paradox (RS > 80 AND AQ < 50),
+    3-10 (default 5) top-performing-content archetypes, trend bucketing across the
+    5-arrow vocabulary, mandatory bridges to content-idea-generator + thread-builder,
+    and a structured monetization refusal path when allow_monetization is false. Reads
+    creator-supplied metrics; never fabricates X numbers.
+  module: analytics_summarizer.run
+  function: generate
+extensions:
+  constitution:
+  - V.1
+  xlos_runtime:
+    type: python_module
+    module: analytics_summarizer

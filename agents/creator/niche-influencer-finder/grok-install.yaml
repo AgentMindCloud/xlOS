@@ -1,0 +1,35 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: niche-influencer-finder
+description: Aggregate niche-influencer discovery for X creators — 4 official match
+  scores (Authority / Engagement / Audience fit / Collaboration potential), 3-5 paraphrased
+  archetype cards across Micro / Mid / Macro tiers, 3-5 collaboration opportunities,
+  and >= 3 cross-template bridges. Aggregate-only — never names a real account
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_niche_influencer_recommendations
+  type: local_function
+  description: Produce a 6-section structured niche-influencer discovery report (or
+    7-section when red-flag count > 3 OR niche keyword count < 2) with 4 official
+    match scores per archetype, 3-5 paraphrased influencer cards across Micro / Mid
+    / Macro tiers, 3-5 collaboration opportunities, and >= 3 cross-template bridges.
+    Never names a real account.
+  module: niche_influencer_finder.run
+  function: generate
+extensions:
+  constitution:
+  - V.1
+  xlos_runtime:
+    type: python_module
+    module: niche_influencer_finder

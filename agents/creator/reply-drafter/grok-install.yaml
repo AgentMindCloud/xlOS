@@ -1,0 +1,40 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: reply-drafter
+description: Local-first reply drafter for X creators — reads a parent X post / thread
+  (and optional voice samples + 7-day trend snapshot + analytics signals) and emits
+  a 6/7-section structured reply plan with 3-10 ready-to-post reply drafts (default
+  5), 4 official Reply Plan Score metrics (Niche fit / Trend alignment / Voice fidelity
+  / Predicted engagement), vanity-hook paradox detection (Trend alignment > 80 AND
+  Niche fit < 50), 10 tone-matched archetypes shared with content-idea-generator,
+  content-enga...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_reply_drafts
+  type: local_function
+  description: Produce a 6-section structured reply plan (or 7-section when red-flag
+    count > 3 OR count >= 8 OR vanity-hook paradox fires OR data_source='demo' with
+    no voice/trends) with 3-10 ready-to-post reply drafts (default 5), 4-row Reply
+    Plan Score table (Niche fit / Trend alignment / Voice fidelity / Predicted engagement)
+    with weighted score, 10 tone-matched archetype assignments, vanity-hook paradox
+    detection (Trend alignment > 80 AND Niche fit < 50), per-draft engagement prediction
+    bands (range only — never absolute counts), and >= 3 cross-template bridges that
+    always include analytics-summarizer and thread-builder. Drafts only — never auto-publishes;
+    never generates monetization / sales / affiliate language unless explicitly requested.
+  module: reply_drafter.run
+  function: generate
+extensions:
+  xlos_runtime:
+    type: python_module
+    module: reply_drafter

@@ -1,0 +1,37 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: hashtag-strategy-advisor
+description: Local-first hashtag strategy advisor for X creators — turns a post topic
+  into a 6/7-section strategy with 5-10 hashtags scored across 4 standard metrics
+  (Niche relevance / Reach potential / Engagement quality / Cleanliness), spread across
+  the 5-category mix (broad-niche / specific-niche / trending / community / branded),
+  with reach-without-relevance paradox detection, anti-engagement-bait refusal, platform-specific
+  count caps (X 0-2 / LinkedIn 0-3), and >= 3 cross-template bridges. Drafts onl...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_hashtag_strategy
+  type: local_function
+  description: Produce a 6-section structured hashtag strategy (or 7-section when
+    red-flag count > 3 OR platform='all') with 5-10 scored hashtag recommendations
+    across the 5-category mix, 4-row Hashtag Plan Score table, platform-specific count
+    caps (X 0-2 / LinkedIn 0-3), reach-without-relevance paradox detection, anti-engagement-bait
+    refusal, and >= 3 cross-template bridges. Drafts only — never auto-publishes.
+  module: hashtag_strategy_advisor.run
+  function: generate
+extensions:
+  constitution:
+  - V.1
+  xlos_runtime:
+    type: python_module
+    module: hashtag_strategy_advisor

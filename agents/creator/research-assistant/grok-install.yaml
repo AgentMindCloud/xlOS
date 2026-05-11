@@ -1,0 +1,28 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: research-assistant
+description: Quick-to-deep research for X creators — multi-source synthesis with key
+  findings, source citations, contradiction flags, and actionable next steps that
+  bridge into the rest of the creator-template suite. Local-first
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  api_calls_per_session_max: 100
+tools:
+- name: generate_research_summary
+  type: local_function
+  description: Run a quick / standard / deep research pass on a query across X / news
+    / academic / all sources and return a structured summary with key findings, contradictions
+    flagged, sources cited, and suggested next steps.
+  module: research_assistant.run
+  function: generate
+extensions:
+  xlos_runtime:
+    type: python_module
+    module: research_assistant

@@ -1,0 +1,39 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: content-calendar-builder
+description: Local-first content calendar builder for X creators — reads creator-supplied
+  cadence + niche + voice profile + analytics signals (or seeded demo signals) and
+  emits a 7/8-section structured calendar with 4 official Calendar Plan Score metrics
+  (Cadence sustainability / Niche fit / Voice fidelity / Variety), over-scheduling
+  paradox detection in BOTH the Plan Score AND Red Flags sections (avg Cadence sustainability
+  < 50 AND posts_per_week > 7), format-streak guard (≥ 3 consecutive same-format slo...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_content_calendar
+  type: local_function
+  description: Produce a 7-section structured content calendar (or 8-section when
+    over-scheduling paradox fires, format-streak guard fires, or weeks=1) with 4 official
+    Calendar Plan Score metrics, weighted Plan Score, over-scheduling paradox detection
+    in BOTH the Plan Score section AND the Red Flags section, format-streak guard
+    (≥ 3 consecutive same-format slots → Red Flag), 4-12 weeks × 3-14 slots/week (clamped
+    to creator's cadence), per-slot day + time-of-week + format + archetype + niche
+    fit + predicted engagement bands, and mandatory bridges to analytics-summarizer
+    + brand-voice-trainer + content-idea-generator. Never auto-publishes. Refuses
+    financial / cashtag / investment / sponsorship / harassment content.
+  module: content_calendar_builder.run
+  function: generate
+extensions:
+  xlos_runtime:
+    type: python_module
+    module: content_calendar_builder

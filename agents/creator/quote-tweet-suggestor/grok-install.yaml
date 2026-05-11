@@ -1,0 +1,28 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: quote-tweet-suggestor
+description: Turn any X post into 2-3 high-value quote tweet variants spanning distinct
+  angles (support / contrarian / add-value / question), each <=280 chars and voice-matched,
+  plus optional Grok Imagine visual + cross-template bridges. Local-first
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.15
+  api_calls_per_session_max: 50
+tools:
+- name: generate_quote_tweet_variants
+  type: local_function
+  description: Take an X post + a quote-angle hint and return 2-3 distinct-angle quote
+    tweet drafts (each <=280 chars) with engagement prediction, optional Grok Imagine
+    visual prompt, and cross-template bridges.
+  module: quote_tweet_suggestor.run
+  function: generate
+extensions:
+  xlos_runtime:
+    type: python_module
+    module: quote_tweet_suggestor
