@@ -1,16 +1,28 @@
-"""Safety scanning for xlOS."""
+"""Safety scanning for xlOS.
+
+Re-exports the public scan API. The Constitution rule library is in
+``xlos.safety.scanner``; the rendered Constitution text is shipped at
+``xlos/safety/constitution.md`` and discoverable via ``constitution_path()``.
+"""
 
 from __future__ import annotations
 
-from typing import Any
+from xlos.safety.scanner import (
+    CHECKS,
+    CONSTITUTION_VERSION,
+    Finding,
+    ScanResult,
+    SEVERITIES,
+    constitution_path,
+    scan_manifest,
+)
 
-__all__ = ["scan_manifest"]
-
-
-def scan_manifest(manifest: dict[str, Any]) -> None:
-    """Scan a manifest for safety violations.
-
-    Stub for Phase 3a. Phase 3b will port the Constitution scanner from
-    ``grok-agent/safety/``.
-    """
-    return None
+__all__ = [
+    "CHECKS",
+    "CONSTITUTION_VERSION",
+    "Finding",
+    "ScanResult",
+    "SEVERITIES",
+    "constitution_path",
+    "scan_manifest",
+]

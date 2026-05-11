@@ -1,0 +1,279 @@
+version: '2.14'
+name: cross-reality-action-fabric
+description: Bridge agent between X / Grok and the user's Windows machine + public
+  web. Every action is explicit, gated, reversible, and provenance-logged.
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - ide
+category: super-agent
+tools:
+- name: web_via_stagehand
+  type: local_function
+  module: connectors.stagehand_client
+  function: execute_web_action
+  description: Drive a visible Chrome window via Stagehand. The user sees every step,
+    can pause / abort, and the action plan is shown before execution.
+  parameters:
+    schema:
+      type: object
+      properties:
+        action_plan:
+          type: string
+          description: Numbered, plain-language plan the user reviewed and approved.
+        consent_token:
+          type: string
+          description: Scoped consent token returned by the HITL prompt.
+        max_steps:
+          type: integer
+          minimum: 1
+          maximum: 25
+      required:
+      - action_plan
+      - consent_token
+- name: windows_local
+  type: local_function
+  module: connectors.windows_local_client
+  function: execute_local_action
+  description: Run a *signed*, user-reviewed PowerShell snippet on the local Windows
+    machine. Snippet is shown verbatim before approval; rollback path is mandatory
+    for any state-changing call.
+  parameters:
+    schema:
+      type: object
+      properties:
+        script:
+          type: string
+          description: Verbatim PowerShell snippet (no template expansion).
+        rollback:
+          type: string
+          description: Verbatim PowerShell snippet that undoes `script`.
+        consent_token:
+          type: string
+      required:
+      - script
+      - rollback
+      - consent_token
+- name: weather_lookup
+  type: public_api
+  description: Read-only weather forecast lookup for trip planning.
+  parameters:
+    schema:
+      type: object
+      properties:
+        locale:
+          type: string
+        forecast_days:
+          type: integer
+          minimum: 1
+          maximum: 7
+      required:
+      - locale
+- name: flight_search
+  type: public_api
+  description: Read-only flight schedule + price lookup via OpenSky Network.
+  parameters:
+    schema:
+      type: object
+      properties:
+        origin_iata:
+          type: string
+          minLength: 3
+          maxLength: 3
+        destination_iata:
+          type: string
+          minLength: 3
+          maxLength: 3
+        date_iso:
+          type: string
+      required:
+      - origin_iata
+      - destination_iata
+- name: x_search
+  type: public_api
+  description: Read-only X search via Grok 4.3 tool-calling. Posting / DMs require
+    separate consent gates and are not callable from this tool.
+  parameters:
+    schema:
+      type: object
+      properties:
+        query:
+          type: string
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 50
+      required:
+      - query
+cost_limits:
+  usd_per_session_max: 0.5
+  usd_per_day_max: 2.0
+  tokens_per_session_max: 300000
+  api_calls_per_session_max: 250
+extensions:
+  constitution:
+  - I
+  - II
+  - III
+  - IV
+  - VI
+  - VII
+  - VIII
+  multi_agent_roles:
+    enabled: true
+    role: orchestrator
+    delegates_to:
+    - living-narrative-fabric
+    - self-evolving-personal-os
+    shared_memory: mem0://cross-reality-action-fabric/shared
+    message_bus: null
+    max_concurrent_workers: 3
+  provenance:
+    enabled: true
+    append_only: true
+    log_path: $env:LOCALAPPDATA\grok-agent\cross-reality-action-fabric\provenance.log
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  demo_metadata:
+    storyboard: templates/super-agents/cross-reality-action-fabric/DEMO.md
+    # url omitted — will be re-added when super-agent-demos-v1 release tag goes live
+    status: deferred
+    note: Actual video has not yet been recorded; once recorded, it will be uploaded
+      as a release asset under tag 'super-agent-demos-v1'.
+    update_instructions:
+    - 'Set metadata.demo_video.status to: available'
+    - Verify metadata.demo_video.url resolves to the released MP4
+    - "Remove the inline 'planned \u2014 recording + upload pending' comment next\
+      \ to the URL"
+    - 'Update README.md demo section: remove ''planned'' language and add a runtime
+      + duration line'
+    - Drop this update_instructions field once status is available
+    recording_steps:
+    - Open the agent's UI per the storyboard at metadata.demo_video.storyboard
+    - Capture with OBS Studio at 1920x1080, 30fps, target duration 90-180 seconds
+    - Encode as MP4 (H.264 video + AAC audio) and save as cross-reality-action-fabric-demo.mp4
+    upload_steps:
+    - 'PowerShell: gh auth login (one-time, if not already authenticated)'
+    - 'Create the release ONCE for all three flagships: gh release create super-agent-demos-v1
+      --title ''Super Agent Demos v1'' --notes ''Recorded demo videos for the three
+      flagship Super Agents.'''
+    - 'Upload this agent''s MP4: gh release upload super-agent-demos-v1 cross-reality-action-fabric-demo.mp4
+      --clobber'
+    - 'Verify the asset URL resolves: Invoke-WebRequest -Method Head https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/cross-reality-action-fabric-demo.mp4'
+  constitution_v215:
+    rules:
+    - 'Rule 1 (Human approval): No action touches the real world, the user''s Windows
+      machine, or any X surface without an explicit typed approval scoped to that
+      single action.'
+    - 'Rule 2 (Provenance mandatory): Every executed action writes one ProvenanceRecord
+      with action_plan, consent_token, rollback snippet, started_at, finished_at,
+      and outcome.'
+    - 'Rule 3 (Rollback): Every state-changing action carries a verbatim rollback
+      snippet stored alongside the forward action; the agent MUST be able to undo
+      any single step.'
+    - "Rule 4 (No silent contradiction resolution): When two sources disagree on a\
+      \ fact the agent presents, both are surfaced with a contradiction flag \u2014\
+      \ never silently picked."
+    - 'Rule 5 (Windows-only execution): All local automation runs on Windows 11 +
+      PowerShell. Bash, macOS, and Linux paths are not supported and are refused at
+      the runtime layer.'
+    - 'Rule 6 (Privacy-first): User data lives under $env:LOCALAPPDATA\grok-agent\cross-reality-action-fabric\.
+      Cloud sync, telemetry, and Langfuse traces are opt-in; the agent defaults to
+      local-only.'
+    consent_gates:
+    - publish_to_x
+    - send_dm
+    - move_funds
+    - pay_real_money
+    - export_tax_report
+    - sync_to_cloud
+    - modify_local_files_outside_appdata
+    - publish_synthesis
+    - run_powershell_local
+    - run_web_action
+    - read_calendar
+    - read_email
+    hard_refusals:
+    - Take any real-world action without an active typed user approval.
+    - Move money or charge a card under any circumstance.
+    - Modify files outside $env:LOCALAPPDATA\grok-agent\ without modify_local_files_outside_appdata.
+    - Impersonate another X user, including for testing or comedy.
+    - Disable, monkey-patch, or skip safety/scanner.py at runtime.
+    - Bypass the rollback contract on any state-changing action.
+  safety_v215:
+    pii_handling: local-only
+    data_retention_days: 730
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    cost_limits:
+      usd_per_session_max: 0.5
+      usd_per_day_max: 2.0
+      tokens_per_session_max: 300000
+      api_calls_per_session_max: 250
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any constitution.consent_gates action
+      - any cost above $0.05
+      - any irreversible filesystem write
+      - any web action that submits a form
+      - any PowerShell snippet that mutates registry
+      - publish_to_x
+      - send_dm
+      - move_funds
+      - pay_real_money
+      - modify_local_files_outside_appdata
+      - publish_synthesis
+      timeout_seconds: 60
+    disclaimers:
+      not_financial_advice: false
+      not_tax_advice: false
+      real_world_action_consent: true
+  real_time_x:
+    enabled: true
+    consent_required: true
+    triggers:
+    - mention
+    - dm
+    - schedule
+    schedule_cron: 0 9 * * *
+    posts: false
+    reply_only: true
+    max_posts_per_day: 5
+  memory:
+    enabled: true
+    provider: mem0
+    vector_store:
+      backend: qdrant
+      url: http://localhost:6333
+      collection: cross-reality-action-fabric
+    episodic: true
+    semantic: true
+    retention_days: 730
+  windows_legacy:
+    appdata_folder: grok-agent/cross-reality-action-fabric
+    config_folder: grok-agent/cross-reality-action-fabric/config
+    cache_folder: grok-agent/cross-reality-action-fabric/cache
+    log_folder: grok-agent/cross-reality-action-fabric/logs
+    defender_exclusion_recommended: false
+    registry_keys: []
+    min_powershell_version: '5.1'
+    requires_admin: false
+    chrome_only: true
+    no_install_dependencies: []
+  runtime_dispatch:
+    type: python_module
+    module: connectors
+  original_kind: super-agent

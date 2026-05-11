@@ -1,0 +1,138 @@
+version: '2.14'
+name: narrative-contradiction-detector
+description: Actively detects and surfaces contradictions across X, news, government,
+  academic, and personal sources with full evidence and user-guided narrative exploration.
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - ide
+category: super-agent
+tools:
+- name: scan_sources
+  type: local_function
+  module: orchestrator
+  function: ContradictionDetector.scan_sources
+  description: Pulls relevant items from each source connector for the topic and timeframe.
+  parameters:
+    schema:
+      type: object
+      properties:
+        topic:
+          type: string
+        time_range:
+          type: string
+          enum:
+          - 7d
+          - 30d
+          - 90d
+          default: 30d
+      required:
+      - topic
+- name: find_contradictions
+  type: local_function
+  module: orchestrator
+  function: ContradictionDetector.find_contradictions
+  description: Compares scanned items pairwise and returns every contradiction with
+    cited evidence.
+  parameters:
+    schema:
+      type: object
+      properties:
+        scan_id:
+          type: string
+      required:
+      - scan_id
+- name: render_contradiction_report
+  type: local_function
+  module: orchestrator
+  function: ContradictionDetector.render_report
+  description: Renders a Markdown report listing every contradiction with primary-source
+    links and equal-rigour framing.
+  parameters:
+    schema:
+      type: object
+      properties:
+        scan_id:
+          type: string
+      required:
+      - scan_id
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+extensions:
+  constitution:
+  - I
+  - II
+  - III
+  - IV
+  - VI
+  - VII
+  - VIII
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 4
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\narrative-contradiction-detector\provenance\events.jsonl
+    cite_sources: true
+    contradiction_detection: true
+    append_only: true
+  constitution_v215:
+    rules:
+    - Never hide contradictions across sources.
+    - Present every side with equal rigour.
+    - Always include a primary source link for each claim.
+    - The user chooses which narrative to explore further.
+    consent_gates:
+    - publish_synthesis
+    - export_provenance_log
+    hard_refusals:
+    - Silently resolve contradictions across sources.
+    - Emit a claim with empty source_id.
+  safety_v215:
+    pii_handling: local-only
+    data_retention_days: 365
+    scanner_severity_floor: warn
+    cost_limits:
+      usd_per_session_max: 1.0
+      usd_per_day_max: 5.0
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - publish_synthesis
+      - export_provenance_log
+    disclaimers:
+      not_financial_advice: false
+      not_tax_advice: false
+      real_world_action_consent: true
+      not_medical_advice: false
+  bridges:
+    min_count: 2
+    links:
+    - living-narrative-fabric
+    - provenance-first-trust-engine
+  memory:
+    enabled: true
+    provider: mem0
+    vector_store:
+      backend: qdrant
+      collection_prefix: narrative-contradiction-detector
+    episodic: true
+    semantic: true
+    retention_days: 365
+    encryption_at_rest: true
+  windows_legacy:
+    appdata_folder: grok-agent/narrative-contradiction-detector
+    log_folder: grok-agent/narrative-contradiction-detector/logs
+    provenance_folder: grok-agent/narrative-contradiction-detector/provenance
+    default_port: 8514
+    chrome_only: true
+    requires_admin: false
+    min_powershell_version: '5.1'
+  runtime_dispatch:
+    type: python_module
+    module: orchestrator
+  original_kind: super-agent

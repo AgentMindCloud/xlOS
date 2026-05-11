@@ -1,0 +1,95 @@
+version: '2.14'
+name: content-idea-generator
+description: "Local-first content idea generator for X creators \u2014 reads creator-supplied\
+  \ performance + voice signals (or seeded demo signals) and emits a 7/8-section structured\
+  \ idea batch with 4 official Idea Plan Score metrics (Niche fit / Trend alignment\
+  \ / Voice fidelity / Predicted engagement), derivative-and-thin paradox detection\
+  \ in BOTH the Plan Score AND Red Flags sections (avg Originality < 40 AND avg Voice\
+  \ fidelity < 60), 4-6 idea cards across single / thread / quote-tweet / image-post\
+  \ / reply-thr..."
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - action
+  - ide
+category: creator-template
+tools:
+- name: generate_post_idea_batch
+  type: local_function
+  module: content_idea_generator.run
+  function: generate
+  description: Generate N X post ideas given the user's niche and a 7-day trend snapshot.
+  parameters:
+    schema:
+      type: object
+      properties:
+        x_handle:
+          type: string
+          description: "Creator's X handle (with or without @). Privacy anchor \u2014\
+            \ only the creator's handle appears in the rendered output."
+        niche:
+          type: string
+          description: User's niche or topic area (e.g. 'AI tooling', 'creator economy',
+            'fintech').
+        tone:
+          type: string
+          enum:
+          - punchy
+          - thoughtful
+          - data-led
+          - mixed
+          description: "Voice flavor \u2014 punchy = short + sharp, thoughtful = long-form\
+            \ essay angles, data-led = number-anchored takes, mixed = balanced blend\
+            \ across affinities."
+        count:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: How many ideas to return (default 5).
+        trend_window_days:
+          type: integer
+          minimum: 1
+          maximum: 30
+          description: Look-back window for the trend snapshot (default 7).
+      required:
+      - niche
+cost_limits:
+  usd_per_session_max: 0.15
+  api_calls_per_session_max: 50
+extensions:
+  constitution:
+  - I
+  - II
+  - VI
+  - VII
+  constitution_v215:
+    rules:
+    - "Never fabricate stats, quotes, or news headlines \u2014 if a number or claim\
+      \ is not grounded in the trend snapshot, omit it."
+    - "Always produce N distinct angles \u2014 no two ideas may share the same hook\
+      \ or framing."
+    - Surface trends as inspiration, never as endorsement of any cashtag, person,
+      or product.
+    - Refuse to draft engagement-bait that violates X policy (false outrage, hate,
+      harassment, or doxxing).
+    - "Tag finance-adjacent ideas with a soft 'Context only \u2014 not financial advice.'\
+      \ note inside the idea card."
+  safety_v215:
+    pii_handling: local-only
+    data_retention_days: 30
+    cost_limits:
+      usd_per_session_max: 0.15
+      api_calls_per_session_max: 50
+  windows_legacy:
+    appdata_folder: grok-agent/content-idea-generator
+    cache_folder: grok-agent/content-idea-generator/cache
+    log_folder: grok-agent/content-idea-generator/logs
+    min_powershell_version: '5.1'
+    requires_admin: false
+    chrome_only: true
+  runtime_dispatch:
+    type: python_module
+    module: content_idea_generator
+  original_kind: creator-template

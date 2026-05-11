@@ -1,0 +1,160 @@
+version: '2.14'
+name: x-money-vision-analyzer
+description: Drag-and-drop vision-powered receipt and statement analyzer. Parses receipts
+  with Grok 4.3 vision and one-click imports them into the X Money Companion Dashboard's
+  SQLite.
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: x-money-tool
+tools:
+- name: parse_receipt
+  type: local_function
+  module: x_vision.receipt
+  function: parse_one
+  description: Parse one receipt image into structured fields (date, total, currency,
+    counterparty, line items, tax) using Grok 4.3 vision.
+  parameters:
+    schema:
+      type: object
+      properties:
+        image_path:
+          type: string
+      required:
+      - image_path
+- name: parse_statement
+  type: local_function
+  module: x_vision.statement
+  function: parse_pages
+  description: Parse a multi-page bank/card statement (image or PDF) into a list of
+    structured transactions.
+  parameters:
+    schema:
+      type: object
+      properties:
+        image_paths:
+          type: array
+          items:
+            type: string
+      required:
+      - image_paths
+- name: import_to_companion_dashboard
+  type: local_function
+  module: x_vision.importer
+  function: import_batch
+  description: "Write a batch of parsed receipts directly into Tool #1's SQLite transactions\
+    \ table. CONSENT-GATED \u2014 never auto-fires; the runtime always presents the\
+    \ action plan + the user must approve (Constitution Article II)."
+  parameters:
+    schema:
+      type: object
+      properties:
+        parsed_items:
+          type: array
+          items:
+            type: object
+      required:
+      - parsed_items
+- name: validate_extraction
+  type: local_function
+  module: x_vision.validator
+  function: double_check
+  description: "Re-check a parsed receipt with a second vision pass and flag any contradictions\
+    \ between the two extractions (Article IV \u2014 never silently resolve)."
+  parameters:
+    schema:
+      type: object
+      properties:
+        image_path:
+          type: string
+        parsed_result:
+          type: object
+      required:
+      - image_path
+      - parsed_result
+- name: categorize_parsed_receipt
+  type: local_function
+  module: x_vision.categorize
+  function: categorize
+  description: 'Assign a category to a parsed receipt before import. Composes with
+    Tool #1''s categorize_transaction when the Companion Dashboard is installed.'
+  parameters:
+    schema:
+      type: object
+      properties:
+        parsed_receipt:
+          type: object
+      required:
+      - parsed_receipt
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+  api_calls_per_session_max: 100
+extensions:
+  constitution:
+  - I
+  - II
+  - V.1
+  - VI
+  - VII
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: true
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    data_retention_days: 365
+  constitution_v215:
+    rules:
+    - Always show 'Not financial advice' banner on every page (Article V.1).
+    - Always show 'Not tax advice' banner on every export and on the Import preview
+      (Article V.2).
+    - Never auto-import to the Companion Dashboard. Every batch passes through the
+      import_to_companion_dashboard consent gate with an explicit user yes (Article
+      II).
+    - Receipt images stay local under $env:LOCALAPPDATA\grok-agent\x-money-vision-analyzer\receipts.
+      Cloud upload is opt-in only (Article VII).
+    - "Cite Grok 4.3 vision provenance on every parsed field \u2014 extraction is\
+      \ a claim, not a fact (Article IV)."
+    - When the second vision pass disagrees with the first, surface BOTH extractions;
+      never silently pick one (Articles III + IV).
+    - 'Tool #4 writes to Tool #1''s SQLite via data/import_receipts.py only. No other
+      cross-tool writes are permitted by this manifest (Article III).'
+    consent_gates:
+    - import_to_companion_dashboard
+    - sync_to_cloud
+  safety_v215:
+    pii_handling: redacted-cloud
+    data_retention_days: 365
+    scanner_severity_floor: warn
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    cost_limits:
+      usd_per_session_max: 1.0
+      usd_per_day_max: 5.0
+      api_calls_per_session_max: 100
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - import_to_companion_dashboard
+      - sync_to_cloud
+      - any cost above $0.20
+      timeout_seconds: 60
+  windows_legacy:
+    appdata_folder: grok-agent/x-money-vision-analyzer
+    log_folder: grok-agent/x-money-vision-analyzer/logs
+    cache_folder: grok-agent/x-money-vision-analyzer/cache
+    min_powershell_version: '5.1'
+    requires_admin: false
+    chrome_only: true
+  runtime_dispatch:
+    type: streamlit_app
+    entrypoint: app.py
+  original_kind: vision-analyzer
