@@ -25,7 +25,7 @@ export function CircuitTrace({
           <stop offset="50%" stopColor="currentColor" stopOpacity="0.04" />
           <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
         </radialGradient>
-        <filter id="ct-neon" x="-20%" y="-20%" width="140%" height="140%">
+        <filter id="ct-accent" x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="1.4" result="b" />
           <feMerge>
             <feMergeNode in="b" />
@@ -49,7 +49,7 @@ export function CircuitTrace({
         stroke="currentColor"
         strokeWidth="1.1"
         strokeOpacity="0.45"
-        filter="url(#ct-neon)"
+        filter="url(#ct-accent)"
         strokeLinecap="round"
         strokeLinejoin="round"
       >

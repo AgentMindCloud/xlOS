@@ -1,6 +1,6 @@
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { NebulaBackdrop } from '@/components/ui/NebulaBackdrop';
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { StatPill } from '@/components/ui/StatPill';
 import { SITE_TAGLINE } from '@/lib/constants';
 import { ArrowRight, Github, Zap } from 'lucide-react';
@@ -26,15 +26,15 @@ export function Hero() {
         </p>
 
         <div className="flex flex-wrap items-center gap-3">
-          <NeonButton
+          <AccentButton
             variant="primary"
             size="lg"
             href="/marketplace"
             trailingIcon={<ArrowRight className="h-4 w-4" />}
           >
             Browse Agents
-          </NeonButton>
-          <NeonButton
+          </AccentButton>
+          <AccentButton
             variant="secondary"
             size="lg"
             href="https://github.com/AgentMindCloud/awesome-grok-agents"
@@ -42,7 +42,7 @@ export function Hero() {
             leadingIcon={<Github className="h-4 w-4" />}
           >
             Submit your agent
-          </NeonButton>
+          </AccentButton>
         </div>
 
         <div className="flex flex-wrap gap-2 pt-2">

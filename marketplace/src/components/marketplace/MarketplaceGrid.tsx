@@ -1,7 +1,7 @@
 'use client';
 
 import { GlassCard } from '@/components/ui/GlassCard';
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { trackFilter, trackSearch } from '@/lib/tracking';
 import type { AgentWithStats, Category, Certification, SortKey } from '@/lib/types';
 import { debounce, fuzzyMatch } from '@/lib/utils';
@@ -154,12 +154,12 @@ export function MarketplaceGrid({ agents }: { agents: AgentWithStats[] }) {
               Try clearing a filter — or help us grow the gallery by submitting yours.
             </p>
             <div className="flex gap-2">
-              <NeonButton variant="secondary" size="sm" onClick={clearAll}>
+              <AccentButton variant="secondary" size="sm" onClick={clearAll}>
                 Clear filters
-              </NeonButton>
-              <NeonButton variant="primary" size="sm" href="/submit">
+              </AccentButton>
+              <AccentButton variant="primary" size="sm" href="/submit">
                 Submit an agent
-              </NeonButton>
+              </AccentButton>
             </div>
           </GlassCard>
         ) : (
@@ -185,9 +185,9 @@ export function MarketplaceGrid({ agents }: { agents: AgentWithStats[] }) {
               boost new certs in the weekly digest.
             </p>
           </div>
-          <NeonButton variant="primary" size="md" href="/submit">
+          <AccentButton variant="primary" size="md" href="/submit">
             Submit your agent
-          </NeonButton>
+          </AccentButton>
         </GlassCard>
       </div>
     </div>

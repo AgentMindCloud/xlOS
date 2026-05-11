@@ -2,7 +2,7 @@ import { AgentCard } from '@/components/marketplace/AgentCard';
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { NebulaBackdrop } from '@/components/ui/NebulaBackdrop';
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { getStarCounts } from '@/lib/github';
 import type { SectionMeta } from '@/lib/sections';
@@ -58,9 +58,9 @@ export async function SectionPage({
             <p className="text-sm text-ink-muted max-w-md">
               This section fills in as new agents ship. Be the first — submit yours.
             </p>
-            <NeonButton variant="primary" size="sm" href="/submit">
+            <AccentButton variant="primary" size="sm" href="/submit">
               Submit an agent
-            </NeonButton>
+            </AccentButton>
           </GlassCard>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">

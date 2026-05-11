@@ -1,6 +1,6 @@
 'use client';
 
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { Check, Share2 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -17,7 +17,7 @@ export function SnapshotButton({ siteUrl }: { siteUrl: string }) {
     }
   }
   return (
-    <NeonButton
+    <AccentButton
       variant="primary"
       size="sm"
       onClick={share}
@@ -26,6 +26,6 @@ export function SnapshotButton({ siteUrl }: { siteUrl: string }) {
       }
     >
       {state === 'copied' ? 'Snapshot link copied' : 'Shareable snapshot'}
-    </NeonButton>
+    </AccentButton>
   );
 }

@@ -76,10 +76,10 @@ function Inner({
   );
 }
 
-export const NeonButton = forwardRef<
+export const AccentButton = forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   ButtonProps | LinkProps
->(function NeonButton(props, ref) {
+>(function AccentButton(props, ref) {
   const {
     variant = 'primary',
     size = 'md',

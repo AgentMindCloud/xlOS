@@ -3,7 +3,7 @@ import { Hero } from '@/components/home/Hero';
 import { LatestGrid } from '@/components/home/LatestGrid';
 import { SectionTeasers } from '@/components/home/SectionTeasers';
 import { StatsTeaser } from '@/components/home/StatsTeaser';
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { getAgents, getFeaturedAgents, getLatestAgents } from '@/lib/agents';
 import { getStarCounts } from '@/lib/github';
@@ -85,14 +85,14 @@ export default async function Home() {
           title="Certified Grok-native, community-loved"
           description="Hand-picked agents that hit our highest certification bars — Grok-Native, Safety-Max, Voice-Ready, or Swarm-Ready."
           action={
-            <NeonButton
+            <AccentButton
               variant="secondary"
               size="sm"
               href="/marketplace"
               trailingIcon={<ArrowRight className="h-4 w-4" />}
             >
               View all
-            </NeonButton>
+            </AccentButton>
           }
         />
         <FeaturedCarousel agents={featuredWithStats} />
@@ -104,14 +104,14 @@ export default async function Home() {
           title="Recently shipped"
           description="The newest agents added to the marketplace. Refreshed every 10 minutes."
           action={
-            <NeonButton
+            <AccentButton
               variant="secondary"
               size="sm"
               href="/marketplace?sort=newest"
               trailingIcon={<ArrowRight className="h-4 w-4" />}
             >
               See all
-            </NeonButton>
+            </AccentButton>
           }
         />
         <LatestGrid agents={latestWithStats} />

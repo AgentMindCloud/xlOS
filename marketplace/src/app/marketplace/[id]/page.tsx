@@ -7,7 +7,7 @@ import { YamlSnippet } from '@/components/marketplace/YamlSnippet';
 import { CertificationBadgeRow } from '@/components/ui/CertificationBadge';
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { Section } from '@/components/ui/Section';
 import { StatPill } from '@/components/ui/StatPill';
 import { getAgentById, getAgents } from '@/lib/agents';
@@ -166,7 +166,7 @@ export default async function AgentDetailPage({
             <GlassCard elevation="hero" padding="md" className="flex flex-col gap-4">
               <InstallOnX agentId={agent.id} repo={agent.repo} agentName={agent.name} />
               <div className="grid grid-cols-2 gap-2 pt-1">
-                <NeonButton
+                <AccentButton
                   variant="secondary"
                   size="sm"
                   href={`https://github.com/${agent.repo}`}
@@ -175,9 +175,9 @@ export default async function AgentDetailPage({
                   fullWidth
                 >
                   Repo
-                </NeonButton>
+                </AccentButton>
                 {agent.homepage ? (
-                  <NeonButton
+                  <AccentButton
                     variant="ghost"
                     size="sm"
                     href={agent.homepage}
@@ -186,9 +186,9 @@ export default async function AgentDetailPage({
                     fullWidth
                   >
                     Site
-                  </NeonButton>
+                  </AccentButton>
                 ) : (
-                  <NeonButton
+                  <AccentButton
                     variant="ghost"
                     size="sm"
                     href={`https://github.com/${agent.repo}/issues/new`}
@@ -196,7 +196,7 @@ export default async function AgentDetailPage({
                     fullWidth
                   >
                     Report
-                  </NeonButton>
+                  </AccentButton>
                 )}
               </div>
               <Link

@@ -3,7 +3,7 @@ import { StatsHeadline } from '@/components/stats/StatsHeadline';
 import { CertificationBadgeRow } from '@/components/ui/CertificationBadge';
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { Section } from '@/components/ui/Section';
 import { getAgentById, getAgents } from '@/lib/agents';
 import { CATEGORY_LABELS } from '@/lib/constants';
@@ -162,22 +162,22 @@ export default async function AgentStatsPage({
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <NeonButton
+            <AccentButton
               variant="primary"
               size="md"
               href={`/marketplace/${agent.id}`}
               trailingIcon={<ArrowUpRight className="h-3.5 w-3.5" />}
             >
               Open agent page
-            </NeonButton>
-            <NeonButton
+            </AccentButton>
+            <AccentButton
               variant="secondary"
               size="md"
               href={`https://github.com/${agent.repo}`}
               external
             >
               View repo
-            </NeonButton>
+            </AccentButton>
           </div>
         </div>
       </Section>

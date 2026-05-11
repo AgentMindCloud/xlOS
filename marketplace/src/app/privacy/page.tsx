@@ -1,6 +1,6 @@
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { CheckCircle2, Github, Shield, XCircle } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -175,7 +175,7 @@ export default function PrivacyPage() {
               the retention job — is open-source. Audit it, submit a PR, or build your own fork.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
-              <NeonButton
+              <AccentButton
                 variant="secondary"
                 size="sm"
                 href="https://github.com/AgentMindCloud/grok-install-cli/tree/main/src/telemetry"
@@ -183,8 +183,8 @@ export default function PrivacyPage() {
                 leadingIcon={<Github className="h-4 w-4" />}
               >
                 CLI telemetry module
-              </NeonButton>
-              <NeonButton
+              </AccentButton>
+              <AccentButton
                 variant="secondary"
                 size="sm"
                 href="https://github.com/AgentMindCloud/grok-agents-marketplace/tree/main/src/app/api/telemetry"
@@ -192,8 +192,8 @@ export default function PrivacyPage() {
                 leadingIcon={<Github className="h-4 w-4" />}
               >
                 Server endpoint
-              </NeonButton>
-              <NeonButton
+              </AccentButton>
+              <AccentButton
                 variant="secondary"
                 size="sm"
                 href="https://github.com/AgentMindCloud/grok-agents-marketplace/blob/main/src/lib/telemetry-queries.ts"
@@ -201,7 +201,7 @@ export default function PrivacyPage() {
                 leadingIcon={<Github className="h-4 w-4" />}
               >
                 Aggregation queries
-              </NeonButton>
+              </AccentButton>
             </div>
           </GlassCard>
 

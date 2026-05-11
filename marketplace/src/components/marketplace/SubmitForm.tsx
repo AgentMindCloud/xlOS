@@ -1,7 +1,7 @@
 'use client';
 
 import { GlassCard } from '@/components/ui/GlassCard';
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { CATEGORY_LABELS, CERTIFICATION_LABELS } from '@/lib/constants';
 import type { Category, Certification } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -155,7 +155,7 @@ export function SubmitForm() {
         </Field>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <NeonButton
+          <AccentButton
             variant="primary"
             size="lg"
             href={isValid ? prUrl : '#'}
@@ -166,15 +166,15 @@ export function SubmitForm() {
             aria-disabled={!isValid}
           >
             Open pre-filled PR
-          </NeonButton>
-          <NeonButton
+          </AccentButton>
+          <AccentButton
             variant="secondary"
             size="lg"
             onClick={onCopy}
             leadingIcon={copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           >
             {copied ? 'Copied markdown' : 'Copy PR body'}
-          </NeonButton>
+          </AccentButton>
         </div>
       </form>
 

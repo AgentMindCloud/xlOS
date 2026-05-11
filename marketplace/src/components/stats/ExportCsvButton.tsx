@@ -1,6 +1,6 @@
 'use client';
 
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { Download } from 'lucide-react';
 
 export interface CsvRow {
@@ -42,13 +42,13 @@ export function ExportCsvButton({ rows }: { rows: CsvRow[] }) {
     URL.revokeObjectURL(url);
   }
   return (
-    <NeonButton
+    <AccentButton
       variant="secondary"
       size="sm"
       onClick={download}
       leadingIcon={<Download className="h-4 w-4" />}
     >
       Export CSV
-    </NeonButton>
+    </AccentButton>
   );
 }

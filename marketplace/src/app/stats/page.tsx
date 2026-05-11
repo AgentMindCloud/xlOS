@@ -10,7 +10,7 @@ import { SafetyDistribution } from '@/components/stats/SafetyDistribution';
 import { SnapshotButton } from '@/components/stats/SnapshotButton';
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { getAgents } from '@/lib/agents';
 import { SITE_URL } from '@/lib/constants';
@@ -159,14 +159,14 @@ export default async function StatsPage() {
                 </p>
               </div>
             </div>
-            <NeonButton
+            <AccentButton
               variant="secondary"
               size="md"
               href="/marketplace"
               trailingIcon={<ArrowUpRight className="h-3.5 w-3.5" />}
             >
               Browse the marketplace
-            </NeonButton>
+            </AccentButton>
           </GlassCard>
 
           <GlassCard
@@ -189,14 +189,14 @@ export default async function StatsPage() {
                 </p>
               </div>
             </div>
-            <NeonButton
+            <AccentButton
               variant="secondary"
               size="md"
               href="/privacy"
               trailingIcon={<ArrowUpRight className="h-3.5 w-3.5" />}
             >
               Read our privacy pledge
-            </NeonButton>
+            </AccentButton>
           </GlassCard>
 
           <div className="flex flex-col items-start gap-2 text-[11px] text-ink-subtle">

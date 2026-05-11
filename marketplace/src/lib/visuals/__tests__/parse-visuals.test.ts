@@ -109,7 +109,7 @@ describe('parseVisuals', () => {
 
   it('rejects unknown style values', () => {
     const input = {
-      style: 'neon',
+      style: 'invalid',
       accent_color: 'cyan',
       demo_media: { kind: 'auto_generate' },
     };

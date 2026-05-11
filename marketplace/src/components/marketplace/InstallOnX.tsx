@@ -1,6 +1,6 @@
 'use client';
 
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { trackInstall } from '@/lib/tracking';
 import { cn } from '@/lib/utils';
 import { Check, Copy, ExternalLink } from 'lucide-react';
@@ -49,7 +49,7 @@ export function InstallOnX({
   return (
     <div className={cn('flex flex-col gap-3', className)}>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <NeonButton
+        <AccentButton
           variant="secondary"
           size="lg"
           onClick={onCopy}
@@ -60,8 +60,8 @@ export function InstallOnX({
           aria-label={copyState === 'copied' ? 'Copied tweet text' : 'Copy tweet text'}
         >
           {copyState === 'copied' ? 'Copied' : 'Copy'}
-        </NeonButton>
-        <NeonButton
+        </AccentButton>
+        <AccentButton
           variant="primary"
           size="lg"
           onClick={onTweet}
@@ -75,7 +75,7 @@ export function InstallOnX({
           )}
         >
           Install on X
-        </NeonButton>
+        </AccentButton>
       </div>
       <p className="text-[11px] text-ink-subtle leading-relaxed">
         Tapping <span className="text-cyan">Install on X</span> opens a pre-filled post tagging

@@ -1,6 +1,6 @@
 'use client';
 
-import { NeonButton } from '@/components/ui/NeonButton';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { NAV_ITEMS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { Github, Menu, X } from 'lucide-react';
@@ -58,7 +58,7 @@ export function Header() {
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
-          <NeonButton
+          <AccentButton
             variant="secondary"
             size="sm"
             href="https://github.com/AgentMindCloud/grok-agents-marketplace"
@@ -66,10 +66,10 @@ export function Header() {
             leadingIcon={<Github className="h-4 w-4" />}
           >
             Star on GitHub
-          </NeonButton>
-          <NeonButton variant="primary" size="sm" href="/marketplace">
+          </AccentButton>
+          <AccentButton variant="primary" size="sm" href="/marketplace">
             Browse Agents
-          </NeonButton>
+          </AccentButton>
         </div>
 
         <button
@@ -102,7 +102,7 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-3 grid grid-cols-2 gap-2">
-              <NeonButton
+              <AccentButton
                 variant="secondary"
                 size="md"
                 href="https://github.com/AgentMindCloud"
@@ -110,10 +110,10 @@ export function Header() {
                 fullWidth
               >
                 GitHub
-              </NeonButton>
-              <NeonButton variant="primary" size="md" href="/marketplace" fullWidth>
+              </AccentButton>
+              <AccentButton variant="primary" size="md" href="/marketplace" fullWidth>
                 Browse
-              </NeonButton>
+              </AccentButton>
             </div>
           </nav>
         </div>
