@@ -1,0 +1,49 @@
+/* src/components/AgentPreviewCard/AgentPreviewCard.module.css
+ *
+ * All color, radii, shadow, and blur values come from tailwind.config.ts.
+ * This module only contains layout + animation shims that are awkward to
+ * express inline. No hardcoded hex values.
+ */
+
+.card {
+  animation: fade-in-up 400ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.trace {
+  opacity: 0.45;
+  mix-blend-mode: screen;
+}
+
+.futuristic {
+  isolation: isolate;
+}
+
+.futuristic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 30, 112, 0.14) 1px, transparent 1px);
+  background-size: 18px 18px;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.premium::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(900px circle at 0% 0%, rgba(255, 30, 112, 0.12), transparent 45%),
+    radial-gradient(700px circle at 100% 100%, rgba(0, 224, 213, 0.1), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.minimal {
+  transition: border-color 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.minimal:hover {
+  border-color: rgba(255, 30, 112, 0.4);
+}

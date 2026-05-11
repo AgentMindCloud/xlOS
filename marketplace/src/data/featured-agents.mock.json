@@ -1,0 +1,175 @@
+[
+  {
+    "id": "post-autopilot",
+    "name": "Post Autopilot",
+    "tagline": "Drafts, schedules, and publishes Grok-aware threads on X.",
+    "description": "Post Autopilot writes in your voice, respects your content guardrails, and posts directly via the X developer API. Ships with a tuned safety policy that blocks 19 known prompt-injection vectors out of the box.",
+    "category": "content",
+    "tags": ["threads", "scheduler", "x-api", "grok-native", "beginner-friendly"],
+    "certifications": ["grok-native", "safety-max", "action-certified"],
+    "creator": {
+      "handle": "@JanSol0s",
+      "github": "JanSol0s",
+      "x": "JanSol0s",
+      "avatar": "https://avatars.githubusercontent.com/JanSol0s",
+      "agentCount": 7
+    },
+    "repo": "AgentMindCloud/post-autopilot",
+    "homepage": "https://postautopilot.grokagents.dev",
+    "demo_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "x_install_url": "https://x.com/install?agent=post-autopilot",
+    "created_at": "2026-02-11T10:00:00Z",
+    "updated_at": "2026-04-14T09:20:00Z",
+    "installs": 14820,
+    "safetyScore": 98,
+    "featured": true,
+    "yaml": {
+      "filename": "grok-agent.yaml",
+      "lang": "yaml",
+      "content": "apiVersion: grokinstall.dev/v1\nkind: Agent\nmetadata:\n  id: post-autopilot\n  name: Post Autopilot\nspec:\n  runtime: grok-4-fast\n  safety:\n    policy: safety-max\n    blockInjection: true\n  actions:\n    - id: draft-thread\n      uses: x.compose\n    - id: schedule-post\n      uses: x.schedule\n      requires: [composer.approved]\n  telemetry:\n    sink: grokinstall-events\n"
+    },
+    "visuals": {
+      "style": "futuristic",
+      "accent_color": "cyan",
+      "demo_media": { "kind": "auto_generate" },
+      "headline": "Ship Grok-native threads at the speed of thought.",
+      "subheadline": "One YAML, one tap, scheduled across X with safety-max guardrails baked in."
+    }
+  },
+  {
+    "id": "voice-concierge",
+    "name": "Voice Concierge",
+    "tagline": "Hands-free Grok agent for replies, DMs, and quick polls.",
+    "description": "A voice-first concierge for X. Wake-word activation, barge-in support, and structured command grammar for replies, DMs, and rapid polls. Built on the Voice-Ready spec v1.2.",
+    "category": "voice",
+    "tags": ["voice", "hands-free", "concierge", "barge-in"],
+    "certifications": ["grok-native", "voice-ready", "safety-max"],
+    "creator": {
+      "handle": "@echostackdev",
+      "github": "echostackdev",
+      "x": "echostackdev",
+      "avatar": "https://avatars.githubusercontent.com/echostackdev",
+      "agentCount": 3
+    },
+    "repo": "AgentMindCloud/voice-concierge",
+    "demo_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "x_install_url": "https://x.com/install?agent=voice-concierge",
+    "created_at": "2026-03-02T14:45:00Z",
+    "updated_at": "2026-04-10T12:00:00Z",
+    "installs": 5203,
+    "safetyScore": 95,
+    "featured": true,
+    "yaml": {
+      "filename": "grok-voice.yaml",
+      "lang": "yaml",
+      "content": "apiVersion: grokinstall.dev/v1\nkind: VoiceAgent\nmetadata:\n  id: voice-concierge\nspec:\n  wakeWord: \"hey grok\"\n  language: en-US\n  barge-in: true\n  commands:\n    - intent: reply\n      grammar: \"reply to <handle> saying <text>\"\n    - intent: dm\n      grammar: \"dm <handle> <text>\"\n    - intent: poll\n      grammar: \"start a poll about <topic>\"\n"
+    },
+    "visuals": {
+      "style": "premium",
+      "accent_color": "green",
+      "demo_media": {
+        "kind": "image",
+        "url": "https://raw.githubusercontent.com/AgentMindCloud/grok-agents-marketplace/main/public/brand/banner-hero-grok-install.svg"
+      },
+      "headline": "Talk to X like it's 2030.",
+      "subheadline": "Wake-word, barge-in, and a structured grammar for replies, DMs, and polls — no hands, no friction."
+    }
+  },
+  {
+    "id": "swarm-sentry",
+    "name": "Swarm Sentry",
+    "tagline": "A three-agent swarm that moderates replies in real time.",
+    "description": "Swarm Sentry coordinates three specialist agents — Triage, Evidence, and Judge — to moderate replies on high-volume posts. Every decision is logged with citations for appeal. Runs on the Swarm-Ready v1 spec.",
+    "category": "swarm",
+    "tags": ["swarm", "moderation", "triage", "audit-log"],
+    "certifications": ["grok-native", "swarm-ready", "safety-max"],
+    "creator": {
+      "handle": "@sentrylabs",
+      "github": "sentrylabs",
+      "x": "sentrylabs",
+      "avatar": "https://avatars.githubusercontent.com/sentrylabs",
+      "agentCount": 4
+    },
+    "repo": "AgentMindCloud/swarm-sentry",
+    "demo_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "x_install_url": "https://x.com/install?agent=swarm-sentry",
+    "created_at": "2026-01-24T09:00:00Z",
+    "updated_at": "2026-04-16T22:10:00Z",
+    "installs": 3104,
+    "safetyScore": 97,
+    "featured": true,
+    "yaml": {
+      "filename": "grok-swarm.yaml",
+      "lang": "yaml",
+      "content": "apiVersion: grokinstall.dev/v1\nkind: Swarm\nmetadata:\n  id: swarm-sentry\nspec:\n  agents:\n    - id: triage\n      role: classifier\n      runtime: grok-4-fast\n    - id: evidence\n      role: retriever\n      runtime: grok-4\n    - id: judge\n      role: arbiter\n      runtime: grok-4\n  routing:\n    - from: triage\n      to: evidence\n      when: \"confidence < 0.85\"\n    - from: evidence\n      to: judge\n      always: true\n  audit:\n    log: true\n    sink: grokinstall-events\n"
+    }
+  },
+  {
+    "id": "thread-summarizer",
+    "name": "Thread Summarizer",
+    "tagline": "Collapses a 200-reply thread into a 5-bullet TL;DR.",
+    "description": "Feed it any X thread URL and get a calibrated TL;DR with citations back to the original posts. Ideal for research, community management, and journalism workflows.",
+    "category": "research",
+    "tags": ["tldr", "summary", "citations", "research", "beginner-friendly"],
+    "certifications": ["grok-native", "safety-max"],
+    "creator": {
+      "handle": "@mxr-labs",
+      "github": "mxr-labs",
+      "avatar": "https://avatars.githubusercontent.com/mxr-labs",
+      "agentCount": 2
+    },
+    "repo": "AgentMindCloud/thread-summarizer",
+    "created_at": "2026-03-18T08:10:00Z",
+    "updated_at": "2026-04-12T15:00:00Z",
+    "installs": 2189,
+    "safetyScore": 92,
+    "visuals": {
+      "style": "minimal",
+      "accent_color": "cyan",
+      "demo_media": { "kind": "auto_generate" },
+      "headline": "Drop a thread URL. Get a 5-bullet TL;DR.",
+      "subheadline": "Cited back to the original posts — ideal for research, community management, and newsroom triage."
+    }
+  },
+  {
+    "id": "devrel-reply",
+    "name": "DevRel Reply",
+    "tagline": "Suggests on-brand replies for developer-community accounts.",
+    "description": "Trained on DevRel voice patterns from 42 OSS accounts. Generates replies you can approve in one tap, respects a custom style guide, and flags anything your brand team pre-listed.",
+    "category": "marketing",
+    "tags": ["devrel", "replies", "style-guide", "brand-safety", "beginner-friendly"],
+    "certifications": ["grok-native", "action-certified"],
+    "creator": {
+      "handle": "@relay-studio",
+      "github": "relay-studio",
+      "avatar": "https://avatars.githubusercontent.com/relay-studio",
+      "agentCount": 5
+    },
+    "repo": "AgentMindCloud/devrel-reply",
+    "created_at": "2026-03-28T11:00:00Z",
+    "updated_at": "2026-04-17T10:45:00Z",
+    "installs": 1476,
+    "safetyScore": 88
+  },
+  {
+    "id": "codepilot-x",
+    "name": "CodePilot X",
+    "tagline": "Turns a code snippet into a post-ready explainer thread.",
+    "description": "Paste code, pick a tone. CodePilot X writes a clear thread with inline syntax highlighting, a hook, and a CTA. Ships with VS Code sidebar integration and GitHub Action support.",
+    "category": "developer",
+    "tags": ["vscode", "code-explainer", "threads", "github-action"],
+    "certifications": ["grok-native", "vscode-verified", "action-certified"],
+    "creator": {
+      "handle": "@vybe-dev",
+      "github": "vybe-dev",
+      "avatar": "https://avatars.githubusercontent.com/vybe-dev",
+      "agentCount": 6
+    },
+    "repo": "AgentMindCloud/codepilot-x",
+    "demo_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "created_at": "2026-04-01T18:00:00Z",
+    "updated_at": "2026-04-18T09:30:00Z",
+    "installs": 987,
+    "safetyScore": 90
+  }
+]
