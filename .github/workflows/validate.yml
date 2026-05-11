@@ -20,18 +20,14 @@ jobs:
         shell: bash
         run: |
           python <<'PYEOF'
+          import json
           import sys
           from pathlib import Path
 
-          schema_path = Path("spec/v2.14/schema.json")
-          if not schema_path.exists():
-              print("spec not yet vendored - Phase 3b")
-              sys.exit(0)
-
-          import json
           import jsonschema
           import yaml
 
+          schema_path = Path("spec/v2.14/schema.json")
           schema = json.loads(schema_path.read_text(encoding="utf-8"))
           yamls = sorted(
               list(Path("agents").rglob("*.yaml"))

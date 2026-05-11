@@ -260,7 +260,7 @@ extensions:
       host: https://cloud.langfuse.com
   demo_metadata:
     storyboard: templates/super-agents/self-evolving-personal-os/DEMO.md
-    url: https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/self-evolving-personal-os-demo.mp4
+    # url omitted — will be re-added when super-agent-demos-v1 release tag goes live
     status: deferred
     note: Actual video has not yet been recorded; once recorded, it will be uploaded
       as a release asset under tag 'super-agent-demos-v1'.

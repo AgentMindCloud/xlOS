@@ -22,6 +22,33 @@ xlOS only consumes the projection below.
 | (x-money) `tax_disclaimer.*`, `finance.*` | `extensions.x_money_specific` | Strict tax/finance disclaimer fields migrate into the `x_money_specific` extension object. |
 | (any) `launcher.ps1` reference | `runtime` block in manifest | PowerShell launchers are not migrated; the manifest's `runtime` block declares the Python entry point, and `xlos run` dispatches from that. |
 
+## Parking convention for v2.15-only sub-blocks
+
+The six rows above cover the v2.15 → v2.14 mappings the master plan defined.
+v2.15 carries additional sub-blocks that have no master-plan-defined extension
+key — for example, the source manifest's verbatim `constitution` block (with
+free-form `rules:` text and Windows-specific path hints) and the source
+`safety` block (with redaction, retention, and Langfuse telemetry knobs).
+
+Rather than drop these or invent new top-level extension keys ad hoc, the
+migration parks each such sub-block under `extensions.<original_key>_v215`.
+The keys actually used in this migration are:
+
+- `extensions.constitution_v215` — the verbatim source `constitution` block
+  (free-form rules text, Windows path hints, telemetry stance). The mapped
+  `extensions.constitution` array of article refs is the canonical v2.14 form;
+  `constitution_v215` is retained for forward reference and so the Constitution
+  scanner can read the source-of-truth rule text when it needs the long form.
+- `extensions.safety_v215` — the verbatim source `safety` block (PII redaction,
+  data retention, Langfuse public/secret env-var names, telemetry host).
+  Distinct from the `constitution`-driven safety scan; this is configuration
+  the runtime will consume once the safety subsystem lands.
+
+Rationale: preserves data without polluting v2.14 validation (both sit under
+`extensions.*` which is `additionalProperties: true`), keeps the Constitution
+scanner able to read the long-form rule text, and gives the v2.15 RFC a clean
+list of candidate keys to promote into first-class extension fields.
+
 ## Schema-level guarantees that allow this projection without modifying v2.14
 
 The vendored `spec/v2.14/schema.json` is permissive at the relevant levels:
