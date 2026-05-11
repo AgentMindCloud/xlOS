@@ -1,0 +1,65 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/niche-influencer-finder/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: niche-influencer-finder
+description: "Aggregate niche-influencer discovery for X creators \u2014 4 official\
+  \ match scores (Authority / Engagement / Audience fit / Collaboration potential),\
+  \ 3-5 paraphrased archetype cards across Micro / Mid / Macro tiers, 3-5 collaboration\
+  \ opportunities, and >= 3 cross-template bridges. Aggregate-only \u2014 never names\
+  \ a real account."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits: &id001
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_niche_influencer_recommendations
+extensions:
+  constitution:
+    rules:
+    - "Aggregate-only output. Top-Influencer cards describe paraphrased archetypes\
+      \ (e.g. 'Indie LLM-infra founder, 8k followers, weekly long-form posts') \u2014\
+      \ never named accounts."
+    - Never invent a follower count, engagement rate, or post date. If sample-derived
+      signal is missing for a metric, mark it `n/a` and note what data would resolve
+      it.
+    - "Surface inflated-engagement risk in BOTH the score row AND the Red Flags section\
+      \ whenever Engagement > 70 AND Authority < 50 (engagement-pod paradox \u2014\
+      \ same shape as the bot-engagement paradox in follower-quality-analyzer)."
+    - Every collaboration recommendation that touches paid placements, sponsorship
+      money, or revenue share carries the Article V.1 'Not financial advice' banner
+      verbatim.
+    - Every analysis links to >= 3 cross-template bridges so the creator can act on
+      the findings without leaving Grok Agent OS.
+    - "Refuse to recommend influencers whose tier sits outside the requested min_followers\
+      \ / max_followers band \u2014 return a guidance card instead of fabricating\
+      \ matches."
+    consent_gates: []
+    hard_refusals:
+    - name a real X account in any output section
+    - fabricate engagement metrics or follower counts the input did not supply
+    - scrape authenticated X content without the creator's consent
+    - "recommend influencers as a 'must follow' list \u2014 recommendations are collaboration\
+      \ angles, not endorsements"
+  demo_metadata:
+    tagline: "Find the right collaborators in your niche \u2014 without naming names\
+      \ you haven't approved."
+    display_name: Niche Influencer Finder
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: false
+      real_world_action_consent: false
+    cost_limits: *id001
+  xlos_runtime:
+    type: python_module
+    module: niche_influencer_finder.run

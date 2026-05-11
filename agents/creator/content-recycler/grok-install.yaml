@@ -1,0 +1,65 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/content-recycler/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: content-recycler
+description: "Local-first content recycler for X creators \u2014 turns an old X post\
+  \ into 2-3 recycled variants under a chosen angle (update / expand / threadify /\
+  \ repurpose / auto) and target format (tweet / thread / carousel / newsletter /\
+  \ all) with 4 official Recycle Score metrics (Freshness lift / Format fit / Engagement\
+  \ potential / Differentiation), stale-rehash paradox detection, and >= 3 cross-template\
+  \ bridges. Recycles only the creator's own content. Drafts only \u2014 never auto-publishes."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits: &id001
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_recycled_variants
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner never publishes a variant. Constitution Article II's
+      `publish_to_x` consent gate covers every output.
+    - "Recycle only the creator's own content. The runner refuses to adapt a post\
+      \ the creator did not author \u2014 recycling another account's content is impersonation\
+      \ by another name."
+    - Preserve the 'originally posted on <date>' attribution stamp on every variant.
+      The runner never strips it; the creator may strip it manually before posting.
+    - "Surface the stale-rehash paradox in BOTH the variant card AND the Red Flags\
+      \ section whenever Format fit > 70 AND Freshness lift < 35 (the variant is well-formatted\
+      \ but adds no new value vs the original \u2014 that is a re-publish, not a recycle)."
+    - Every monetization-related recommendation (cross-platform paid-tier funnel,
+      sponsored-content recycle) carries the Article V.1 'Not financial advice' banner
+      verbatim.
+    - Every analysis links to >= 3 cross-template bridges so the creator can act on
+      the findings without leaving Grok Agent OS.
+    consent_gates: []
+    hard_refusals:
+    - recycle a post the creator did not author (refuse on a handle mismatch)
+    - auto-publish a variant to any platform without an explicit consent gate
+    - strip the 'originally posted on <date>' attribution stamp from any variant
+    - claim a recycled variant is original content
+    - "fabricate updated data, statistics, or quotes the source did not contain \u2014\
+      \ when angle=update and runner has no fresh data, mark the placeholder explicitly"
+    - scrape authenticated X content to seed the recycle
+  demo_metadata:
+    tagline: Compound your back catalog without copy-pasting yourself.
+    display_name: Content Recycler
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: false
+      real_world_action_consent: false
+    cost_limits: *id001
+  xlos_runtime:
+    type: python_module
+    module: content_recycler.run

@@ -1,0 +1,79 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/growth-experiment-runner/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: growth-experiment-runner
+description: "Local-first growth experiment runner for X creators \u2014 reads creator-supplied\
+  \ hypothesis + audience signals (or seeded demo signals) and emits a 7/8-section\
+  \ structured experiment plan with 4 official Experiment Plan Score metrics (Hypothesis\
+  \ specificity / Single-axis isolation / Sample power / Risk avoidance), small-n\
+  \ paradox detection in BOTH the Plan Score AND Red Flags sections (avg Sample power\
+  \ < 40 AND avg Hypothesis specificity > 70), multi-variable guard (any experiment\
+  \ varying > 1 axis..."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_growth_experiment_plan
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits an experiment plan the creator reads before running;
+      it never auto-runs, auto-publishes, or auto-schedules experiments.
+    - "No fabricated statistics. Demo metrics carry an explicit [demo experiment \u2014\
+      \ re-run with --hypothesis-file for real audience data] label so the creator\
+      \ never confuses demo output for real test data."
+    - "Surface the small-n paradox in BOTH the Experiment Plan Score section AND the\
+      \ Red Flags section whenever average Sample power is below 40 AND average Hypothesis\
+      \ specificity is above 70 (well-specified experiments that cannot statistically\
+      \ detect the predicted effect). Both conditions must hold \u2014 if only one\
+      \ fires, surface each in its own row instead."
+    - "Multi-variable guard: any experiment varying more than 1 axis \u2192 excluded\
+      \ from the experiment list and consolidated as a single Red Flag titled 'Multi-variable\
+      \ experiments excluded' with severity 'high' and a remediation step. This matches\
+      \ ab-test-suggester's single-axis isolation contract."
+    - "Risk-exclude guard: any experiment with risk_avoidance_score < 40 \u2192 excluded\
+      \ with a Red Flag titled 'High-risk experiments excluded'. Risk includes audience-distress\
+      \ patterns (e.g. negative-engagement experiments), policy-violation, and unsafe\
+      \ creator-burnout cadences."
+    - Every output unconditionally includes bridges to analytics-summarizer (the experiment's
+      primary metric is sourced + measured by analytics-summarizer) AND ab-test-suggester
+      (variant generation when the hypothesis is content-shaped). These two bridges
+      are never optional.
+    - "Privacy-first: no source-post handles, raw post text, or external URLs appear\
+      \ in the rendered output. Hypotheses and copy outlines are paraphrased only\
+      \ \u2014 never raw text or third-party handles."
+    - Refuse financial / cashtag / investment / sponsorship / harassment / unsafe-experiment
+      content. Forbidden tokens in hypothesis or axis labels trigger a hard refusal
+      with the exact token surfaced to the operator.
+    consent_gates: []
+    hard_refusals:
+    - auto-run, auto-publish, auto-schedule, or auto-queue any experiment on X without
+      explicit creator consent
+    - generate financial, cashtag, investment, portfolio, ticker, or trading-experiment
+      content of any kind
+    - generate sponsored-experiment content without explicit creator-supplied disclosure
+      copy
+    - expose source-post X handles, raw post text, or external URLs in the rendered
+      output
+    - scrape authenticated X content to seed audience signals
+    - generate experiments that target individuals for harassment, distress, or X-policy
+      violations
+    - design experiments that knowingly run a creator past sustainable cadence
+  demo_metadata:
+    tagline: Testable hypotheses with the math that says whether you can detect the
+      effect.
+    display_name: Growth Experiment Runner
+  xlos_runtime:
+    type: python_module
+    module: growth_experiment_runner.run

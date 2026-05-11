@@ -1,0 +1,108 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/reply-drafter/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: reply-drafter
+description: "Local-first reply drafter for X creators \u2014 reads a parent X post\
+  \ / thread (and optional voice samples + 7-day trend snapshot + analytics signals)\
+  \ and emits a 6/7-section structured reply plan with 3-10 ready-to-post reply drafts\
+  \ (default 5), 4 official Reply Plan Score metrics (Niche fit / Trend alignment\
+  \ / Voice fidelity / Predicted engagement), vanity-hook paradox detection (Trend\
+  \ alignment > 80 AND Niche fit < 50), 10 tone-matched archetypes shared with content-idea-generator,\
+  \ content-enga..."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_reply_drafts
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits reply variants the creator pastes into their X
+      composer themselves; the runner never auto-publishes, never schedules, never
+      DMs the draft to anyone. v1 has real_time_x.enabled = false; any future v2 posting
+      capability requires an explicit publish_to_x consent gate per draft.
+    - Train Voice fidelity scoring only on the creator's own posts. The runner refuses
+      to score voice against samples authored by a different handle (including the
+      parent post's author). The system prompt is unambiguous; the runner's contract
+      is unambiguous; the manifest binds the unambiguous contract.
+    - No fabricated engagement absolutes. Predicted engagement is a 0-100 sub-score
+      plus a band label (low / medium / high). The runner refuses to print absolute
+      like / repost / reply counts it cannot derive from a creator-supplied analytics
+      file.
+    - "Surface the vanity-hook paradox in BOTH the Reply Plan Performance section\
+      \ AND the Red Flags section whenever any draft has Trend alignment > 80 AND\
+      \ Niche fit < 50 \u2014 a reply that rides the parent post's trending surface\
+      \ for the wrong audience is the most common Type-I error in creator engagement\
+      \ (carry-over from content-idea-generator P98)."
+    - "Every reply draft is paraphrased to the creator's voice \u2014 never copy-pasted\
+      \ from competitors and never a sycophantic echo of the parent post. The runner\
+      \ refuses to suggest copying a competitor's signature phrasing or simply restating\
+      \ the parent's argument."
+    - "Every analysis links to >= 3 cross-template bridges so the creator can wire\
+      \ the reply into the next loop without leaving Grok Agent OS \u2014 bridges\
+      \ MUST include `analytics-summarizer` (so the post-reply read is structured)\
+      \ and `thread-builder` (so a high-EV reply can be promoted into a long-form\
+      \ anchor when the topic carries one)."
+    - '10 tone-matched archetypes shared with content-idea-generator. Every draft
+      is tagged with one archetype from the official set: numbers-led-list, contrarian-thesis,
+      first-person-rebuild, question-led-poll, tactical-playbook, story-cold-open,
+      metric-receipt, synthesis-takedown, trend-aligned-riff, anti-pattern-warning.
+      The runner picks the per-tone subset deterministically so the same input always
+      yields the same reply set.'
+    - "No monetization / sales / affiliate language by default. When `allow_monetization`\
+      \ is false (the default) the runner refuses to generate any reply that contains\
+      \ revenue, paid-tier, sponsorship, ad-spend, affiliate, or cashtag scope \u2014\
+      \ it emits a structured refusal that points the creator at `monetization-optimizer`\
+      \ and stops. The user must explicitly set `allow_monetization: true` to opt\
+      \ in, and even then no financial advice is generated \u2014 only on-brand reply\
+      \ structure."
+    - Audit auto-triggers when red-flag count > 3 OR count >= 8 OR the vanity-hook
+      paradox fires OR data_source = demo with no voice samples and no trends file.
+      Identical condition set to content-idea-generator P98 so the audit semantics
+      are consistent across the daily creator loop.
+    - "Reply character cap of 280 (X's default reply-body cap). Every draft body is\
+      \ enforced <= 280 characters at render time. Threaded multi-post replies are\
+      \ out of scope for v1 \u2014 that work belongs to `thread-builder`."
+    - "Engagement prediction bands are content-engagement only (impressions / replies\
+      \ / reposts / bookmarks pattern). The runner does NOT predict revenue, paid-tier\
+      \ conversions, or sponsorship dollars \u2014 that is `monetization-optimizer`'s\
+      \ job and explicitly out of scope here."
+    - "Count cap. The runner never emits more than 10 drafts regardless of input \u2014\
+      \ and >= 8 auto-triggers the Reply Audit because cognitive load on the creator\
+      \ rises sharply."
+    consent_gates: []
+    hard_refusals:
+    - "auto-publish, auto-schedule, or auto-DM any reply draft to any platform without\
+      \ an explicit consent gate (v1 has no posting capability \u2014 all drafts are\
+      \ read-only)"
+    - fabricate absolute engagement counts (likes / reposts / replies / bookmarks)
+      on any draft
+    - score Voice fidelity against samples authored by a creator other than --x-handle
+      (including the parent post's author)
+    - copy-paste a competitor's signature phrasing, sycophantically echo the parent
+      post, or impersonate the parent author's voice
+    - emit more than 10 reply drafts in a single run
+    - "generate any monetization / sales / sponsorship / affiliate / cashtag reply\
+      \ when allow_monetization is false (the default) \u2014 emit a structured refusal\
+      \ pointing at monetization-optimizer instead"
+    - "scrape authenticated X content to seed the parent post or the voice samples\
+      \ \u2014 the parent post text must be pasted by the creator"
+    - "predict revenue, paid-tier conversions, or sponsorship dollars (out of scope\
+      \ \u2014 see monetization-optimizer)"
+  demo_metadata:
+    tagline: "Reply in your own voice \u2014 5 drafts, every time, never auto-sent."
+    display_name: Reply Drafter
+  xlos_runtime:
+    type: python_module
+    module: reply_drafter.run

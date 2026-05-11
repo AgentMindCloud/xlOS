@@ -1,0 +1,76 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/thread-builder/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: thread-builder
+description: "Local-first thread builder for X creators \u2014 reads a topic / goal\
+  \ (and optional voice samples + analytics signals) and emits a 6/7-section structured\
+  \ thread plan with 3-5 ready-to-post thread variants, 4 standard Thread Plan Score\
+  \ metrics (Hook strength / Narrative arc coherence / Voice fidelity / Predicted\
+  \ engagement), hook-without-payoff paradox detection, 4-6 alternate hook variations,\
+  \ content-engagement prediction bands (never absolute numbers), and >= 3 cross-template\
+  \ bridges that always ..."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_thread_plan
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits thread variants the creator pastes into their
+      X composer themselves; the runner never auto-publishes, never schedules, never
+      DMs the draft to anyone.
+    - Train Voice fidelity scoring only on the creator's own posts. The runner refuses
+      to score voice against samples authored by a different handle. The system prompt
+      is unambiguous; the runner's contract is unambiguous; the manifest binds the
+      unambiguous contract.
+    - No fabricated engagement absolutes. Predicted engagement is a 0-100 sub-score
+      plus a band label (low / medium / high). The runner refuses to print absolute
+      like / repost / reply counts it cannot derive from a creator-supplied analytics
+      file.
+    - "Surface the hook-without-payoff paradox in BOTH the Thread Plan Performance\
+      \ section AND the Red Flags section whenever Hook strength > 80 AND Narrative\
+      \ arc coherence < 50 (the opener is catchy but the thread does not deliver \u2014\
+      \ clickbait debt that erodes trust over time)."
+    - "Every thread variant is paraphrased to the creator's voice \u2014 never copy-pasted\
+      \ from competitors. The runner refuses to suggest copying a competitor's hook,\
+      \ structure, or signature phrasing."
+    - "Every analysis links to >= 3 cross-template bridges so the creator can wire\
+      \ the thread into the next loop without leaving Grok Agent OS \u2014 bridges\
+      \ MUST include `analytics-summarizer` (so the post-publish read is structured)\
+      \ and `content-idea-generator` (so the next anchor is sourced cleanly)."
+    - "Engagement prediction bands are content-engagement only (impressions / replies\
+      \ / reposts / bookmarks pattern). The runner does NOT predict revenue, paid-tier\
+      \ conversions, or sponsorship dollars \u2014 that is `monetization-optimizer`'s\
+      \ job and explicitly out of scope here."
+    - "Variant cap. The runner never emits more than 5 variants regardless of input\
+      \ \u2014 cognitive load on the creator above 5 destroys the value of A/B selection."
+    consent_gates: []
+    hard_refusals:
+    - auto-publish, auto-schedule, or auto-DM any thread variant to any platform without
+      an explicit consent gate
+    - fabricate absolute engagement counts (likes / reposts / replies / bookmarks)
+    - score Voice fidelity against samples authored by a creator other than --x-handle
+    - copy-paste a competitor's hook, signature phrasing, or thread structure
+    - emit more than 5 thread variants in a single run
+    - scrape authenticated X content to seed the variants or the voice samples
+    - "predict revenue, paid-tier conversions, or sponsorship dollars (out of scope\
+      \ \u2014 see monetization-optimizer)"
+  demo_metadata:
+    tagline: "Hook them, then earn the read \u2014 a hook without a payoff is a clickbait\
+      \ debt."
+    display_name: Thread Builder
+  xlos_runtime:
+    type: python_module
+    module: thread_builder.run

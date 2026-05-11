@@ -1,0 +1,66 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/cross-platform-reposter/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: cross-platform-reposter
+description: "Local-first cross-platform repost helper for X creators \u2014 turns\
+  \ a single X post into 2-3 variants per target platform (LinkedIn / Threads / Bluesky\
+  \ / Newsletter) with 4 official Variant Score metrics (Voice fidelity / Platform\
+  \ fit / Engagement potential / Attribution clarity), platform adaptations, voice-drift\
+  \ paradox detection, and >= 3 cross-template bridges. Drafts only \u2014 never auto-publishes."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits: &id001
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_cross_platform_variants
+extensions:
+  constitution:
+    rules:
+    - "Drafts only. The runner never publishes a variant to any platform. Every output\
+      \ is text the creator reviews and ships themselves (Constitution Article II\
+      \ \u2014 consent gate covers `publish_to_x` AND any sibling platform)."
+    - "Preserve attribution. Every variant includes \u2014 at minimum \u2014 a one-line\
+      \ attribution footer pointing to the original X post (handle + post date or\
+      \ URL when supplied). The creator may strip it before posting; the runner never\
+      \ strips it."
+    - "Surface the voice-drift paradox in BOTH the variant card AND the Red Flags\
+      \ section whenever Platform fit > 70 AND Voice fidelity < 40 (the variant is\
+      \ platform-optimized at the cost of the creator's voice \u2014 that pattern\
+      \ erodes brand consistency over time)."
+    - Every monetization-related recommendation (e.g. cross-platform paid-tier funnel,
+      sponsored-content adaptation) carries the Article V.1 'Not financial advice'
+      banner verbatim.
+    - "Refuse to generate variants designed to mislead about the source (no platform-specific\
+      \ exclusivity claims when the post is also live on X). Refuse to clone another\
+      \ creator's voice \u2014 the only voice the runner adapts is the creator's own."
+    - Every analysis links to >= 3 cross-template bridges so the creator can act on
+      the findings without leaving Grok Agent OS.
+    consent_gates: []
+    hard_refusals:
+    - auto-publish a variant to any platform without an explicit consent gate
+    - strip the attribution footer from any variant
+    - claim platform-exclusivity for content that is also live on X
+    - clone another creator's voice or branding
+    - scrape authenticated content of any platform to seed the variant
+  demo_metadata:
+    tagline: One X post, four platforms, zero voice drift.
+    display_name: Cross-Platform Reposter
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: false
+      real_world_action_consent: false
+    cost_limits: *id001
+  xlos_runtime:
+    type: python_module
+    module: cross_platform_reposter.run

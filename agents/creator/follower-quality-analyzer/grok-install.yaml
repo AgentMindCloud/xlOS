@@ -1,0 +1,57 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/follower-quality-analyzer/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: follower-quality-analyzer
+description: "Aggregate follower-quality scoring for X creators \u2014 4 standard\
+  \ metrics, paraphrased top-follower archetypes, bot-engagement paradox detection,\
+  \ and \u22653 cross-template bridges. Aggregate-only privacy."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits: &id001
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_follower_quality_analysis
+extensions:
+  constitution:
+    rules:
+    - Aggregate-only output. Never expose an individual follower's handle, display
+      name, bio, or any other PII in the analysis body.
+    - Surface the bot-engagement paradox in BOTH the Quality Scores table AND the
+      Red Flags section whenever bot share > 15% AND aggregate engagement is above
+      the niche median.
+    - "Top Followers cards describe paraphrased archetypes (e.g. 'Indie ML researcher,\
+      \ 3-year tenure, replies daily') \u2014 never named accounts."
+    - Every monetization-tier recommendation carries the Article V.1 'Not financial
+      advice' banner verbatim.
+    - "Every analysis links to \u22653 cross-template bridges so the creator can act\
+      \ on the findings without leaving Grok Agent OS."
+    - "Refuse to run scoring on a sample whose size is < 5 (insufficient signal \u2014\
+      \ emit guidance, not a fabricated score)."
+    consent_gates: []
+    hard_refusals:
+    - expose individual follower handles in any output section
+    - "score followers as 'low value' or 'block-worthy' \u2014 that judgement belongs\
+      \ to the creator, not the agent"
+    - scrape authenticated X content without the creator's consent
+  demo_metadata:
+    tagline: "Know your real audience \u2014 aggregate signal, never individual PII."
+    display_name: Follower Quality Analyzer
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: false
+      real_world_action_consent: false
+    cost_limits: *id001
+  xlos_runtime:
+    type: python_module
+    module: follower_quality_analyzer.run

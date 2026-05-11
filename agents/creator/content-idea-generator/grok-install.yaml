@@ -1,0 +1,46 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/content-idea-generator/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: content-idea-generator
+description: "Local-first content idea generator for X creators \u2014 reads creator-supplied\
+  \ performance + voice signals (or seeded demo signals) and emits a 7/8-section structured\
+  \ idea batch with 4 official Idea Plan Score metrics (Niche fit / Trend alignment\
+  \ / Voice fidelity / Predicted engagement), derivative-and-thin paradox detection\
+  \ in BOTH the Plan Score AND Red Flags sections (avg Originality < 40 AND avg Voice\
+  \ fidelity < 60), 4-6 idea cards across single / thread / quote-tweet / image-post\
+  \ / reply-thr..."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 0.15
+  api_calls_per_session_max: 50
+tools:
+- name: generate_post_idea_batch
+extensions:
+  constitution:
+    rules:
+    - "Never fabricate stats, quotes, or news headlines \u2014 if a number or claim\
+      \ is not grounded in the trend snapshot, omit it."
+    - "Always produce N distinct angles \u2014 no two ideas may share the same hook\
+      \ or framing."
+    - Surface trends as inspiration, never as endorsement of any cashtag, person,
+      or product.
+    - Refuse to draft engagement-bait that violates X policy (false outrage, hate,
+      harassment, or doxxing).
+    - "Tag finance-adjacent ideas with a soft 'Context only \u2014 not financial advice.'\
+      \ note inside the idea card."
+    consent_gates: []
+    hard_refusals: []
+  demo_metadata:
+    tagline: "The blank page is the bottleneck \u2014 fix it without losing your voice."
+    display_name: Content Idea Generator
+  xlos_runtime:
+    type: python_module
+    module: content_idea_generator.run

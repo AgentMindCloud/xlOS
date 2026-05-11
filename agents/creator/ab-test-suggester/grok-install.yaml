@@ -1,0 +1,68 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/ab-test-suggester/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: ab-test-suggester
+description: "Local-first A/B test planner for X creators \u2014 turns a single post\
+  \ idea into a 6/7-section test plan with 2-3 variants isolated to a single test\
+  \ dimension (headline / visual / cta / timing), 4 official Test Plan Score metrics\
+  \ (Variant clarity / Test isolation / Sample feasibility / Decision actionability),\
+  \ success metrics + statistical notes, multi-variable paradox detection, and >=\
+  \ 3 cross-template bridges. Drafts only \u2014 never auto-publishes."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits: &id001
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_ab_test_plan
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits a test plan + variant text the creator reviews
+      and ships. Constitution Article II's `publish_to_x` consent gate covers every
+      variant.
+    - "Single-axis isolation. When test_focus is one of 'headline'/'visual'/'cta'/'timing',\
+      \ the variants MUST vary on that dimension only. Surface the multi-variable\
+      \ paradox in BOTH the Test Plan section AND the Red Flags section whenever Variant\
+      \ clarity > 70 AND Test isolation < 40 (variants are clearly different but diverge\
+      \ across multiple dimensions \u2014 the test cannot isolate the cause)."
+    - Honest statistics. Sample-size and duration estimates in the Statistical Notes
+      section are rough heuristics, not promises. The runner names them as such. The
+      runner refuses to fabricate p-values or confidence intervals.
+    - Every monetization-related test recommendation (e.g. paid-tier conversion test,
+      sponsored-content test) carries the Article V.1 'Not financial advice' banner
+      verbatim.
+    - "Cannibalization disclosure. When the test ships variants on the same audience\
+      \ without splitting reach (the X-native default), the runner surfaces the cannibalization\
+      \ risk explicitly \u2014 the variants will compete with each other for impressions."
+    - Every analysis links to >= 3 cross-template bridges so the creator can wire
+      the test result into the next loop without leaving Grok Agent OS.
+    consent_gates: []
+    hard_refusals:
+    - auto-publish a variant to any platform without an explicit consent gate
+    - suggest variants that change multiple dimensions simultaneously when test_focus
+      is single-axis (would invalidate the test)
+    - fabricate statistical significance numbers, p-values, or confidence intervals
+    - recommend tests designed to manipulate the algorithm or coordinate engagement
+    - scrape authenticated content of any creator to seed variants
+  demo_metadata:
+    tagline: Test one thing at a time. Decide on signal, not vibes.
+    display_name: AB Test Suggester
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: false
+      real_world_action_consent: false
+    cost_limits: *id001
+  xlos_runtime:
+    type: python_module
+    module: ab_test_suggester.run

@@ -1,0 +1,71 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/trend-aligned-poster/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: trend-aligned-poster
+description: "Local-first trend-aligned poster for X creators \u2014 reads creator-supplied\
+  \ trend data (or seeded demo trends) and emits a 7/8-section structured plan with\
+  \ 4 official Trend Alignment Plan Score metrics (Trend match strength / Niche fit\
+  \ / Voice fidelity / Originality), trend-chasing paradox detection in both Trend\
+  \ Alignment Plan Score and Red Flags sections, 3\u20135 trend watchlist entries,\
+  \ 4\u20136 post ideas (mix of single + thread formats) with per-idea trend match\
+  \ score and predicted engagement band, ..."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_trend_aligned_post_plan
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits a post plan the creator reads before posting;
+      it never auto-publishes, schedules, or queues posts on X.
+    - "No fabricated statistics. Demo trend velocity and engagement bands carry an\
+      \ explicit [demo trend \u2014 re-run with --trends-file for real X data] label\
+      \ so the creator never confuses demo output for real trend data."
+    - "Surface the trend-chasing paradox in BOTH the Trend Alignment Plan Score section\
+      \ AND the Red Flags section whenever average Trend match strength is above 75\
+      \ AND Niche fit is below the configured floor (default 40). Both conditions\
+      \ must be true \u2014 if only one fires, surface each condition in its own row\
+      \ instead."
+    - "Off-niche guard: any post idea scoring trend_match \u2265 75 AND niche_fit\
+      \ < 40 is excluded from the Post Ideas section and consolidated as a single\
+      \ Red Flag titled 'Off-niche trend-chasers excluded' with severity 'high' and\
+      \ a specific remediation step."
+    - "Post Ideas section is capped at 4\u20136 entries after the off-niche filter\
+      \ (target configurable via --target-idea-count, clamped to [4,6]). Off-niche\
+      \ entries do not count toward the 4\u20136 cap \u2014 they are surfaced exclusively\
+      \ in the Red Flags section."
+    - Every output unconditionally includes bridges to both content-idea-generator
+      (to re-source new anchor posts when trends shift) and thread-builder (to expand
+      the highest-match thread idea into long-form). These two bridges are never optional.
+    - "Privacy-first: no source-post handles, raw trend post text, or external URLs\
+      \ appear in the rendered output. Trend descriptions and idea copy outlines are\
+      \ paraphrased only \u2014 never raw text or third-party handles."
+    consent_gates: []
+    hard_refusals:
+    - auto-publish, auto-schedule, or auto-queue any post on X without explicit creator
+      consent
+    - generate financial, cashtag, investment, portfolio, ticker, or trading content
+      of any kind
+    - generate sponsored-post or paid-promotion content without explicit creator-supplied
+      disclosure copy
+    - expose source-post X handles, raw trend post text, or external URLs in the rendered
+      output
+    - scrape authenticated X content to seed the trend data
+  demo_metadata:
+    tagline: "Ride the trend without losing your voice \u2014 or your niche."
+    display_name: Trend-Aligned Poster
+  xlos_runtime:
+    type: python_module
+    module: trend_aligned_poster.run

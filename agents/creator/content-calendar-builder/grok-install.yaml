@@ -1,0 +1,74 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/creator/content-calendar-builder/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: content-calendar-builder
+description: "Local-first content calendar builder for X creators \u2014 reads creator-supplied\
+  \ cadence + niche + voice profile + analytics signals (or seeded demo signals) and\
+  \ emits a 7/8-section structured calendar with 4 official Calendar Plan Score metrics\
+  \ (Cadence sustainability / Niche fit / Voice fidelity / Variety), over-scheduling\
+  \ paradox detection in BOTH the Plan Score AND Red Flags sections (avg Cadence sustainability\
+  \ < 50 AND posts_per_week > 7), format-streak guard (\u2265 3 consecutive same-format\
+  \ slo..."
+category: creator-template
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+tools:
+- name: generate_content_calendar
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits a calendar the creator reads before scheduling;
+      it never auto-publishes, schedules, or queues posts on X.
+    - "No fabricated statistics. Demo niche fit, voice fidelity, and predicted engagement\
+      \ bands carry an explicit [demo slot \u2014 re-run with --voice-profile-file\
+      \ / --analytics-file for real X data] label so the creator never confuses demo\
+      \ output for real data."
+    - "Surface the over-scheduling paradox in BOTH the Calendar Plan Score section\
+      \ AND the Red Flags section whenever average Cadence sustainability is below\
+      \ 50 AND posts_per_week is above 7. Both conditions must hold \u2014 if only\
+      \ one fires, surface each in its own row instead."
+    - 'Format-streak guard: if any 3 consecutive slots share the same format type
+      (single / thread / quote-tweet / image-post / reply-thread), surface a single
+      Red Flag titled ''Format-streak guard fired'' with severity ''medium'' and a
+      remediation step. The streak slots stay in the calendar (the creator may have
+      a deliberate format push) but are flagged.'
+    - "Variety floor (configurable via --variety-floor, default 4 distinct format\
+      \ types). Below the floor \u2192 Red Flag titled 'Variety floor breached'."
+    - Every output unconditionally includes bridges to analytics-summarizer (calendar
+      feeds next-window analytics) AND brand-voice-trainer (voice anchors every slot).
+      These two bridges are never optional.
+    - "Privacy-first: no source-post handles, raw post text, or external URLs appear\
+      \ in the rendered output. Archetypes and slot copy outlines are paraphrased\
+      \ only \u2014 never raw text or third-party handles."
+    - Refuse financial / cashtag / investment / sponsorship / harassment content.
+      Forbidden tokens in niche, archetype labels, or slot outlines trigger a hard
+      refusal with the exact token surfaced to the operator.
+    consent_gates: []
+    hard_refusals:
+    - auto-publish, auto-schedule, or auto-queue any slot on X without explicit creator
+      consent
+    - generate financial, cashtag, investment, portfolio, ticker, or trading content
+      of any kind
+    - generate sponsored-post or paid-promotion content without explicit creator-supplied
+      disclosure copy
+    - expose source-post X handles, raw post text, or external URLs in the rendered
+      output
+    - scrape authenticated X content to seed the niche or analytics signals
+    - generate harassment-pattern slots
+  demo_metadata:
+    tagline: "A sustainable cadence \u2014 never volume past your voice."
+    display_name: Content Calendar Builder
+  xlos_runtime:
+    type: python_module
+    module: content_calendar_builder.run
