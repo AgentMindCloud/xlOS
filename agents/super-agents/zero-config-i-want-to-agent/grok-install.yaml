@@ -1,0 +1,45 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: zero-config-i-want-to-agent
+description: User states a goal in natural language and the agent assembles tools,
+  APIs, memory, and workflows with zero configuration
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+category: super-agent
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+tools:
+- name: parse_intent
+  type: local_function
+  description: Parses a natural-language goal into a structured plan.
+  module: orchestrator
+  function: ZeroConfigAgent.parse_intent
+- name: assemble_plan
+  type: local_function
+  description: Assembles the tool + API + workflow plan and returns it for HITL approval.
+  module: orchestrator
+  function: ZeroConfigAgent.assemble_plan
+- name: execute_with_consent
+  type: local_function
+  description: Executes an approved plan one step at a time, gating each external
+    action behind a consent prompt.
+  module: orchestrator
+  function: ZeroConfigAgent.execute_with_consent
+extensions:
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 5
+  provenance:
+    enabled: true
+    log_path: grok-agent/zero-config-i-want-to-agent/provenance/events.jsonl
+    cite_sources: true
+    append_only: true
+  xlos_runtime:
+    type: python_module
+    module: zero_config_i_want_to_agent

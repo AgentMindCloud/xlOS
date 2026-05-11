@@ -1,0 +1,47 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: narrative-contradiction-detector
+description: Actively detects and surfaces contradictions across X, news, government,
+  academic, and personal sources with full evidence and user-guided narrative exploration
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+category: super-agent
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+tools:
+- name: scan_sources
+  type: local_function
+  description: Pulls relevant items from each source connector for the topic and timeframe.
+  module: orchestrator
+  function: ContradictionDetector.scan_sources
+- name: find_contradictions
+  type: local_function
+  description: Compares scanned items pairwise and returns every contradiction with
+    cited evidence.
+  module: orchestrator
+  function: ContradictionDetector.find_contradictions
+- name: render_contradiction_report
+  type: local_function
+  description: Renders a Markdown report listing every contradiction with primary-source
+    links and equal-rigour framing.
+  module: orchestrator
+  function: ContradictionDetector.render_report
+extensions:
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 4
+  provenance:
+    enabled: true
+    log_path: grok-agent/narrative-contradiction-detector/provenance/events.jsonl
+    cite_sources: true
+    contradiction_detection: true
+    append_only: true
+  xlos_runtime:
+    type: python_module
+    module: narrative_contradiction_detector

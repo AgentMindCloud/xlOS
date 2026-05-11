@@ -1,0 +1,93 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: cross-reality-action-fabric
+description: Bridge agent between X / Grok and the user's Windows machine + public
+  web. Every action is explicit, gated, reversible, and provenance-logged
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+category: super-agent
+cost_limits:
+  usd_per_session_max: 0.5
+  usd_per_day_max: 2.0
+  tokens_per_session_max: 300000
+  api_calls_per_session_max: 250
+tools:
+- name: web_via_stagehand
+  type: local_function
+  description: Drive a visible Chrome window via Stagehand. The user sees every step,
+    can pause / abort, and the action plan is shown before execution.
+  module: connectors.stagehand_client
+  function: execute_web_action
+- name: windows_local
+  type: local_function
+  description: Run a *signed*, user-reviewed PowerShell snippet on the local Windows
+    machine. Snippet is shown verbatim before approval; rollback path is mandatory
+    for any state-changing call.
+  module: connectors.windows_local_client
+  function: execute_local_action
+- name: weather_lookup
+  type: public_api
+  description: Read-only weather forecast lookup for trip planning.
+- name: flight_search
+  type: public_api
+  description: Read-only flight schedule + price lookup via OpenSky Network.
+- name: x_search
+  type: public_api
+  description: Read-only X search via Grok 4.3 tool-calling. Posting / DMs require
+    separate consent gates and are not callable from this tool.
+extensions:
+  multi_agent_roles:
+    enabled: true
+    role: orchestrator
+    delegates_to:
+    - living-narrative-fabric
+    - self-evolving-personal-os
+    shared_memory: mem0://cross-reality-action-fabric/shared
+    message_bus: null
+    max_concurrent_workers: 3
+  provenance:
+    enabled: true
+    append_only: true
+    log_path: grok-agent/cross-reality-action-fabric/provenance.log
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  demo_metadata:
+    storyboard: templates/super-agents/cross-reality-action-fabric/DEMO.md
+    url: https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/cross-reality-action-fabric-demo.mp4
+    status: deferred
+    note: Actual video has not yet been recorded; once recorded, it will be uploaded
+      as a release asset under tag 'super-agent-demos-v1'.
+    update_instructions:
+    - 'Set metadata.demo_video.status to: available'
+    - Verify metadata.demo_video.url resolves to the released MP4
+    - Remove the inline 'planned — recording + upload pending' comment next to the
+      URL
+    - 'Update README.md demo section: remove ''planned'' language and add a runtime
+      + duration line'
+    - Drop this update_instructions field once status is available
+    recording_steps:
+    - Open the agent's UI per the storyboard at metadata.demo_video.storyboard
+    - Capture with OBS Studio at 1920x1080, 30fps, target duration 90-180 seconds
+    - Encode as MP4 (H.264 video + AAC audio) and save as cross-reality-action-fabric-demo.mp4
+    upload_steps:
+    - 'PowerShell: gh auth login (one-time, if not already authenticated)'
+    - 'Create the release ONCE for all three flagships: gh release create super-agent-demos-v1
+      --title ''Super Agent Demos v1'' --notes ''Recorded demo videos for the three
+      flagship Super Agents.'''
+    - 'Upload this agent''s MP4: gh release upload super-agent-demos-v1 cross-reality-action-fabric-demo.mp4
+      --clobber'
+    - 'Verify the asset URL resolves: Invoke-WebRequest -Method Head https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/cross-reality-action-fabric-demo.mp4'
+    notes: Embedded URL returned non-2xx during migration; marked deferred.
+  xlos_runtime:
+    type: python_module
+    module: cross_reality_action_fabric

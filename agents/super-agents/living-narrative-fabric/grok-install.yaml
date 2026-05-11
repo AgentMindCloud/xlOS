@@ -1,0 +1,143 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: living-narrative-fabric
+description: Versioned, provenance-first synthesis across X, news, academia, government,
+  and the open web — with full contradiction detection that never silently picks a
+  winner
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+category: super-agent
+cost_limits:
+  usd_per_session_max: 2.0
+  usd_per_day_max: 10.0
+  tokens_per_session_max: 500000
+tools:
+- name: synthesize
+  type: local_function
+  description: Run the 6-node DAG (ingest → normalise → detect_contradictions → score
+    → audit → finalize) and return a SynthesisVersion.
+  module: orchestrator
+  function: LivingNarrativeFabric.synthesize
+- name: rewind_to_version
+  type: local_function
+  description: Walk the parent_version_id chain back to a prior SynthesisVersion.
+    Append-only — never mutates.
+  module: memory
+  function: Mem0QdrantStore.rewind_to_version
+- name: flag_contradiction
+  type: local_function
+  description: Append-only flag against a prior contradiction. Reason is mandatory
+    and visible in audit_trail forever.
+  module: memory
+  function: Mem0QdrantStore.flag_contradiction
+- name: export_provenance_report
+  type: local_function
+  description: Render a Markdown provenance report covering Topic Snapshot, Run Timeline,
+    Connector Activity, Contradictions Flagged, and Bridges. Consent-gated.
+  module: provenance
+  function: LivingNarrativeFabricProvenance.export_report
+- name: run_weekly_eval
+  type: local_function
+  description: Run the Promptfoo + DeepEval suite, write the EvaluationRun, generate
+    prompt suggestions (dry-run by default).
+  module: eval
+  function: SelfImprovementLoop.run_weekly_eval
+- name: newsapi_fetch
+  type: public_api
+  description: Pull recent articles from NewsAPI /v2/everything for a topic, since-window,
+    and per-source limit.
+  module: connectors.newsapi_client
+  function: NewsApiConnector.fetch
+- name: gnews_fetch
+  type: public_api
+  module: connectors.gnews_client
+  function: GnewsConnector.fetch
+  description: Pull recent articles from GNews /api/v4/search.
+- name: semantic_scholar_fetch
+  type: public_api
+  module: connectors.semantic_scholar_client
+  function: SemanticScholarConnector.fetch
+  description: Pull peer-reviewed papers from Semantic Scholar Graph API /paper/search.
+    Highest authority tier (0.95).
+- name: data_gov_fetch
+  type: public_api
+  module: connectors.data_gov_client
+  function: DataGovConnector.fetch
+  description: Pull primary government datasets from data.gov CKAN /api/3/action/package_search.
+- name: x_search_fetch
+  type: public_api
+  module: connectors.x_grok_client
+  function: XGrokConnector.fetch
+  description: X (Twitter) search via Grok 4.3 tool-calling. Cashtag detection auto-flags
+    Article V.1 disclaimer when a $XAI-style ticker appears.
+- name: crawl4ai_fetch
+  type: public_api
+  module: connectors.crawl4ai_client
+  function: Crawl4aiConnector.fetch
+  description: Open-web scrape via the local Crawl4AI package; async-to-sync bridge
+    via asyncio.run.
+extensions:
+  constitution:
+  - II
+  - III
+  - IV
+  - IX
+  - V
+  - VI
+  - VII
+  - VIII
+  - X
+  multi_agent_roles:
+    role: orchestrator
+    delegates_to:
+    - self-evolving-personal-os
+    - cross-reality-action-fabric
+    shared_memory: mem0://grok-agent-shared
+    message_bus: null
+    max_concurrent_workers: 4
+  provenance:
+    enabled: true
+    log_path: grok-agent/living-narrative-fabric/provenance/events.jsonl
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    append_only: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  demo_metadata:
+    storyboard: templates/super-agents/living-narrative-fabric/DEMO.md
+    url: https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/living-narrative-fabric-demo.mp4
+    status: deferred
+    note: Actual video has not yet been recorded; once recorded, it will be uploaded
+      as a release asset under tag 'super-agent-demos-v1'.
+    update_instructions:
+    - 'Set metadata.demo_video.status to: available'
+    - Verify metadata.demo_video.url resolves to the released MP4
+    - Remove the inline 'planned — recording + upload pending' comment next to the
+      URL
+    - 'Update README.md demo section: remove ''planned'' language and add a runtime
+      + duration line'
+    - Drop this update_instructions field once status is available
+    recording_steps:
+    - Open the agent's UI per the storyboard at metadata.demo_video.storyboard
+    - Capture with OBS Studio at 1920x1080, 30fps, target duration 90-180 seconds
+    - Encode as MP4 (H.264 video + AAC audio) and save as living-narrative-fabric-demo.mp4
+    upload_steps:
+    - 'PowerShell: gh auth login (one-time, if not already authenticated)'
+    - 'Create the release ONCE for all three flagships: gh release create super-agent-demos-v1
+      --title ''Super Agent Demos v1'' --notes ''Recorded demo videos for the three
+      flagship Super Agents.'''
+    - 'Upload this agent''s MP4: gh release upload super-agent-demos-v1 living-narrative-fabric-demo.mp4
+      --clobber'
+    - 'Verify the asset URL resolves: Invoke-WebRequest -Method Head https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/living-narrative-fabric-demo.mp4'
+    notes: Embedded URL returned non-2xx during migration; marked deferred.
+  xlos_runtime:
+    type: python_module
+    module: living_narrative_fabric

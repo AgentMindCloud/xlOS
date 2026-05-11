@@ -1,0 +1,46 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: agent-swarm-with-shared-memory
+description: Collaborative swarm of specialised agents that share long-term memory
+  and reason together in real time for superior collective intelligence
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+category: super-agent
+cost_limits:
+  usd_per_session_max: 1.2
+  usd_per_day_max: 6.0
+tools:
+- name: swarm_debate
+  type: local_function
+  description: Runs the six-agent debate loop and returns each agent's contribution
+    + the final synthesis.
+  module: orchestrator
+  function: AgentSwarm.debate
+- name: shared_memory_read
+  type: local_function
+  description: Reads from the shared mem0 collection. Read-only — never mutates shared
+    memory.
+  module: memory
+  function: SharedMemory.read
+- name: shared_memory_append
+  type: local_function
+  description: Append-only write into the shared mem0 collection.
+  module: memory
+  function: SharedMemory.append
+extensions:
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 6
+  provenance:
+    enabled: true
+    log_path: grok-agent/agent-swarm-with-shared-memory/provenance/events.jsonl
+    cite_sources: true
+    append_only: true
+  xlos_runtime:
+    type: python_module
+    module: agent_swarm_with_shared_memory

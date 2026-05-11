@@ -1,0 +1,55 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: provenance-first-trust-engine
+description: Every response comes with a complete clickable provenance report including
+  all sources, confidence scores, and alternative viewpoints for maximum trust and
+  transparency
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+category: super-agent
+cost_limits:
+  usd_per_session_max: 0.8
+  usd_per_day_max: 4.0
+tools:
+- name: trace_claims
+  type: local_function
+  description: Decomposes a response into claims and attaches a citation + confidence
+    score per claim.
+  module: orchestrator
+  function: TrustEngine.trace_claims
+- name: verify_source
+  type: local_function
+  description: Re-fetches a source URL and confirms the claim is still supported by
+    it.
+  module: orchestrator
+  function: TrustEngine.verify_source
+- name: render_provenance_report
+  type: local_function
+  description: Renders the user-visible Markdown provenance report — sources, confidence,
+    alternatives.
+  module: orchestrator
+  function: TrustEngine.render_provenance_report
+extensions:
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 3
+  provenance:
+    enabled: true
+    log_path: grok-agent/provenance-first-trust-engine/provenance/events.jsonl
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    append_only: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  xlos_runtime:
+    type: python_module
+    module: provenance_first_trust_engine

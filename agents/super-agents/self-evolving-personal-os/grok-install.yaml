@@ -1,0 +1,164 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: self-evolving-personal-os
+description: Personal second brain on Windows — morning briefings, long-term personal
+  + X memory, auto-evolving workflows, full rewind, and explicit-consent gates on
+  every real-world action
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+category: super-agent
+cost_limits:
+  usd_per_session_max: 1.5
+  usd_per_day_max: 5.0
+  tokens_per_session_max: 300000
+tools:
+- name: morning_brief
+  type: local_function
+  description: Generate the daily Morning Brief from personal memory + calendar +
+    X mentions + weather + personalised news. Emits a versioned BriefingVersion.
+  module: orchestrator
+  function: PersonalOS.morning_brief
+- name: remember_personal
+  type: local_function
+  description: Append-only store of a personal note, observation, or pattern. Carries
+    full provenance (source, captured_at, source_id).
+  module: memory
+  function: PersonalMemoryStore.remember
+- name: recall_personal
+  type: local_function
+  description: Retrieve from personal memory by subject, predicate, source, or vector
+    similarity. Honors the retention window.
+  module: memory
+  function: PersonalMemoryStore.recall
+- name: evolve_workflow
+  type: local_function
+  description: Analyse the workflow journal + recent briefings + procedural memory
+    and emit a tuple[WorkflowSuggestion, ...]. Dry-run by default.
+  module: eval
+  function: PersonalOSImprovementLoop.evolve_workflow
+- name: apply_workflow_change
+  type: local_function
+  description: CONSENT-GATED. Apply a previously-emitted WorkflowSuggestion. Default
+    dry_run=true; user must flip to false in the Improvements tab.
+  module: eval
+  function: PersonalOSImprovementLoop.apply_workflow_change
+- name: rewind_briefing
+  type: local_function
+  description: Walk the parent_version_id chain back to a prior BriefingVersion. Append-only
+    — never mutates.
+  module: memory
+  function: PersonalMemoryStore.rewind_to_briefing
+- name: flag_pattern
+  type: local_function
+  description: Append-only flag against a recurring personal pattern (positive amplify
+    or negative cease). Reason is mandatory.
+  module: memory
+  function: PersonalMemoryStore.flag_pattern
+- name: export_personal_log
+  type: local_function
+  description: CONSENT-GATED. Render a Markdown personal-provenance report covering
+    Brief Snapshot, Recall Trail, Workflow Evolution, Patterns Flagged, and Bridges.
+  module: provenance
+  function: PersonalOSProvenance.export_report
+- name: x_personal_fetch
+  type: public_api
+  module: connectors.x_personal_client
+  function: XPersonalConnector.fetch
+  description: Pull the authenticated user's mentions / DMs / lists / bookmarks via
+    Grok 4.3 tool-calling. Read-only; never posts.
+- name: gcal_fetch
+  type: public_api
+  module: connectors.gcal_client
+  function: GcalConnector.fetch
+  description: Pull the user's Google Calendar events (read-only by default). All
+    write paths flow through apply_workflow_change → consent gate.
+- name: gmail_fetch
+  type: public_api
+  module: connectors.gmail_client
+  function: GmailConnector.fetch
+  description: Pull the user's Gmail headers + labels (read-only by default). Body
+    is fetched lazily and never sent to a public LLM without consent.
+- name: local_notes_fetch
+  type: public_api
+  module: connectors.local_notes_client
+  function: LocalNotesConnector.fetch
+  description: Read the user's Obsidian vault / Markdown notes folder. Never writes;
+    never moves files.
+- name: weather_fetch
+  type: public_api
+  module: connectors.weather_client
+  function: WeatherConnector.fetch
+  description: Pull the user's local weather forecast for the morning brief. PII-safe
+    — only sends a coarse-grained location.
+- name: news_personal_fetch
+  type: public_api
+  module: connectors.news_personal_client
+  function: NewsPersonalConnector.fetch
+  description: Pull recent NewsAPI articles filtered to the user's stored interest
+    set. Interests live locally and are never sent upstream.
+extensions:
+  constitution:
+  - II
+  - III
+  - IV
+  - IX
+  - V
+  - VI
+  - VII
+  - VIII
+  - X
+  multi_agent_roles:
+    role: orchestrator
+    delegates_to:
+    - living-narrative-fabric
+    - cross-reality-action-fabric
+    shared_memory: mem0://grok-agent-shared
+    message_bus: null
+    max_concurrent_workers: 2
+  provenance:
+    enabled: true
+    log_path: grok-agent/self-evolving-personal-os/provenance/events.jsonl
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    append_only: true
+    redact_pii_before_langfuse: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  demo_metadata:
+    storyboard: templates/super-agents/self-evolving-personal-os/DEMO.md
+    url: https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/self-evolving-personal-os-demo.mp4
+    status: deferred
+    note: Actual video has not yet been recorded; once recorded, it will be uploaded
+      as a release asset under tag 'super-agent-demos-v1'.
+    update_instructions:
+    - 'Set metadata.demo_video.status to: available'
+    - Verify metadata.demo_video.url resolves to the released MP4
+    - Remove the inline 'planned — recording + upload pending' comment next to the
+      URL
+    - 'Update README.md demo section: remove ''planned'' language and add a runtime
+      + duration line'
+    - Drop this update_instructions field once status is available
+    recording_steps:
+    - Open the agent's UI per the storyboard at metadata.demo_video.storyboard
+    - Capture with OBS Studio at 1920x1080, 30fps, target duration 90-180 seconds
+    - Encode as MP4 (H.264 video + AAC audio) and save as self-evolving-personal-os-demo.mp4
+    upload_steps:
+    - 'PowerShell: gh auth login (one-time, if not already authenticated)'
+    - 'Create the release ONCE for all three flagships: gh release create super-agent-demos-v1
+      --title ''Super Agent Demos v1'' --notes ''Recorded demo videos for the three
+      flagship Super Agents.'''
+    - 'Upload this agent''s MP4: gh release upload super-agent-demos-v1 self-evolving-personal-os-demo.mp4
+      --clobber'
+    - 'Verify the asset URL resolves: Invoke-WebRequest -Method Head https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/self-evolving-personal-os-demo.mp4'
+    notes: Embedded URL returned non-2xx during migration; marked deferred.
+  xlos_runtime:
+    type: python_module
+    module: self_evolving_personal_os
