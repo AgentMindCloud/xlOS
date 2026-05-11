@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!-- Copyright 2026 AgentMindCloud -->
+<!-- Licensed under the Apache License, Version 2.0 -->
+<!-- http://www.apache.org/licenses/LICENSE-2.0 -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>xlOS Browser Extension — Options</title>
+    <style>
+      :root {
+        --ui-bg: #0a0a0a;
+        --ui-accent: #ff1e70;
+        --ui-fg: #f4ecda;
+        --ui-highlight: #00e0d5;
+        --g-mono: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
+      }
+      html,
+      body {
+        background: var(--ui-bg);
+        color: var(--ui-fg);
+        font-family: var(--g-mono);
+        font-size: 13px;
+        margin: 0;
+        padding: 24px;
+        line-height: 1.5;
+      }
+      h1 {
+        color: var(--ui-accent);
+        font-size: 18px;
+        margin: 0 0 4px;
+      }
+      .g-tagline {
+        color: rgba(244, 236, 218, 0.72);
+        font-size: 11px;
+        margin: 0 0 24px;
+      }
+      .g-form {
+        max-width: 640px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      fieldset {
+        border: 1px solid rgba(244, 236, 218, 0.18);
+        padding: 12px 14px;
+      }
+      legend {
+        color: var(--ui-highlight);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 0 6px;
+      }
+      label {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+      }
+      input[type="text"] {
+        width: 100%;
+        background: rgba(244, 236, 218, 0.06);
+        color: var(--ui-fg);
+        border: 1px solid rgba(244, 236, 218, 0.3);
+        padding: 6px 8px;
+        font-family: inherit;
+        font-size: 12px;
+      }
+      input[type="text"]:focus {
+        outline: 2px solid var(--ui-highlight);
+        outline-offset: 1px;
+      }
+      .g-radio,
+      .g-check {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-top: 6px;
+      }
+      .g-radio input,
+      .g-check input {
+        margin-top: 3px;
+      }
+      .g-actions {
+        display: flex;
+        gap: 10px;
+      }
+      .g-btn {
+        font-family: inherit;
+        font-size: 13px;
+        padding: 8px 16px;
+        cursor: pointer;
+        border: 1px solid var(--ui-accent);
+      }
+      .g-btn-primary {
+        background: var(--ui-accent);
+        color: var(--ui-bg);
+      }
+      .g-btn-secondary {
+        background: transparent;
+        color: var(--ui-fg);
+        border-color: rgba(244, 236, 218, 0.4);
+      }
+      .g-status {
+        font-size: 11px;
+        color: var(--ui-highlight);
+        min-height: 1.4em;
+      }
+      .g-status.error {
+        color: var(--ui-accent);
+      }
+      footer {
+        margin-top: 32px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(244, 236, 218, 0.18);
+        font-size: 10px;
+        color: rgba(244, 236, 218, 0.6);
+      }
+      a {
+        color: var(--ui-highlight);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>xlOS Browser Extension — Options</h1>
+      <p class="g-tagline">
+        Detect v2.15 manifest YAML on X and trigger an xlOS install.
+      </p>
+    </header>
+
+    <form id="g-options-form" class="g-form" novalidate>
+      <fieldset>
+        <legend>Install path</legend>
+        <label for="g-install-path">
+          Default install location for new agents
+        </label>
+        <input
+          type="text"
+          id="g-install-path"
+          name="install_path"
+          autocomplete="off"
+          spellcheck="false"
+          aria-describedby="g-install-path-help"
+        />
+        <small id="g-install-path-help">
+          Default: <code>$env:LOCALAPPDATA\xlos\agents</code>
+        </small>
+      </fieldset>
+
+      <fieldset>
+        <legend>Notifications</legend>
+        <div class="g-check">
+          <input type="checkbox" id="g-notifications" name="notifications" />
+          <label for="g-notifications">
+            Show desktop notifications when an install completes
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Preferred install method</legend>
+        <div class="g-radio">
+          <input
+            type="radio"
+            id="g-method-stdin"
+            name="install_method"
+            value="cli-stdin"
+          />
+          <label for="g-method-stdin">
+            CLI stdin pipe (paste manifest into a running shell)
+          </label>
+        </div>
+        <div class="g-radio">
+          <input
+            type="radio"
+            id="g-method-oneliner"
+            name="install_method"
+            value="one-liner"
+          />
+          <label for="g-method-oneliner">
+            Copy a one-liner CLI command to the clipboard
+          </label>
+        </div>
+        <div class="g-radio">
+          <input
+            type="radio"
+            id="g-method-url"
+            name="install_method"
+            value="manifest-url"
+          />
+          <label for="g-method-url">
+            Open a manifest URL in <code>xlos install &lt;url&gt;</code>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="g-actions">
+        <button
+          type="button"
+          id="g-save-btn"
+          class="g-btn g-btn-primary"
+          aria-label="Save options"
+        >
+          Save
+        </button>
+        <button
+          type="button"
+          id="g-reset-btn"
+          class="g-btn g-btn-secondary"
+          aria-label="Reset to defaults"
+        >
+          Reset
+        </button>
+      </div>
+      <p
+        id="g-status"
+        class="g-status"
+        role="status"
+        aria-live="polite"
+      ></p>
+    </form>
+
+    <footer>
+      <p>
+        Apache-2.0.
+        <a
+          href="https://github.com/AgentMindCloud/xlOS"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub</a
+        >
+      </p>
+    </footer>
+
+    <script src="options.js"></script>
+  </body>
+</html>
