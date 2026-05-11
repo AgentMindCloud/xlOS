@@ -1,0 +1,183 @@
+version: '2.14'
+name: x-smart-cashtag-alpha-engine
+description: "Real-time cashtag intelligence on X \u2014 narrative momentum, contradictions\
+  \ across sources, and Grok-powered alpha signals with full provenance."
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: x-money-tool
+tools:
+- name: track_cashtag
+  type: local_function
+  module: x_alpha.watchlist
+  function: track
+  description: Add or remove a cashtag from the user's watchlist with optional alert
+    threshold.
+  parameters:
+    schema:
+      type: object
+      properties:
+        cashtag:
+          type: string
+        threshold_pct:
+          type: number
+        action:
+          type: string
+          enum:
+          - add
+          - remove
+      required:
+      - cashtag
+      - action
+- name: fetch_cashtag_quote
+  type: local_function
+  module: x_alpha.market
+  function: fetch_quote
+  description: "Pull a live quote for a cashtag \u2014 yfinance for equities/FX, coingecko\
+    \ for crypto."
+  parameters:
+    schema:
+      type: object
+      properties:
+        cashtag:
+          type: string
+      required:
+      - cashtag
+- name: fetch_cashtag_news
+  type: local_function
+  module: x_alpha.news
+  function: fetch_for_cashtag
+  description: Pull NewsAPI headlines for a cashtag's underlying ticker / company
+    / project.
+  parameters:
+    schema:
+      type: object
+      properties:
+        cashtag:
+          type: string
+        limit:
+          type: integer
+        from_date:
+          type: string
+      required:
+      - cashtag
+- name: generate_alpha_report
+  type: local_function
+  module: x_alpha.report
+  function: build
+  description: "Generate a Grok-powered alpha report for a cashtag \u2014 narrative\
+    \ momentum, contradictions across sources, confidence rating. Never autonomously\
+    \ published; the report stays local until the user explicitly chooses to share."
+  parameters:
+    schema:
+      type: object
+      properties:
+        cashtag:
+          type: string
+        window_hours:
+          type: integer
+      required:
+      - cashtag
+- name: simulate_portfolio
+  type: local_function
+  module: x_alpha.portfolio
+  function: simulate
+  description: Run a what-if portfolio simulation across the user's watchlist with
+    hypothetical positions and a date window.
+  parameters:
+    schema:
+      type: object
+      properties:
+        positions:
+          type: array
+          items:
+            type: object
+        start_date:
+          type: string
+        end_date:
+          type: string
+      required:
+      - positions
+      - start_date
+      - end_date
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+  api_calls_per_session_max: 500
+extensions:
+  constitution:
+  - I
+  - II
+  - V.1
+  - VI
+  - VII
+  - VIII
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: true
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    data_retention_days: 180
+  constitution_v215:
+    rules:
+    - Always show 'Not financial advice' banner on every page (Article V.1).
+    - Always show 'Not tax advice' banner alongside any export or accounting-related
+      output (Article V.2).
+    - "Cite the source for every signal \u2014 never aggregate without provenance\
+      \ (Article IV)."
+    - Flag contradictions across sources; never silently resolve them (Article IV).
+    - All cashtag history stays local under $env:LOCALAPPDATA\grok-agent (Article
+      VII).
+    - Never post an alpha report or signal to X without the publish_alpha_to_x consent
+      gate; posts is currently false in this manifest (Article II).
+    consent_gates:
+    - sync_to_cloud
+  safety_v215:
+    pii_handling: local-only
+    data_retention_days: 180
+    scanner_severity_floor: warn
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    cost_limits:
+      usd_per_session_max: 1.0
+      usd_per_day_max: 5.0
+      api_calls_per_session_max: 500
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - sync_to_cloud
+      - any cost above $0.20
+      timeout_seconds: 60
+  real_time_x:
+    enabled: true
+    consent_required: true
+    triggers:
+    - cashtag_change
+    - schedule
+    schedule_cron: 0 9,17 * * 1-5
+    cashtag_threshold_pct: 5.0
+    watched_cashtags:
+    - $XAI
+    - $X
+    posts: false
+    reply_only: true
+    max_posts_per_day: 0
+  windows_legacy:
+    appdata_folder: grok-agent/x-smart-cashtag-alpha-engine
+    log_folder: grok-agent/x-smart-cashtag-alpha-engine/logs
+    cache_folder: grok-agent/x-smart-cashtag-alpha-engine/cache
+    min_powershell_version: '5.1'
+    requires_admin: false
+    chrome_only: true
+  runtime_dispatch:
+    type: streamlit_app
+    entrypoint: app.py
+  original_kind: alpha-engine
