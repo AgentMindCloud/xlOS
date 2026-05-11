@@ -1,0 +1,88 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: x-smart-cashtag-alpha-engine
+description: Real-time cashtag intelligence on X — narrative momentum, contradictions
+  across sources, and Grok-powered alpha signals with full provenance.
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+category: x-money-tool
+tools:
+- name: track_cashtag
+- name: fetch_cashtag_quote
+- name: fetch_cashtag_news
+- name: generate_alpha_report
+- name: simulate_portfolio
+cost_limits: &id001
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+  api_calls_per_session_max: 500
+extensions:
+  constitution:
+    articles:
+    - V.1
+    - V.2
+    - IV
+    - VII
+    - II
+    rules:
+    - Always show 'Not financial advice' banner on every page (Article V.1).
+    - Always show 'Not tax advice' banner alongside any export or accounting-related
+      output (Article V.2).
+    - Cite the source for every signal — never aggregate without provenance (Article
+      IV).
+    - Flag contradictions across sources; never silently resolve them (Article IV).
+    - All cashtag history stays local under $env:LOCALAPPDATA\grok-agent (Article
+      VII).
+    - Never post an alpha report or signal to X without the publish_alpha_to_x consent
+      gate; posts is currently false in this manifest (Article II).
+    consent_gates:
+    - sync_to_cloud
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: true
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    cost_limits: *id001
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 180
+    scanner_severity_floor: warn
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - sync_to_cloud
+      - any cost above $0.20
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: x_smart_cashtag_alpha_engine.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: X Smart Cashtag Alpha Engine
+    tagline: Cashtag-aware market intelligence for X.
+    categories:
+    - finance
+    - x-money
+    - alpha
+    tags:
+    - streamlit
+    - sqlite
+    - real-time-x
+    - windows-first
+    - cashtag
+    - alpha-engine
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/finance/x-smart-cashtag-alpha-engine/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

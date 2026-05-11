@@ -1,0 +1,85 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: x-money-companion-dashboard
+description: Personal X Money command center on Windows — overview, transactions,
+  analytics, Grok insights, tax export, and alerts.
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+category: x-money-tool
+tools:
+- name: categorize_transaction
+- name: fetch_market_quote
+- name: fetch_relevant_news
+- name: build_tax_export
+- name: summarize_alerts
+cost_limits: &id001
+  usd_per_session_max: 0.5
+  usd_per_day_max: 2.0
+  api_calls_per_session_max: 200
+extensions:
+  constitution:
+    articles:
+    - V.1
+    - V.2
+    - IV
+    rules:
+    - Always show 'Not financial advice' banner on every page (Article V.1).
+    - Always show 'Not tax advice' banner on the Tax Export tab (Article V.2).
+    - Never share transaction data outside local SQLite without explicit consent.
+    - All transactions stay local under $env:LOCALAPPDATA\grok-agent.
+    - Cite the source of every market quote and headline shown next to a transaction
+      (Article IV).
+    - 'The Vision Analyzer (Tool #4) is the only sibling tool permitted to write into
+      this SQLite, and only via data/import_receipts.py.'
+    consent_gates:
+    - export_tax_report
+    - sync_to_cloud
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: false
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    cost_limits: *id001
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 365
+    scanner_severity_floor: warn
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - export_tax_report
+      - sync_to_cloud
+      - any cost above $0.10
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: x_money_companion_dashboard.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: X Money Companion Dashboard
+    tagline: Your X Money command center, on Windows.
+    categories:
+    - finance
+    - x-money
+    - creator-tools
+    tags:
+    - streamlit
+    - sqlite
+    - tax
+    - windows-first
+    - anchor-tool
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/finance/x-money-companion-dashboard/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator
