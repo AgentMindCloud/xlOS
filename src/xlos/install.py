@@ -15,7 +15,7 @@ import yaml
 from filelock import FileLock
 from platformdirs import user_data_dir
 
-from xlos.safety import scan_manifest
+from xlos.safety import ScanResult, scan_manifest
 from xlos.validators import validate_manifest_v214
 
 
@@ -42,7 +42,10 @@ def install_command(manifest: str | None, from_stdin: bool) -> None:
     """Install a manifest by writing it under the per-user agents directory."""
     data, text = _load_manifest(manifest, from_stdin)
     validate_manifest_v214(data)
-    scan_manifest(data)
+    result: ScanResult = scan_manifest(data)
+    if result.has_errors:
+        errors = "\n".join(f.to_line() for f in result.findings if f.severity == "error")
+        raise click.UsageError(f"Constitution scan failed:\n{errors}")
 
     name = data.get("name")
     if not isinstance(name, str) or not name:
