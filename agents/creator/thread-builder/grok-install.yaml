@@ -1,0 +1,174 @@
+version: '2.14'
+name: thread-builder
+description: "Local-first thread builder for X creators \u2014 reads a topic / goal\
+  \ (and optional voice samples + analytics signals) and emits a 6/7-section structured\
+  \ thread plan with 3-5 ready-to-post thread variants, 4 standard Thread Plan Score\
+  \ metrics (Hook strength / Narrative arc coherence / Voice fidelity / Predicted\
+  \ engagement), hook-without-payoff paradox detection, 4-6 alternate hook variations,\
+  \ content-engagement prediction bands (never absolute numbers), and >= 3 cross-template\
+  \ bridges that always..."
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - action
+  - ide
+category: creator-template
+tools:
+- name: generate_thread_plan
+  type: local_function
+  module: thread_builder.run
+  function: generate
+  description: "Produce a 6-section structured thread plan (or 7-section when red-flag\
+    \ count > 3 OR variant_count >= 5 OR data_source='demo') with 3-5 ready-to-post\
+    \ thread variants, 4-row Thread Plan Score table (Hook strength / Narrative arc\
+    \ coherence / Voice fidelity / Predicted engagement) with weighted score, 4-6\
+    \ alternate hook variations, hook-without-payoff paradox detection, content-engagement\
+    \ prediction bands (range only \u2014 never absolute counts), and >= 3 cross-template\
+    \ bridges that always include analytics-summarizer and content-idea-generator.\
+    \ Drafts only \u2014 never auto-publishes."
+  parameters:
+    schema:
+      type: object
+      properties:
+        x_handle:
+          type: string
+          description: Creator's X handle (with or without @). The voice anchor for
+            variant scoring; voice fidelity is measured against this handle's supplied
+            samples.
+        topic_or_goal:
+          type: string
+          description: Either the post topic / thesis / goal in plain text, or a one-line
+            brief. Required unless --demo is passed.
+        voice_samples:
+          type: array
+          items:
+            type: string
+          description: Optional inline list of recent post bodies authored by --x-handle.
+            Used to anchor Voice fidelity scoring; the runner refuses to train on
+            another creator's posts.
+        analytics_file:
+          type: string
+          description: Optional path to an analytics-summarizer JSON export. When
+            provided, Predicted engagement is anchored to the creator's actual baseline
+            rather than a niche-typical default.
+        variant_count:
+          type: integer
+          minimum: 3
+          maximum: 5
+          default: 3
+          description: Number of thread variants to draft (3-5). 5 variants auto-triggers
+            the optional Thread Audit because cognitive load on the creator rises.
+        thread_length:
+          type: string
+          enum:
+          - short
+          - medium
+          - long
+          default: medium
+          description: 'Target thread length: short = 4-6 posts, medium = 7-10 posts,
+            long = 11-15 posts. The runner caps at 15 posts even when ''long'' is
+            requested.'
+        tone_focus:
+          type: string
+          enum:
+          - analytical
+          - personal
+          - tactical
+          - narrative
+          - all
+          default: all
+          description: Which tone register to emphasise across the variants. 'all'
+            samples one variant from each available register (analytical / personal
+            / tactical / narrative).
+      required:
+      - x_handle
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+  - I
+  - II
+  - VI
+  - VII
+  constitution_v215:
+    rules:
+    - Drafts only. The runner emits thread variants the creator pastes into their
+      X composer themselves; the runner never auto-publishes, never schedules, never
+      DMs the draft to anyone.
+    - Train Voice fidelity scoring only on the creator's own posts. The runner refuses
+      to score voice against samples authored by a different handle. The system prompt
+      is unambiguous; the runner's contract is unambiguous; the manifest binds the
+      unambiguous contract.
+    - No fabricated engagement absolutes. Predicted engagement is a 0-100 sub-score
+      plus a band label (low / medium / high). The runner refuses to print absolute
+      like / repost / reply counts it cannot derive from a creator-supplied analytics
+      file.
+    - "Surface the hook-without-payoff paradox in BOTH the Thread Plan Performance\
+      \ section AND the Red Flags section whenever Hook strength > 80 AND Narrative\
+      \ arc coherence < 50 (the opener is catchy but the thread does not deliver \u2014\
+      \ clickbait debt that erodes trust over time)."
+    - "Every thread variant is paraphrased to the creator's voice \u2014 never copy-pasted\
+      \ from competitors. The runner refuses to suggest copying a competitor's hook,\
+      \ structure, or signature phrasing."
+    - "Every analysis links to >= 3 cross-template bridges so the creator can wire\
+      \ the thread into the next loop without leaving Grok Agent OS \u2014 bridges\
+      \ MUST include `analytics-summarizer` (so the post-publish read is structured)\
+      \ and `content-idea-generator` (so the next anchor is sourced cleanly)."
+    - "Engagement prediction bands are content-engagement only (impressions / replies\
+      \ / reposts / bookmarks pattern). The runner does NOT predict revenue, paid-tier\
+      \ conversions, or sponsorship dollars \u2014 that is `monetization-optimizer`'s\
+      \ job and explicitly out of scope here."
+    - "Variant cap. The runner never emits more than 5 variants regardless of input\
+      \ \u2014 cognitive load on the creator above 5 destroys the value of A/B selection."
+    hard_refusals:
+    - auto-publish, auto-schedule, or auto-DM any thread variant to any platform without
+      an explicit consent gate
+    - fabricate absolute engagement counts (likes / reposts / replies / bookmarks)
+    - score Voice fidelity against samples authored by a creator other than --x-handle
+    - copy-paste a competitor's hook, signature phrasing, or thread structure
+    - emit more than 5 thread variants in a single run
+    - scrape authenticated X content to seed the variants or the voice samples
+    - "predict revenue, paid-tier conversions, or sponsorship dollars (out of scope\
+      \ \u2014 see monetization-optimizer)"
+  safety_v215:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    - copy_competitor_signature_phrasing
+    cost_limits:
+      usd_per_session_max: 0.3
+      usd_per_day_max: 1.0
+      tokens_per_session_max: 60000
+      api_calls_per_session_max: 80
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the thread plan to a path outside the agent AppData folder
+      - any future-version auto-publish (currently disabled in v1)
+      - any future-version auto-schedule (currently disabled in v1)
+      timeout_seconds: 60
+    disclaimers:
+      not_financial_advice: false
+      not_tax_advice: false
+      real_world_action_consent: false
+  windows_legacy:
+    appdata_folder: grok-agent/thread-builder
+    cache_folder: grok-agent/thread-builder/cache
+    log_folder: grok-agent/thread-builder/logs
+    min_powershell_version: '5.1'
+    requires_admin: false
+    chrome_only: true
+  runtime_dispatch:
+    type: python_module
+    module: thread_builder
+  original_kind: creator-template

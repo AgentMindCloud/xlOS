@@ -1,0 +1,192 @@
+version: '2.14'
+name: analytics-summarizer
+description: "Local-first analytics summarizer for X creators \u2014 reads creator-supplied\
+  \ X analytics (or seeded demo metrics) and emits a 6/7-section period summary with\
+  \ 4 official Period Performance metrics (Reach Score / Engagement Velocity / Audience\
+  \ Quality / Content Resonance), the vanity-reach paradox (Reach Score > 80 AND Audience\
+  \ Quality < 50), weighted Performance score (0.30\xB7AudienceQuality + 0.25\xB7\
+  EngagementVelocity + 0.25\xB7ContentResonance + 0.20\xB7ReachScore), top-performing-content\
+  \ archetypes, tren..."
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - action
+  - ide
+category: creator-template
+tools:
+- name: generate_analytics_summary
+  type: local_function
+  module: analytics_summarizer.run
+  function: generate
+  description: "Produce a 6-section structured analytics period summary (or 7-section\
+    \ when red-flag count >= 3, time_range='7d', count >= 8, OR data_source='demo'\
+    \ with no anchors) with 4 official Period Performance metrics (Reach Score / Engagement\
+    \ Velocity / Audience Quality / Content Resonance), weighted Performance score\
+    \ (0.30\xB7AQ + 0.25\xB7EV + 0.25\xB7CR + 0.20\xB7RS), the vanity-reach paradox\
+    \ (RS > 80 AND AQ < 50), 3-10 (default 5) top-performing-content archetypes, trend\
+    \ bucketing across the 5-arrow vocabulary, mandatory bridges to content-idea-generator\
+    \ + thread-builder, and a structured monetization refusal path when allow_monetization\
+    \ is false. Reads creator-supplied metrics; never fabricates X numbers."
+  parameters:
+    schema:
+      type: object
+      properties:
+        x_handle:
+          type: string
+          description: "Creator's X handle (with or without @). The voice anchor for\
+            \ archetype paraphrasing and Content Resonance scoring; voice fidelity\
+            \ is measured against this handle's supplied samples \u2014 never another\
+            \ creator's posts."
+        niche:
+          type: string
+          description: Creator's niche / topic anchor in plain text. Used to score
+            Audience Quality (on-niche engagers vs drive-bys) and to paraphrase top-performing
+            content archetypes inside the niche frame. Required so the vanity-reach
+            paradox can fire when reach is high but the audience is off-niche.
+        metrics_file:
+          type: string
+          description: Optional path to a creator-supplied X analytics export (JSON
+            or CSV). When omitted the runner emits seeded demo metrics explicitly
+            marked as such.
+        metric_focus:
+          type: string
+          enum:
+          - reach
+          - engagement
+          - audience
+          - resonance
+          - all
+          default: all
+          description: Which standard metric to emphasise in the headline + ranking.
+            Default 'all' applies no nudge.
+        time_range:
+          type: string
+          enum:
+          - 7d
+          - 30d
+          - 90d
+          default: 30d
+          description: Period covered by the summary. 7d auto-triggers the optional
+            Period Audit because the window is dominated by single-day variance.
+        compare_to:
+          type: string
+          enum:
+          - previous_period
+          - benchmark
+          default: previous_period
+          description: Comparison basis for delta calculation. 'previous_period' compares
+            against the immediately preceding window of the same length; 'benchmark'
+            compares against a niche-typical baseline.
+        count:
+          type: integer
+          minimum: 3
+          maximum: 10
+          default: 5
+          description: Number of top-performing-content archetypes to surface. Clamps
+            to [3, 10]; default 5. count >= 8 auto-triggers the Period Audit section.
+        allow_monetization:
+          type: boolean
+          default: false
+          description: "Off by default. When false, the runner emits a structured\
+            \ monetization refusal stub (no funnel modelling, no sponsorship pricing).\
+            \ When true, the runner may cite the monetization-optimizer bridge \u2014\
+            \ every monetization-touching line still carries the Article V.1 'Not\
+            \ financial advice' banner verbatim."
+      required:
+      - x_handle
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+  - I
+  - II
+  - VI
+  - VII
+  constitution_v215:
+    rules:
+    - Drafts only. The runner emits text the creator reads; the runner never auto-publishes,
+      never auto-shares the analytics anywhere.
+    - No fabricated statistics. The runner refuses to print p-values, confidence intervals,
+      or absolute lift numbers it did not derive from the supplied input. Heuristics
+      in the Statistical Honesty subsection are named as such.
+    - "Surface the vanity-reach paradox in BOTH the Period Performance section AND\
+      \ the Red Flags section whenever Reach Score is above 80 AND Audience Quality\
+      \ is below 50. Reach without audience quality is vanity \u2014 copy that cadence\
+      \ at your peril."
+    - "When `metrics_file` is omitted, the runner emits seeded demo metrics with an\
+      \ explicit `[demo metric \u2014 re-run with --metrics-file for real X data]`\
+      \ label so the creator never confuses the demo output for their actual analytics."
+    - Top-performing-content archetypes are paraphrased categories (e.g. `long-form
+      thread on niche pain-point`), never raw post URLs or full post text, unless
+      the creator explicitly supplies them via `metrics_file`.
+    - "Every analysis includes mandatory bridges to `content-idea-generator` and `thread-builder`\
+      \ \u2014 these are the official 'measure \u2192 next anchor \u2192 next thread'\
+      \ loop closers and never get omitted."
+    - Monetization recommendations are gated by `allow_monetization`. When false (default),
+      the runner emits a structured refusal stub. When true, every monetization-derived
+      line carries the Article V.1 'Not financial advice' banner verbatim.
+    - "Insight prose is capped at 280 characters per line; longer narrative is truncated\
+      \ to the cap with a `\u2026[capped]` marker so the creator can paste cleanly\
+      \ into a brief or X draft."
+    hard_refusals:
+    - auto-publish or auto-share the analytics summary to any platform without an
+      explicit consent gate
+    - fabricate p-values, confidence intervals, or absolute statistical significance
+      numbers
+    - recommend algorithm-gaming tactics derived from the analytics (mass-engagement,
+      hashtag stuffing, follow-trains)
+    - expose other creators' analytics or paste a non-creator's account export as
+      if it belonged to --x-handle
+    - scrape authenticated X content to seed the metrics
+    - emit monetization recommendations when allow_monetization is false; emit them
+      without the V.1 disclaimer when true
+  safety_v215:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    - copy_competitor_signature_phrasing
+    - auto_publish_without_consent
+    cost_limits:
+      usd_per_session_max: 0.3
+      usd_per_day_max: 1.0
+      tokens_per_session_max: 60000
+      api_calls_per_session_max: 80
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the analytics summary to a path outside the agent AppData folder
+      - any future-version auto-share (currently disabled in v1)
+      - any analysis generated with allow_monetization=true (must be confirmed before
+        render)
+      timeout_seconds: 60
+    disclaimers:
+      not_financial_advice: false
+      not_tax_advice: false
+      real_world_action_consent: true
+  real_time_x:
+    enabled: false
+    consent_required: true
+    posts: false
+    reply_only: false
+    max_posts_per_day: 0
+  windows_legacy:
+    appdata_folder: grok-agent/analytics-summarizer
+    cache_folder: grok-agent/analytics-summarizer/cache
+    log_folder: grok-agent/analytics-summarizer/logs
+    min_powershell_version: '5.1'
+    requires_admin: false
+    chrome_only: true
+  runtime_dispatch:
+    type: python_module
+    module: analytics_summarizer
+  original_kind: creator-template

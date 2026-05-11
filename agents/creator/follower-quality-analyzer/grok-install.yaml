@@ -1,0 +1,120 @@
+version: '2.14'
+name: follower-quality-analyzer
+description: "Aggregate follower-quality scoring for X creators \u2014 4 standard\
+  \ metrics, paraphrased top-follower archetypes, bot-engagement paradox detection,\
+  \ and \u22653 cross-template bridges. Aggregate-only privacy."
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - action
+  - ide
+category: creator-template
+tools:
+- name: generate_follower_quality_analysis
+  type: local_function
+  module: follower_quality_analyzer.run
+  function: generate
+  description: "Produce a 6-section structured follower-quality analysis (or 7-section\
+    \ when red-flag count > 3 OR sample size < 50) with 4 official aggregate metrics,\
+    \ paraphrased top-follower archetypes, bot-engagement paradox detection, and \u2265\
+    3 cross-template bridges. Never exposes individual follower PII."
+  parameters:
+    schema:
+      type: object
+      properties:
+        x_handle:
+          type: string
+          description: Creator's X handle (with or without @). Aggregate analysis
+            target.
+        follower_sample:
+          type: array
+          items:
+            type: string
+          description: Optional inline sample of follower handles. If omitted, --follower-file
+            or --date-range supplies the sample.
+        follower_file:
+          type: string
+          description: Optional path to a newline-delimited file of follower handles.
+        date_range:
+          type: string
+          description: Optional ISO date range (YYYY-MM-DD/YYYY-MM-DD) used as the
+            sample-window seed when no explicit sample is provided.
+        focus:
+          type: string
+          enum:
+          - engagement
+          - authenticity
+          - growth_potential
+          - all
+          default: all
+          description: Which of the 4 standard metrics to emphasise in the headline
+            and recommendations.
+      required:
+      - x_handle
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+  - I
+  - II
+  - VI
+  - VII
+  constitution_v215:
+    rules:
+    - Aggregate-only output. Never expose an individual follower's handle, display
+      name, bio, or any other PII in the analysis body.
+    - Surface the bot-engagement paradox in BOTH the Quality Scores table AND the
+      Red Flags section whenever bot share > 15% AND aggregate engagement is above
+      the niche median.
+    - "Top Followers cards describe paraphrased archetypes (e.g. 'Indie ML researcher,\
+      \ 3-year tenure, replies daily') \u2014 never named accounts."
+    - Every monetization-tier recommendation carries the Article V.1 'Not financial
+      advice' banner verbatim.
+    - "Every analysis links to \u22653 cross-template bridges so the creator can act\
+      \ on the findings without leaving Grok Agent OS."
+    - "Refuse to run scoring on a sample whose size is < 5 (insufficient signal \u2014\
+      \ emit guidance, not a fabricated score)."
+    hard_refusals:
+    - expose individual follower handles in any output section
+    - "score followers as 'low value' or 'block-worthy' \u2014 that judgement belongs\
+      \ to the creator, not the agent"
+    - scrape authenticated X content without the creator's consent
+  safety_v215:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    cost_limits:
+      usd_per_session_max: 0.3
+      usd_per_day_max: 1.0
+      tokens_per_session_max: 60000
+      api_calls_per_session_max: 80
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the analysis to a path outside the agent AppData folder
+      timeout_seconds: 60
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: false
+      real_world_action_consent: false
+  windows_legacy:
+    appdata_folder: grok-agent/follower-quality-analyzer
+    cache_folder: grok-agent/follower-quality-analyzer/cache
+    log_folder: grok-agent/follower-quality-analyzer/logs
+    min_powershell_version: '5.1'
+    requires_admin: false
+    chrome_only: true
+  runtime_dispatch:
+    type: python_module
+    module: follower_quality_analyzer
+  original_kind: creator-template
