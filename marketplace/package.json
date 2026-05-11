@@ -4,6 +4,10 @@
   "private": true,
   "description": "xlOS marketplace — discovery surface for grok-install agents.",
   "scripts": {
+    "build:agents-index": "node scripts/build-agents-index.mjs",
+    "predev": "npm run build:agents-index",
+    "prebuild": "npm run build:agents-index",
+    "pretest": "npm run build:agents-index",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -38,7 +42,8 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",
-    "vitest": "^2.1.9"
+    "vitest": "^2.1.9",
+    "yaml": "^2.5.0"
   },
   "engines": {
     "node": ">=20"
