@@ -36,9 +36,8 @@ def test_agent_validates_and_scans_clean(manifest_path: Path) -> None:
     # Constitution scan must produce zero high-severity findings
     result = scan_manifest(data)
     errors = [f for f in result.findings if f.severity == "error"]
-    assert not errors, (
-        f"{manifest_path}: Constitution errors:\n"
-        + "\n".join(f.to_line() for f in errors)
+    assert not errors, f"{manifest_path}: Constitution errors:\n" + "\n".join(
+        f.to_line() for f in errors
     )
 
 

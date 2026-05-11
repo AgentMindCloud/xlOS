@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -39,9 +38,7 @@ def test_run_streamlit_app_invokes_subprocess(
         "description": "Test streamlit-app runtime dispatch path.",
         "runtime": {"engine": "grok", "model": "grok-4"},
         "deploy": {"targets": ["web"]},
-        "extensions": {
-            "xlos_runtime": {"type": "streamlit_app", "entrypoint": "app.py"}
-        },
+        "extensions": {"xlos_runtime": {"type": "streamlit_app", "entrypoint": "app.py"}},
     }
     _install_manifest(tmp_path, "demo-streamlit", manifest)
 
@@ -73,9 +70,7 @@ def test_run_python_module_invokes_subprocess(
         "description": "Test python-module runtime dispatch path.",
         "runtime": {"engine": "grok", "model": "grok-4"},
         "deploy": {"targets": ["worker"]},
-        "extensions": {
-            "xlos_runtime": {"type": "python_module", "module": "demo.module"}
-        },
+        "extensions": {"xlos_runtime": {"type": "python_module", "module": "demo.module"}},
     }
     _install_manifest(tmp_path, "demo-module", manifest)
 
@@ -97,9 +92,7 @@ def test_run_python_module_invokes_subprocess(
     assert calls == [[sys.executable, "-m", "demo.module"]]
 
 
-def test_run_unknown_agent_exits_non_zero(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_run_unknown_agent_exits_non_zero(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     _patch_user_data_dir(monkeypatch, tmp_path)
     with pytest.raises(SystemExit) as exc_info:
         runtime_module.run_command("does-not-exist")

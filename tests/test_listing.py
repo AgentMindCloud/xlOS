@@ -44,18 +44,26 @@ def test_list_table_contains_installed_agents(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     _patch_user_data_dir(monkeypatch, tmp_path)
-    _write_manifest(tmp_path, "alpha", {
-        "version": "2.14",
-        "name": "alpha",
-        "category": "creator-template",
-        "deploy": {"targets": ["worker", "web"]},
-    })
-    _write_manifest(tmp_path, "beta", {
-        "version": "2.14",
-        "name": "beta",
-        "category": "x-money-tool",
-        "deploy": {"targets": ["web"]},
-    })
+    _write_manifest(
+        tmp_path,
+        "alpha",
+        {
+            "version": "2.14",
+            "name": "alpha",
+            "category": "creator-template",
+            "deploy": {"targets": ["worker", "web"]},
+        },
+    )
+    _write_manifest(
+        tmp_path,
+        "beta",
+        {
+            "version": "2.14",
+            "name": "beta",
+            "category": "x-money-tool",
+            "deploy": {"targets": ["web"]},
+        },
+    )
 
     from xlos.cli import main
 
@@ -83,18 +91,26 @@ def test_list_json_output_emits_full_manifests(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     _patch_user_data_dir(monkeypatch, tmp_path)
-    _write_manifest(tmp_path, "alpha", {
-        "version": "2.14",
-        "name": "alpha",
-        "category": "creator-template",
-        "deploy": {"targets": ["worker"]},
-    })
-    _write_manifest(tmp_path, "beta", {
-        "version": "2.14",
-        "name": "beta",
-        "category": "x-money-tool",
-        "deploy": {"targets": ["web"]},
-    })
+    _write_manifest(
+        tmp_path,
+        "alpha",
+        {
+            "version": "2.14",
+            "name": "alpha",
+            "category": "creator-template",
+            "deploy": {"targets": ["worker"]},
+        },
+    )
+    _write_manifest(
+        tmp_path,
+        "beta",
+        {
+            "version": "2.14",
+            "name": "beta",
+            "category": "x-money-tool",
+            "deploy": {"targets": ["web"]},
+        },
+    )
 
     from xlos.cli import main
 
