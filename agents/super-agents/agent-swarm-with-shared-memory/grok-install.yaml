@@ -1,0 +1,50 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/super-agents/agent-swarm-with-shared-memory/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: agent-swarm-with-shared-memory
+description: Collaborative swarm of specialised agents that share long-term memory
+  and reason together in real time for superior collective intelligence.
+category: super-agent
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 1.2
+  usd_per_day_max: 6.0
+tools:
+- name: swarm_debate
+- name: shared_memory_read
+- name: shared_memory_append
+extensions:
+  constitution:
+    rules:
+    - All agents in the swarm must access the same shared memory.
+    - Every final answer must include dissenting opinions from the swarm.
+    - Memory is private and never shared externally without explicit consent.
+    - Swarm decisions require consensus or a clear majority.
+    consent_gates:
+    - publish_synthesis
+    - export_provenance_log
+    hard_refusals:
+    - Mutate or delete provenance events.
+    - Hide a dissenting agent's opinion from the final response.
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 6
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\agent-swarm-with-shared-memory\provenance\events.jsonl
+    cite_sources: true
+    append_only: true
+  demo_metadata:
+    tagline: "Six specialised agents \xB7 one shared memory \xB7 visible debate."
+    display_name: Agent Swarm with Shared Memory
+  xlos_runtime:
+    type: python_module
+    module: orchestrator

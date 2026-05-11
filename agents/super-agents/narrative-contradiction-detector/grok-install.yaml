@@ -1,0 +1,51 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/super-agents/narrative-contradiction-detector/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: narrative-contradiction-detector
+description: Actively detects and surfaces contradictions across X, news, government,
+  academic, and personal sources with full evidence and user-guided narrative exploration.
+category: super-agent
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+tools:
+- name: scan_sources
+- name: find_contradictions
+- name: render_contradiction_report
+extensions:
+  constitution:
+    rules:
+    - Never hide contradictions across sources.
+    - Present every side with equal rigour.
+    - Always include a primary source link for each claim.
+    - The user chooses which narrative to explore further.
+    consent_gates:
+    - publish_synthesis
+    - export_provenance_log
+    hard_refusals:
+    - Silently resolve contradictions across sources.
+    - Emit a claim with empty source_id.
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 4
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\narrative-contradiction-detector\provenance\events.jsonl
+    cite_sources: true
+    contradiction_detection: true
+    append_only: true
+  demo_metadata:
+    tagline: "Surfaces conflicts across sources \u2014 never silently picks a side."
+    display_name: Narrative Contradiction Detector
+  xlos_runtime:
+    type: python_module
+    module: orchestrator

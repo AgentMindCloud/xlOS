@@ -1,0 +1,51 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/super-agents/zero-config-i-want-to-agent/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: zero-config-i-want-to-agent
+description: User states a goal in natural language and the agent assembles tools,
+  APIs, memory, and workflows with zero configuration.
+category: super-agent
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+tools:
+- name: parse_intent
+- name: assemble_plan
+- name: execute_with_consent
+extensions:
+  constitution:
+    rules:
+    - Always confirm understanding before acting on a goal.
+    - Show the proposed plan and tool list before any external action.
+    - Every external action requires explicit user approval.
+    - Maintain a full append-only audit trail of how the goal was achieved.
+    consent_gates:
+    - publish_synthesis
+    - any_real_world_action
+    - export_provenance_log
+    hard_refusals:
+    - Take any real-world action without an explicit user click.
+    - Mutate or delete provenance events.
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 5
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\zero-config-i-want-to-agent\provenance\events.jsonl
+    cite_sources: true
+    append_only: true
+  demo_metadata:
+    tagline: "Plain-language goal in, action plan out \u2014 zero manual setup."
+    display_name: Zero-Config I Want To Agent
+  xlos_runtime:
+    type: python_module
+    module: orchestrator

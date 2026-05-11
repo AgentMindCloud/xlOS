@@ -1,0 +1,58 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/super-agents/provenance-first-trust-engine/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: provenance-first-trust-engine
+description: Every response comes with a complete clickable provenance report including
+  all sources, confidence scores, and alternative viewpoints for maximum trust and
+  transparency.
+category: super-agent
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - worker
+cost_limits:
+  usd_per_session_max: 0.8
+  usd_per_day_max: 4.0
+tools:
+- name: trace_claims
+- name: verify_source
+- name: render_provenance_report
+extensions:
+  constitution:
+    rules:
+    - Every claim must have a traceable, append-only provenance record.
+    - A confidence score is required for every statement.
+    - Alternative viewpoints must be presented when available.
+    - Users can click any source to verify.
+    consent_gates:
+    - export_provenance_log
+    - publish_synthesis
+    hard_refusals:
+    - Emit a claim with empty source_id.
+    - Mutate or delete provenance events.
+  multi_agent_roles:
+    role: orchestrator
+    shared_memory: mem0://grok-agent-shared
+    max_concurrent_workers: 3
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\provenance-first-trust-engine\provenance\events.jsonl
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    append_only: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  demo_metadata:
+    tagline: "Verifiable answers \u2014 every claim, every source, every score."
+    display_name: Provenance-First Trust Engine
+  xlos_runtime:
+    type: python_module
+    module: orchestrator

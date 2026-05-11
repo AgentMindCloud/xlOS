@@ -1,0 +1,121 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/super-agents/self-evolving-personal-os/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: self-evolving-personal-os
+description: "Personal second brain on Windows \u2014 morning briefings, long-term\
+  \ personal + X memory, auto-evolving workflows, full rewind, and explicit-consent\
+  \ gates on every real-world action."
+category: super-agent
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+  - worker
+cost_limits:
+  usd_per_session_max: 1.5
+  usd_per_day_max: 5.0
+  tokens_per_session_max: 300000
+tools:
+- name: morning_brief
+- name: remember_personal
+- name: recall_personal
+- name: evolve_workflow
+- name: apply_workflow_change
+- name: rewind_briefing
+- name: flag_pattern
+- name: export_personal_log
+- name: x_personal_fetch
+- name: gcal_fetch
+- name: gmail_fetch
+- name: local_notes_fetch
+- name: weather_fetch
+- name: news_personal_fetch
+extensions:
+  constitution:
+    rules:
+    - "User data is sacred \u2014 PII never leaves the machine without explicit consent\
+      \ (Article II)."
+    - "Self-improvement is conservative \u2014 every workflow change requires human\
+      \ approval (Article III)."
+    - Personal memory is versioned and rewindable (Article IV).
+    - "Provenance is append-only \u2014 no mutations, no deletes (Article V)."
+    - The 4-metric Briefing Trust Score formula is locked (Article VI).
+    - "Every emitted briefing carries \u22653 cross-template bridges (Article VII)."
+    - Audit triggers fire on memory drift, recall miss, or trust drop below 50 (Article
+      VIII).
+    - Every real-world action (calendar, files, scheduling, X post) requires explicit
+      consent (Article IX).
+    - All user data lives under $env:LOCALAPPDATA, encrypted at rest where the OS
+      supports it (Article X).
+    consent_gates:
+    - publish_briefing
+    - modify_calendar
+    - send_email
+    - post_to_x
+    - send_dm
+    - modify_local_files_outside_appdata
+    - apply_workflow_change
+    - export_personal_log
+    - sync_to_cloud
+    hard_refusals:
+    - Send any user PII to a public API beyond what the connector explicitly declares.
+    - Auto-apply workflow changes without explicit user approval.
+    - Mutate or delete provenance events.
+    - Take any real-world action without an explicit user click.
+    - Post to X impersonating the user without per-post consent.
+  multi_agent_roles:
+    role: orchestrator
+    delegates_to:
+    - living-narrative-fabric
+    - cross-reality-action-fabric
+    shared_memory: mem0://grok-agent-shared
+    message_bus: null
+    max_concurrent_workers: 2
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\self-evolving-personal-os\provenance\events.jsonl
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    append_only: true
+    redact_pii_before_langfuse: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  demo_metadata:
+    storyboard: templates/super-agents/self-evolving-personal-os/DEMO.md
+    url: https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/self-evolving-personal-os-demo.mp4
+    status: deferred
+    note: Actual video has not yet been recorded; once recorded, it will be uploaded
+      as a release asset under tag 'super-agent-demos-v1'.
+    update_instructions:
+    - 'Set metadata.demo_video.status to: available'
+    - Verify metadata.demo_video.url resolves to the released MP4
+    - "Remove the inline 'planned \u2014 recording + upload pending' comment next\
+      \ to the URL"
+    - 'Update README.md demo section: remove ''planned'' language and add a runtime
+      + duration line'
+    - Drop this update_instructions field once status is available
+    recording_steps:
+    - Open the agent's UI per the storyboard at metadata.demo_video.storyboard
+    - Capture with OBS Studio at 1920x1080, 30fps, target duration 90-180 seconds
+    - Encode as MP4 (H.264 video + AAC audio) and save as self-evolving-personal-os-demo.mp4
+    upload_steps:
+    - 'PowerShell: gh auth login (one-time, if not already authenticated)'
+    - 'Create the release ONCE for all three flagships: gh release create super-agent-demos-v1
+      --title ''Super Agent Demos v1'' --notes ''Recorded demo videos for the three
+      flagship Super Agents.'''
+    - 'Upload this agent''s MP4: gh release upload super-agent-demos-v1 self-evolving-personal-os-demo.mp4
+      --clobber'
+    - 'Verify the asset URL resolves: Invoke-WebRequest -Method Head https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/self-evolving-personal-os-demo.mp4'
+    tagline: "Your second brain on Windows \u2014 auto-improving, never leaks."
+    display_name: Self-Evolving Personal OS
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py

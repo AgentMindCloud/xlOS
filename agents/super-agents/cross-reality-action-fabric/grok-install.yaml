@@ -1,0 +1,121 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/super-agents/cross-reality-action-fabric/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: cross-reality-action-fabric
+description: Bridge agent between X / Grok and the user's Windows machine + public
+  web. Every action is explicit, gated, reversible, and provenance-logged.
+category: super-agent
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+  - worker
+cost_limits:
+  usd_per_session_max: 0.5
+  usd_per_day_max: 2.0
+  tokens_per_session_max: 300000
+  api_calls_per_session_max: 250
+tools:
+- name: web_via_stagehand
+- name: windows_local
+- name: weather_lookup
+- name: flight_search
+- name: x_search
+extensions:
+  constitution:
+    rules:
+    - 'Rule 1 (Human approval): No action touches the real world, the user''s Windows
+      machine, or any X surface without an explicit typed approval scoped to that
+      single action.'
+    - 'Rule 2 (Provenance mandatory): Every executed action writes one ProvenanceRecord
+      with action_plan, consent_token, rollback snippet, started_at, finished_at,
+      and outcome.'
+    - 'Rule 3 (Rollback): Every state-changing action carries a verbatim rollback
+      snippet stored alongside the forward action; the agent MUST be able to undo
+      any single step.'
+    - "Rule 4 (No silent contradiction resolution): When two sources disagree on a\
+      \ fact the agent presents, both are surfaced with a contradiction flag \u2014\
+      \ never silently picked."
+    - 'Rule 5 (Windows-only execution): All local automation runs on Windows 11 +
+      PowerShell. Bash, macOS, and Linux paths are not supported and are refused at
+      the runtime layer.'
+    - 'Rule 6 (Privacy-first): User data lives under $env:LOCALAPPDATA\grok-agent\cross-reality-action-fabric\.
+      Cloud sync, telemetry, and Langfuse traces are opt-in; the agent defaults to
+      local-only.'
+    consent_gates:
+    - publish_to_x
+    - send_dm
+    - move_funds
+    - pay_real_money
+    - export_tax_report
+    - sync_to_cloud
+    - modify_local_files_outside_appdata
+    - publish_synthesis
+    - run_powershell_local
+    - run_web_action
+    - read_calendar
+    - read_email
+    hard_refusals:
+    - Take any real-world action without an active typed user approval.
+    - Move money or charge a card under any circumstance.
+    - Modify files outside $env:LOCALAPPDATA\grok-agent\ without modify_local_files_outside_appdata.
+    - Impersonate another X user, including for testing or comedy.
+    - Disable, monkey-patch, or skip safety/scanner.py at runtime.
+    - Bypass the rollback contract on any state-changing action.
+  multi_agent_roles:
+    enabled: true
+    role: orchestrator
+    delegates_to:
+    - living-narrative-fabric
+    - self-evolving-personal-os
+    shared_memory: mem0://cross-reality-action-fabric/shared
+    message_bus: null
+    max_concurrent_workers: 3
+  provenance:
+    enabled: true
+    append_only: true
+    log_path: $env:LOCALAPPDATA\grok-agent\cross-reality-action-fabric\provenance.log
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  demo_metadata:
+    storyboard: templates/super-agents/cross-reality-action-fabric/DEMO.md
+    url: https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/cross-reality-action-fabric-demo.mp4
+    status: deferred
+    note: Actual video has not yet been recorded; once recorded, it will be uploaded
+      as a release asset under tag 'super-agent-demos-v1'.
+    update_instructions:
+    - 'Set metadata.demo_video.status to: available'
+    - Verify metadata.demo_video.url resolves to the released MP4
+    - "Remove the inline 'planned \u2014 recording + upload pending' comment next\
+      \ to the URL"
+    - 'Update README.md demo section: remove ''planned'' language and add a runtime
+      + duration line'
+    - Drop this update_instructions field once status is available
+    recording_steps:
+    - Open the agent's UI per the storyboard at metadata.demo_video.storyboard
+    - Capture with OBS Studio at 1920x1080, 30fps, target duration 90-180 seconds
+    - Encode as MP4 (H.264 video + AAC audio) and save as cross-reality-action-fabric-demo.mp4
+    upload_steps:
+    - 'PowerShell: gh auth login (one-time, if not already authenticated)'
+    - 'Create the release ONCE for all three flagships: gh release create super-agent-demos-v1
+      --title ''Super Agent Demos v1'' --notes ''Recorded demo videos for the three
+      flagship Super Agents.'''
+    - 'Upload this agent''s MP4: gh release upload super-agent-demos-v1 cross-reality-action-fabric-demo.mp4
+      --clobber'
+    - 'Verify the asset URL resolves: Invoke-WebRequest -Method Head https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/cross-reality-action-fabric-demo.mp4'
+    tagline: "Grok's hands on your Windows machine \u2014 explicit consent on every\
+      \ action."
+    display_name: Cross-Reality Action Fabric
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py

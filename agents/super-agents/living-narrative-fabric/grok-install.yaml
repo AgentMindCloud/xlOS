@@ -1,0 +1,110 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/super-agents/living-narrative-fabric/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: living-narrative-fabric
+description: "Versioned, provenance-first synthesis across X, news, academia, government,\
+  \ and the open web \u2014 with full contradiction detection that never silently\
+  \ picks a winner."
+category: super-agent
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+  - web
+  - worker
+cost_limits:
+  usd_per_session_max: 2.0
+  usd_per_day_max: 10.0
+  tokens_per_session_max: 500000
+tools:
+- name: synthesize
+- name: rewind_to_version
+- name: flag_contradiction
+- name: export_provenance_report
+- name: run_weekly_eval
+- name: newsapi_fetch
+- name: gnews_fetch
+- name: semantic_scholar_fetch
+- name: data_gov_fetch
+- name: x_search_fetch
+- name: crawl4ai_fetch
+extensions:
+  constitution:
+    rules:
+    - Source citations are mandatory on every claim (Article II).
+    - Contradictions are never silently resolved; both sides stay verbatim (Article
+      III).
+    - Synthesis is versioned and rewindable (Article IV).
+    - "Provenance is append-only \u2014 no mutations, no deletes (Article V)."
+    - The 4-metric Synthesis Confidence formula is locked (Article VI).
+    - "Every emitted synthesis carries \u22653 cross-template bridges (Article VII)."
+    - Audit triggers fire when contradictions > 3 OR sources < 3 OR confidence < 50
+      (Article VIII).
+    - Real-world actions require explicit human approval (Article IX).
+    - "All user data lives under $env:LOCALAPPDATA \u2014 local-first + privacy-first\
+      \ (Article X)."
+    consent_gates:
+    - publish_synthesis
+    - export_provenance_log
+    - apply_improvements
+    - any_real_world_action
+    hard_refusals:
+    - Silently resolve contradictions across sources.
+    - Emit a claim with empty source_id.
+    - Mutate or delete provenance events.
+    - "Publish a synthesis without \u22653 cross-template bridges."
+    - Take any real-world action without an explicit user click.
+  multi_agent_roles:
+    role: orchestrator
+    delegates_to:
+    - self-evolving-personal-os
+    - cross-reality-action-fabric
+    shared_memory: mem0://grok-agent-shared
+    message_bus: null
+    max_concurrent_workers: 4
+  provenance:
+    enabled: true
+    log_path: $env:LOCALAPPDATA\grok-agent\living-narrative-fabric\provenance\events.jsonl
+    cite_sources: true
+    versioned_synthesis: true
+    contradiction_detection: true
+    append_only: true
+    langfuse:
+      enabled: false
+      public_key_env_var: LANGFUSE_PUBLIC_KEY
+      secret_key_env_var: LANGFUSE_SECRET_KEY
+      host: https://cloud.langfuse.com
+  demo_metadata:
+    storyboard: templates/super-agents/living-narrative-fabric/DEMO.md
+    url: https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/living-narrative-fabric-demo.mp4
+    status: deferred
+    note: Actual video has not yet been recorded; once recorded, it will be uploaded
+      as a release asset under tag 'super-agent-demos-v1'.
+    update_instructions:
+    - 'Set metadata.demo_video.status to: available'
+    - Verify metadata.demo_video.url resolves to the released MP4
+    - "Remove the inline 'planned \u2014 recording + upload pending' comment next\
+      \ to the URL"
+    - 'Update README.md demo section: remove ''planned'' language and add a runtime
+      + duration line'
+    - Drop this update_instructions field once status is available
+    recording_steps:
+    - Open the agent's UI per the storyboard at metadata.demo_video.storyboard
+    - Capture with OBS Studio at 1920x1080, 30fps, target duration 90-180 seconds
+    - Encode as MP4 (H.264 video + AAC audio) and save as living-narrative-fabric-demo.mp4
+    upload_steps:
+    - 'PowerShell: gh auth login (one-time, if not already authenticated)'
+    - 'Create the release ONCE for all three flagships: gh release create super-agent-demos-v1
+      --title ''Super Agent Demos v1'' --notes ''Recorded demo videos for the three
+      flagship Super Agents.'''
+    - 'Upload this agent''s MP4: gh release upload super-agent-demos-v1 living-narrative-fabric-demo.mp4
+      --clobber'
+    - 'Verify the asset URL resolves: Invoke-WebRequest -Method Head https://github.com/AgentMindCloud/grok-agent/releases/download/super-agent-demos-v1/living-narrative-fabric-demo.mp4'
+    tagline: "Versioned truth across X, news, academia, and gov data \u2014 on Windows."
+    display_name: Living Narrative Fabric
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py
