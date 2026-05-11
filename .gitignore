@@ -69,7 +69,8 @@ desktop.ini
 
 # xlOS scratch
 .scratch/
-.archive/
+# Claude Code worktrees (transient sub-agent isolation)
+   .claude/worktrees/
 
 # Env / secrets
 .env
