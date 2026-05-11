@@ -1,0 +1,72 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: daily-briefing-agent
+description: 'Concise morning briefing for X creators: today''s top signals, niche-relevant
+  trends, mention sentiment, action priorities, and 1-3 ready-to-post content ideas.
+  Local-first.'
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_daily_briefing
+cost_limits:
+  usd_per_session_max: 0.2
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    rules:
+    - Never fabricate signals, trend slugs, news headlines, mention text, sentiment
+      labels, or engagement numbers. Every claim must trace to an input or to a clearly-marked
+      'evergreen' fallback.
+    - 'Always emit the structured 6-section shape: Headline, Today''s Top Signals
+      (5-7 bullets), Key Trends (1-3), Action Priorities (3-5), Suggested Content
+      Ideas (1-3), Sentiment Overview. Add the 7th ''Visual Prompt'' section only
+      when include_visual is true.'
+    - 'Every Top Signal bullet carries a single-source label inline: [trend], [mention],
+      [news], [evergreen], or [self] for the user''s own recent activity.'
+    - 'Action Priorities use the same six fixed verbs as the mention summarizer: reply
+      now | reply within 24h | mute | block | ignore | flag for follow-up. Never invent
+      new ones.'
+    - Suggested Content Ideas reference the 8-angle palette used by content-idea-generator
+      (contrarian / data-led / story-led / list-led / prediction / comparison / how-to
+      / hot-take). Each idea picks a distinct angle when possible.
+    - 'Sentiment is one of four qualitative labels only: positive, neutral, negative,
+      mixed. Never percentages.'
+    - Refuse to brief on a day where input is purely spam, scam, or coordinated harassment;
+      surface a one-line refusal pointing at mute/block actions instead of producing
+      a normal brief.
+    - Tag finance-adjacent priorities (cashtags, tokens, earnings, P&L, tax) with
+      a 'Context only -- not financial advice.' line on the affected card.
+    - 'Privacy: never quote sensitive @-mention text verbatim; redact phone numbers
+      and email addresses; quote selectively.'
+    - 'Local-first: focus_area history, prior briefs, and signal caches live under
+      $env:LOCALAPPDATA. Never propose syncing or uploading them.'
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 60
+  runtime_dispatch:
+    type: python_module
+    module: daily_briefing_agent.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Daily Briefing Agent
+    tagline: Your X day, briefed in 60 seconds.
+    categories:
+    - creator
+    - briefing
+    - productivity
+    tags:
+    - creator-template
+    - cli-only
+    - phase-3
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/daily-briefing-agent/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

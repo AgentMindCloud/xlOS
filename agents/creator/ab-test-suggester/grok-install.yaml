@@ -1,0 +1,98 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: ab-test-suggester
+description: Local-first A/B test planner for X creators — turns a single post idea
+  into a 6/7-section test plan with 2-3 variants isolated to a single test dimension
+  (headline / visual / cta / timing), 4 official Test Plan Score metrics (Variant
+  clarity / Test isolation / Sample feasibility / Decision actionability), success
+  metrics + statistical notes, multi-variable paradox detection, and >= 3 cross-template
+  bridges. Drafts only — never auto-publishes.
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_ab_test_plan
+cost_limits: &id001
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    articles:
+    - II
+    - V.1
+    rules:
+    - Drafts only. The runner emits a test plan + variant text the creator reviews
+      and ships. Constitution Article II's `publish_to_x` consent gate covers every
+      variant.
+    - Single-axis isolation. When test_focus is one of 'headline'/'visual'/'cta'/'timing',
+      the variants MUST vary on that dimension only. Surface the multi-variable paradox
+      in BOTH the Test Plan section AND the Red Flags section whenever Variant clarity
+      > 70 AND Test isolation < 40 (variants are clearly different but diverge across
+      multiple dimensions — the test cannot isolate the cause).
+    - Honest statistics. Sample-size and duration estimates in the Statistical Notes
+      section are rough heuristics, not promises. The runner names them as such. The
+      runner refuses to fabricate p-values or confidence intervals.
+    - Every monetization-related test recommendation (e.g. paid-tier conversion test,
+      sponsored-content test) carries the Article V.1 'Not financial advice' banner
+      verbatim.
+    - Cannibalization disclosure. When the test ships variants on the same audience
+      without splitting reach (the X-native default), the runner surfaces the cannibalization
+      risk explicitly — the variants will compete with each other for impressions.
+    - Every analysis links to >= 3 cross-template bridges so the creator can wire
+      the test result into the next loop without leaving Grok Agent OS.
+    hard_refusals:
+    - auto-publish a variant to any platform without an explicit consent gate
+    - suggest variants that change multiple dimensions simultaneously when test_focus
+      is single-axis (would invalidate the test)
+    - fabricate statistical significance numbers, p-values, or confidence intervals
+    - recommend tests designed to manipulate the algorithm or coordinate engagement
+    - scrape authenticated content of any creator to seed variants
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: false
+    cost_limits: *id001
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the test plan to a path outside the agent AppData folder
+      - any future-version auto-publish (currently disabled in v1)
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: ab_test_suggester.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: AB Test Suggester
+    tagline: Test one thing at a time. Decide on signal, not vibes.
+    categories:
+    - creator
+    - experimentation
+    - analytics
+    tags:
+    - creator-template
+    - cli-only
+    - drafts-only
+    - single-axis-tests
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/ab-test-suggester/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

@@ -1,0 +1,102 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: trend-aligned-poster
+description: Local-first trend-aligned poster for X creators — reads creator-supplied
+  trend data (or seeded demo trends) and emits a 7/8-section structured plan with
+  4 official Trend Alignment Plan Score metrics (Trend match strength / Niche fit
+  / Voice fidelity / Originality), trend-chasing paradox detection in both Trend Alignment
+  Plan Score and Red Flags sections, 3–5 trend watchlist entries, 4–6 post ideas (mix
+  of single + thread formats) with per-idea trend match score and predicted engagement
+  band,...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_trend_aligned_post_plan
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits a post plan the creator reads before posting;
+      it never auto-publishes, schedules, or queues posts on X.
+    - No fabricated statistics. Demo trend velocity and engagement bands carry an
+      explicit [demo trend — re-run with --trends-file for real X data] label so the
+      creator never confuses demo output for real trend data.
+    - Surface the trend-chasing paradox in BOTH the Trend Alignment Plan Score section
+      AND the Red Flags section whenever average Trend match strength is above 75
+      AND Niche fit is below the configured floor (default 40). Both conditions must
+      be true — if only one fires, surface each condition in its own row instead.
+    - 'Off-niche guard: any post idea scoring trend_match ≥ 75 AND niche_fit < 40
+      is excluded from the Post Ideas section and consolidated as a single Red Flag
+      titled ''Off-niche trend-chasers excluded'' with severity ''high'' and a specific
+      remediation step.'
+    - Post Ideas section is capped at 4–6 entries after the off-niche filter (target
+      configurable via --target-idea-count, clamped to [4,6]). Off-niche entries do
+      not count toward the 4–6 cap — they are surfaced exclusively in the Red Flags
+      section.
+    - Every output unconditionally includes bridges to both content-idea-generator
+      (to re-source new anchor posts when trends shift) and thread-builder (to expand
+      the highest-match thread idea into long-form). These two bridges are never optional.
+    - 'Privacy-first: no source-post handles, raw trend post text, or external URLs
+      appear in the rendered output. Trend descriptions and idea copy outlines are
+      paraphrased only — never raw text or third-party handles.'
+    hard_refusals:
+    - auto-publish, auto-schedule, or auto-queue any post on X without explicit creator
+      consent
+    - generate financial, cashtag, investment, portfolio, ticker, or trading content
+      of any kind
+    - generate sponsored-post or paid-promotion content without explicit creator-supplied
+      disclosure copy
+    - expose source-post X handles, raw trend post text, or external URLs in the rendered
+      output
+    - scrape authenticated X content to seed the trend data
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 30
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - auto_publish_post
+    - auto_schedule_post
+    - generate_financial_content
+    - generate_unsanctioned_sponsored_content
+    - expose_third_party_handles
+    - bypass_safety_scanner
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the post plan to a path outside the agent AppData folder
+      - any future-version auto-publish action (currently disabled in v1)
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: trend_aligned_poster.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Trend-Aligned Poster
+    tagline: Ride the trend without losing your voice — or your niche.
+    categories:
+    - creator
+    - content
+    - trends
+    tags:
+    - creator-template
+    - cli-only
+    - drafts-only
+    - off-niche-guard
+    - no-finance-content
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/trend-aligned-poster/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

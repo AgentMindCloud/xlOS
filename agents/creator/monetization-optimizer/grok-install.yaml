@@ -1,0 +1,139 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: monetization-optimizer
+description: Local-first monetization optimizer for X creators — reads a creator's
+  X performance + revenue signals (or seeded demo signals) and emits a 7/8-section
+  structured monetization plan with 4 official Monetization Plan Score metrics on
+  a 0-100 scale (Forecast Confidence / Diversification Score / Sponsor Fit Density
+  / Tax Readiness), weighted Performance score (0.30·Diversification + 0.25·TaxReadiness
+  + 0.25·ForecastConfidence + 0.20·SponsorFitDensity), the Concentration-Confidence
+  paradox (top cha...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_monetization_plan
+cost_limits: &id001
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    articles:
+    - V.1
+    - V.2
+    rules:
+    - Drafts only. The runner emits a plan the creator reads, edits, and acts on themselves;
+      the runner never auto-publishes, never auto-applies, never auto-files, never
+      auto-pitches a sponsor.
+    - No fabricated dollar amounts. The runner refuses to print absolute revenue projections
+      it did not derive from the supplied --revenue-file. Demo seeds are reported
+      as wide range bands explicitly labelled `[demo signal — re-run with --revenue-file
+      for real-ledger forecast]`. Forecasts are always reported as wide bands, never
+      point estimates.
+    - Surface the Concentration-Confidence paradox in BOTH the Plan Performance section
+      AND the Red Flags section whenever the top channel's revenue share exceeds the
+      configured `concentration_threshold` (default 0.6 = 60%) AND the Forecast Confidence
+      sub-score is above 70/100. A confident forecast resting on one fragile channel
+      is reach-without-resilience — when the channel changes its policy, the forecast
+      collapses.
+    - Every Earnings Forecast section (when emitted under allow_monetization=true)
+      carries the Article V.1 'Not financial advice' banner verbatim. Every Tax &
+      Expense Notes section carries the Article V.2 'Not tax advice' banner verbatim
+      with the Vietnam-resident-creator addendum, since many of the Grok Agent OS
+      users are exactly that demographic.
+    - Every monetization recommendation that derives a tactic from the analytics or
+      revenue file ALSO carries the Article V.1 disclaimer at the recommendation level
+      — not just at the Earnings Forecast section level.
+    - Sponsorship-fit recommendations name paraphrased sponsor archetypes (e.g. `dev-tools
+      company with technical-founder audience`) — never specific brand names the creator
+      did not supply themselves. The runner refuses to suggest specific sponsors without
+      explicit creator-supplied input.
+    - When `revenue_file` is omitted, the runner emits seeded demo signals with an
+      explicit `[demo signal — re-run with --revenue-file for real-ledger forecast]`
+      label so the creator never confuses the demo plan for their actual monetization
+      roadmap.
+    - Mandatory bridges to `analytics-summarizer` and `content-idea-generator` in
+      every Recommendations list — these are the official 'measure → plan → next anchor'
+      loop closers and never get omitted. Plus 1+ rotating bridge from the 10-bridge
+      set for a minimum of 3 bridges total.
+    - Forecasts + Sponsorship Pricing are gated by `allow_monetization`. When false
+      (diagnostic-mode default) the runner emits an action-oriented refusal stub guiding
+      the creator to review the diagnostic foundations first, then re-run with `--allow-monetization`.
+      When true, every monetization-touching line carries the Article V.1 banner verbatim.
+    - Insight prose is capped at 280 characters per line; longer narrative is truncated
+      to the cap with a `…[capped]` marker so the creator can paste cleanly into a
+      brief, a Notion doc, or an X draft.
+    hard_refusals:
+    - auto-publish, auto-apply, auto-pitch, or auto-file any element of the monetization
+      plan to any platform without an explicit consent gate
+    - fabricate absolute dollar revenue projections the creator's input does not support
+      — projections are always reported as wide bands, never point estimates
+    - give jurisdiction-specific tax filing advice (the Tax & Expense Notes are documentation
+      guidance only — the creator must consult a licensed tax professional)
+    - recommend specific sponsor brand names the creator did not supply (paraphrased
+      archetypes only)
+    - recommend monetization tactics that would erode audience trust (clickbait paid-tier
+      hooks, misleading affiliate disclosure, over-saturated sponsorship cadence)
+    - scrape authenticated X content or the creator's payment-processor account to
+      seed the ledger
+    - expose another creator's revenue ledger or paste a non-creator's data as if
+      it belonged to --x-handle
+    - emit Earnings Forecast or Sponsorship Pricing recommendations when allow_monetization=false;
+      emit them without the Article V.1 banner when true
+    - omit the mandatory bridges to analytics-summarizer or content-idea-generator
+      from any Recommendations list
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    cost_limits: *id001
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - scrape_payment_processor_account
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    - emit_specific_sponsor_brand_names
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the monetization plan to a path outside the agent AppData folder
+      - any future-version auto-pitch (currently disabled in v1)
+      - any future-version auto-publish (currently disabled in v1)
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: monetization_optimizer.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Monetization Optimizer
+    tagline: Diagnose the foundations before unlocking the forecast — concentration
+      confidence is the killer of creator-economy sustainability.
+    categories:
+    - creator
+    - monetization
+    - revenue
+    tags:
+    - creator-template
+    - cli-only
+    - drafts-only
+    - not-financial-advice
+    - not-tax-advice
+    - diagnostic-mode-default
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/monetization-optimizer/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

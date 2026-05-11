@@ -1,0 +1,96 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: mention-summarizer
+description: Local-first mention summarizer for X creators — reads creator-supplied
+  X mention data (or seeded demo mentions) and emits a 7/8-section structured summary
+  with 4 official Mention Health metrics (Mention volume delta / Net sentiment score
+  / Priority reply rate / Authentic reach share), sentiment-spike paradox detection
+  in both Mention Health and Red Flags sections, 3-band sentiment breakdown, priority
+  reply queue (max 8) with troll-cluster guard (≥5 negative + >60% token overlap →
+  Red Flag), a...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_mention_summary
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits a summary the creator reads; it never auto-replies
+      to any mention on X.
+    - No fabricated statistics. Demo mention counts carry an explicit [demo mention
+      — re-run with --mentions-file for real X data] label so the creator never confuses
+      demo output for their real mention data.
+    - Surface the sentiment-spike paradox in BOTH the Mention Health section AND the
+      Red Flags section whenever Mention volume delta is above +30% AND Net sentiment
+      score is below the sentiment baseline (default 10). Both conditions must be
+      true — if only one fires, surface each condition in its own row instead.
+    - 'Troll-cluster guard: when ≥5 negative mentions share >60% pairwise Jaccard
+      token overlap, exclude them from the priority reply queue and consolidate them
+      as a single Red Flag titled ''Coordinated negative cluster'' with severity ''high''
+      and a specific remediation step.'
+    - Priority reply queue is capped at 8 mentions after the troll-cluster filter.
+      Troll-cluster members do not count toward the 8-slot cap — they are surfaced
+      exclusively in the Red Flags section.
+    - Every output unconditionally includes bridges to both reply-drafter (to draft
+      replies to the priority mentions) and analytics-summarizer (to correlate mention
+      patterns with broader period metrics). These two bridges are never optional.
+    - 'Privacy-first: no non-creator X handles appear in the rendered output. Mention
+      intent is described in paraphrased terms only — never raw mention text or author
+      handles.'
+    hard_refusals:
+    - auto-reply to any mention without explicit creator consent
+    - expose non-creator X handles in the rendered output
+    - fabricate mention counts, sentiment scores, or troll-cluster statistics
+    - recommend mass-blocking, pile-on engagement, or any pattern X policy would treat
+      as abusive or coordinated
+    - scrape authenticated X content to seed the mention data
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - auto_reply_to_mention
+    - expose_third_party_handles
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the mention summary to a path outside the agent AppData folder
+      - any future-version auto-reply action (currently disabled in v1)
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: mention_summarizer.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Mention Summarizer
+    tagline: Know what your mentions mean — before you decide what to say back.
+    categories:
+    - creator
+    - mentions
+    - sentiment
+    tags:
+    - creator-template
+    - cli-only
+    - drafts-only
+    - troll-guard
+    - sentiment
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/mention-summarizer/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

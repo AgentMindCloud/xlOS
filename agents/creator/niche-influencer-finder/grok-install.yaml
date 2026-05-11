@@ -1,0 +1,91 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: niche-influencer-finder
+description: Aggregate niche-influencer discovery for X creators — 4 official match
+  scores (Authority / Engagement / Audience fit / Collaboration potential), 3-5 paraphrased
+  archetype cards across Micro / Mid / Macro tiers, 3-5 collaboration opportunities,
+  and >= 3 cross-template bridges. Aggregate-only — never names a real account.
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_niche_influencer_recommendations
+cost_limits: &id001
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    articles:
+    - V.1
+    rules:
+    - Aggregate-only output. Top-Influencer cards describe paraphrased archetypes
+      (e.g. 'Indie LLM-infra founder, 8k followers, weekly long-form posts') — never
+      named accounts.
+    - Never invent a follower count, engagement rate, or post date. If sample-derived
+      signal is missing for a metric, mark it `n/a` and note what data would resolve
+      it.
+    - Surface inflated-engagement risk in BOTH the score row AND the Red Flags section
+      whenever Engagement > 70 AND Authority < 50 (engagement-pod paradox — same shape
+      as the bot-engagement paradox in follower-quality-analyzer).
+    - Every collaboration recommendation that touches paid placements, sponsorship
+      money, or revenue share carries the Article V.1 'Not financial advice' banner
+      verbatim.
+    - Every analysis links to >= 3 cross-template bridges so the creator can act on
+      the findings without leaving Grok Agent OS.
+    - Refuse to recommend influencers whose tier sits outside the requested min_followers
+      / max_followers band — return a guidance card instead of fabricating matches.
+    hard_refusals:
+    - name a real X account in any output section
+    - fabricate engagement metrics or follower counts the input did not supply
+    - scrape authenticated X content without the creator's consent
+    - recommend influencers as a 'must follow' list — recommendations are collaboration
+      angles, not endorsements
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: false
+    cost_limits: *id001
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the analysis to a path outside the agent AppData folder
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: niche_influencer_finder.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Niche Influencer Finder
+    tagline: Find the right collaborators in your niche — without naming names you
+      haven't approved.
+    categories:
+    - creator
+    - discovery
+    - growth
+    tags:
+    - creator-template
+    - cli-only
+    - aggregate-only
+    - no-pii
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/niche-influencer-finder/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

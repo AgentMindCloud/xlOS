@@ -1,0 +1,98 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: dm-triager
+description: Local-first DM triager for X creators — reads creator-supplied X DM data
+  (or seeded demo DMs) and emits a 7/8-section structured triage report with 4 official
+  Triage Health metrics (Triage urgency rate / Opportunity ratio / Spam pressure /
+  Authentic sender share), opportunity-flood paradox detection in both Triage Health
+  and Red Flags sections, 4-bucket distribution (Urgent / Opportunity / Routine /
+  Spam), suggested-action queue (max 6) with spam-burst guard (≥5 spam DMs + >60%
+  token overlap...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_dm_triage
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits a triage report the creator reads; it never auto-replies,
+      blocks, or mutes any DM on X.
+    - No fabricated statistics. Demo DM counts carry an explicit [demo DM — re-run
+      with --dms-file for real X data] label so the creator never confuses demo output
+      for their real DM inbox.
+    - Surface the opportunity-flood paradox in BOTH the Triage Health section AND
+      the Red Flags section whenever Opportunity ratio is above 30% AND Authentic
+      sender share is below the configured floor (default 60). Both conditions must
+      be true — if only one fires, surface each condition in its own row instead.
+    - 'Spam-burst guard: when ≥5 DMs in the Spam bucket share >60% pairwise Jaccard
+      token overlap, exclude them from the suggested-action queue and consolidate
+      them as a single Red Flag titled ''Coordinated spam burst'' with severity ''high''
+      and a specific remediation step.'
+    - Suggested-action queue is capped at 6 items after the spam-burst filter. Spam-burst
+      members do not count toward the 6-slot cap — they are surfaced exclusively in
+      the Red Flags section.
+    - Every output unconditionally includes bridges to both reply-drafter (to draft
+      replies to Urgent and Opportunity DMs) and mention-summarizer (to confirm whether
+      DM patterns mirror public mention patterns). These two bridges are never optional.
+    - 'Privacy-first: no sender X handles, raw DM text, attachment URLs, or external
+      links appear in the rendered output. DM content is paraphrased into intent labels
+      only and never written to disk outside the agent''s AppData folder.'
+    hard_refusals:
+    - auto-reply, mute, block, or report any DM without explicit creator consent
+    - expose sender X handles, raw DM text, or external URLs in the rendered output
+    - fabricate DM counts, bucket distribution, or spam-burst statistics
+    - store DM content outside the user's local Windows machine ($env:LOCALAPPDATA)
+    - scrape authenticated X DM content
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 30
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - auto_reply_to_dm
+    - auto_block_or_mute_sender
+    - expose_third_party_handles
+    - exfiltrate_dm_content
+    - bypass_safety_scanner
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the triage report to a path outside the agent AppData folder
+      - any future-version auto-reply, mute, or block action (currently disabled in
+        v1)
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: dm_triager.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: DM Triager
+    tagline: Sort the inbox before it sorts your day.
+    categories:
+    - creator
+    - dms
+    - triage
+    tags:
+    - creator-template
+    - cli-only
+    - drafts-only
+    - spam-guard
+    - triage
+    - privacy-first
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/dm-triager/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

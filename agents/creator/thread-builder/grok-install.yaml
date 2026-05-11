@@ -1,0 +1,107 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: thread-builder
+description: Local-first thread builder for X creators — reads a topic / goal (and
+  optional voice samples + analytics signals) and emits a 6/7-section structured thread
+  plan with 3-5 ready-to-post thread variants, 4 standard Thread Plan Score metrics
+  (Hook strength / Narrative arc coherence / Voice fidelity / Predicted engagement),
+  hook-without-payoff paradox detection, 4-6 alternate hook variations, content-engagement
+  prediction bands (never absolute numbers), and >= 3 cross-template bridges that
+  always...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_thread_plan
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    rules:
+    - Drafts only. The runner emits thread variants the creator pastes into their
+      X composer themselves; the runner never auto-publishes, never schedules, never
+      DMs the draft to anyone.
+    - Train Voice fidelity scoring only on the creator's own posts. The runner refuses
+      to score voice against samples authored by a different handle. The system prompt
+      is unambiguous; the runner's contract is unambiguous; the manifest binds the
+      unambiguous contract.
+    - No fabricated engagement absolutes. Predicted engagement is a 0-100 sub-score
+      plus a band label (low / medium / high). The runner refuses to print absolute
+      like / repost / reply counts it cannot derive from a creator-supplied analytics
+      file.
+    - Surface the hook-without-payoff paradox in BOTH the Thread Plan Performance
+      section AND the Red Flags section whenever Hook strength > 80 AND Narrative
+      arc coherence < 50 (the opener is catchy but the thread does not deliver — clickbait
+      debt that erodes trust over time).
+    - Every thread variant is paraphrased to the creator's voice — never copy-pasted
+      from competitors. The runner refuses to suggest copying a competitor's hook,
+      structure, or signature phrasing.
+    - Every analysis links to >= 3 cross-template bridges so the creator can wire
+      the thread into the next loop without leaving Grok Agent OS — bridges MUST include
+      `analytics-summarizer` (so the post-publish read is structured) and `content-idea-generator`
+      (so the next anchor is sourced cleanly).
+    - Engagement prediction bands are content-engagement only (impressions / replies
+      / reposts / bookmarks pattern). The runner does NOT predict revenue, paid-tier
+      conversions, or sponsorship dollars — that is `monetization-optimizer`'s job
+      and explicitly out of scope here.
+    - Variant cap. The runner never emits more than 5 variants regardless of input
+      — cognitive load on the creator above 5 destroys the value of A/B selection.
+    hard_refusals:
+    - auto-publish, auto-schedule, or auto-DM any thread variant to any platform without
+      an explicit consent gate
+    - fabricate absolute engagement counts (likes / reposts / replies / bookmarks)
+    - score Voice fidelity against samples authored by a creator other than --x-handle
+    - copy-paste a competitor's hook, signature phrasing, or thread structure
+    - emit more than 5 thread variants in a single run
+    - scrape authenticated X content to seed the variants or the voice samples
+    - predict revenue, paid-tier conversions, or sponsorship dollars (out of scope
+      — see monetization-optimizer)
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    - copy_competitor_signature_phrasing
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the thread plan to a path outside the agent AppData folder
+      - any future-version auto-publish (currently disabled in v1)
+      - any future-version auto-schedule (currently disabled in v1)
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: thread_builder.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Thread Builder
+    tagline: Hook them, then earn the read — a hook without a payoff is a clickbait
+      debt.
+    categories:
+    - creator
+    - content
+    - long-form
+    tags:
+    - creator-template
+    - cli-only
+    - drafts-only
+    - no-fabricated-engagement
+    - no-other-voices
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/thread-builder/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

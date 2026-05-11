@@ -1,0 +1,85 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: follower-quality-analyzer
+description: Aggregate follower-quality scoring for X creators — 4 standard metrics,
+  paraphrased top-follower archetypes, bot-engagement paradox detection, and ≥3 cross-template
+  bridges. Aggregate-only privacy.
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_follower_quality_analysis
+cost_limits: &id001
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    articles:
+    - V.1
+    rules:
+    - Aggregate-only output. Never expose an individual follower's handle, display
+      name, bio, or any other PII in the analysis body.
+    - Surface the bot-engagement paradox in BOTH the Quality Scores table AND the
+      Red Flags section whenever bot share > 15% AND aggregate engagement is above
+      the niche median.
+    - Top Followers cards describe paraphrased archetypes (e.g. 'Indie ML researcher,
+      3-year tenure, replies daily') — never named accounts.
+    - Every monetization-tier recommendation carries the Article V.1 'Not financial
+      advice' banner verbatim.
+    - Every analysis links to ≥3 cross-template bridges so the creator can act on
+      the findings without leaving Grok Agent OS.
+    - Refuse to run scoring on a sample whose size is < 5 (insufficient signal — emit
+      guidance, not a fabricated score).
+    hard_refusals:
+    - expose individual follower handles in any output section
+    - score followers as 'low value' or 'block-worthy' — that judgement belongs to
+      the creator, not the agent
+    - scrape authenticated X content without the creator's consent
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: false
+    cost_limits: *id001
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the analysis to a path outside the agent AppData folder
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: follower_quality_analyzer.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Follower Quality Analyzer
+    tagline: Know your real audience — aggregate signal, never individual PII.
+    categories:
+    - creator
+    - audience
+    - growth
+    tags:
+    - creator-template
+    - cli-only
+    - aggregate-only
+    - no-pii
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/follower-quality-analyzer/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

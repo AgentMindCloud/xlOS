@@ -1,0 +1,59 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: content-idea-generator
+description: Local-first content idea generator for X creators — reads creator-supplied
+  performance + voice signals (or seeded demo signals) and emits a 7/8-section structured
+  idea batch with 4 official Idea Plan Score metrics (Niche fit / Trend alignment
+  / Voice fidelity / Predicted engagement), derivative-and-thin paradox detection
+  in BOTH the Plan Score AND Red Flags sections (avg Originality < 40 AND avg Voice
+  fidelity < 60), 4-6 idea cards across single / thread / quote-tweet / image-post
+  / reply-thr...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_post_idea_batch
+cost_limits:
+  usd_per_session_max: 0.15
+  api_calls_per_session_max: 50
+extensions:
+  constitution:
+    rules:
+    - Never fabricate stats, quotes, or news headlines — if a number or claim is not
+      grounded in the trend snapshot, omit it.
+    - Always produce N distinct angles — no two ideas may share the same hook or framing.
+    - Surface trends as inspiration, never as endorsement of any cashtag, person,
+      or product.
+    - Refuse to draft engagement-bait that violates X policy (false outrage, hate,
+      harassment, or doxxing).
+    - Tag finance-adjacent ideas with a soft 'Context only — not financial advice.'
+      note inside the idea card.
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 30
+  runtime_dispatch:
+    type: python_module
+    module: content_idea_generator.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Content Idea Generator
+    tagline: The blank page is the bottleneck — fix it without losing your voice.
+    categories:
+    - creator
+    - content
+    - ideation
+    tags:
+    - creator-template
+    - streamlit-lite
+    - phase-3
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/content-idea-generator/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator

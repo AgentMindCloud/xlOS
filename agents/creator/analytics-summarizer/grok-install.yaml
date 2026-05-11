@@ -1,0 +1,109 @@
+# Migrated from AgentMindCloud/grok-agent (v2.15 draft) to v2.14 + extensions.
+# See docs/migration/v215-to-v214-extensions.md for the field mapping.
+version: '2.14'
+name: analytics-summarizer
+description: Local-first analytics summarizer for X creators — reads creator-supplied
+  X analytics (or seeded demo metrics) and emits a 6/7-section period summary with
+  4 official Period Performance metrics (Reach Score / Engagement Velocity / Audience
+  Quality / Content Resonance), the vanity-reach paradox (Reach Score > 80 AND Audience
+  Quality < 50), weighted Performance score (0.30·AudienceQuality + 0.25·EngagementVelocity
+  + 0.25·ContentResonance + 0.20·ReachScore), top-performing-content archetypes, tren...
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - ide
+category: creator-template
+tools:
+- name: generate_analytics_summary
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+  tokens_per_session_max: 60000
+  api_calls_per_session_max: 80
+extensions:
+  constitution:
+    articles:
+    - V.1
+    rules:
+    - Drafts only. The runner emits text the creator reads; the runner never auto-publishes,
+      never auto-shares the analytics anywhere.
+    - No fabricated statistics. The runner refuses to print p-values, confidence intervals,
+      or absolute lift numbers it did not derive from the supplied input. Heuristics
+      in the Statistical Honesty subsection are named as such.
+    - Surface the vanity-reach paradox in BOTH the Period Performance section AND
+      the Red Flags section whenever Reach Score is above 80 AND Audience Quality
+      is below 50. Reach without audience quality is vanity — copy that cadence at
+      your peril.
+    - When `metrics_file` is omitted, the runner emits seeded demo metrics with an
+      explicit `[demo metric — re-run with --metrics-file for real X data]` label
+      so the creator never confuses the demo output for their actual analytics.
+    - Top-performing-content archetypes are paraphrased categories (e.g. `long-form
+      thread on niche pain-point`), never raw post URLs or full post text, unless
+      the creator explicitly supplies them via `metrics_file`.
+    - Every analysis includes mandatory bridges to `content-idea-generator` and `thread-builder`
+      — these are the official 'measure → next anchor → next thread' loop closers
+      and never get omitted.
+    - Monetization recommendations are gated by `allow_monetization`. When false (default),
+      the runner emits a structured refusal stub. When true, every monetization-derived
+      line carries the Article V.1 'Not financial advice' banner verbatim.
+    - Insight prose is capped at 280 characters per line; longer narrative is truncated
+      to the cap with a `…[capped]` marker so the creator can paste cleanly into a
+      brief or X draft.
+    hard_refusals:
+    - auto-publish or auto-share the analytics summary to any platform without an
+      explicit consent gate
+    - fabricate p-values, confidence intervals, or absolute statistical significance
+      numbers
+    - recommend algorithm-gaming tactics derived from the analytics (mass-engagement,
+      hashtag stuffing, follow-trains)
+    - expose other creators' analytics or paste a non-creator's account export as
+      if it belonged to --x-handle
+    - scrape authenticated X content to seed the metrics
+    - emit monetization recommendations when allow_monetization is false; emit them
+      without the V.1 disclaimer when true
+  safety_policy:
+    pii_handling: local-only
+    data_retention_days: 90
+    scanner_severity_floor: warn
+    forbidden_actions:
+    - scrape_authenticated_x_content
+    - impersonate_user_identity
+    - bypass_safety_scanner
+    - exfiltrate_user_data
+    - copy_competitor_signature_phrasing
+    - auto_publish_without_consent
+    human_in_the_loop:
+      enabled: true
+      confirm_before:
+      - any export of the analytics summary to a path outside the agent AppData folder
+      - any future-version auto-share (currently disabled in v1)
+      - any analysis generated with allow_monetization=true (must be confirmed before
+        render)
+      timeout_seconds: 60
+  runtime_dispatch:
+    type: python_module
+    module: analytics_summarizer.run
+    note: xlos run dispatches via python -m <module>.
+  metadata:
+    display_name: Analytics Summarizer
+    tagline: Read your numbers honestly — vanity reach without audience quality is
+      not a win.
+    categories:
+    - creator
+    - analytics
+    - measurement
+    tags:
+    - creator-template
+    - cli-only
+    - read-only
+    - no-fabricated-stats
+    - no-other-voices
+    - consent-gated
+  migration:
+    source_repo: AgentMindCloud/grok-agent
+    source_path: templates/creator/analytics-summarizer/grok-agent.yaml
+    source_version: '2.15'
+    migrated_at: '2026-05-11'
+    tooling: xlOS Phase 3b migrator
