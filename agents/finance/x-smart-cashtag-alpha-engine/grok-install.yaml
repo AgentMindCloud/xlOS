@@ -1,0 +1,89 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: x-smart-cashtag-alpha-engine
+description: Real-time cashtag intelligence on X — narrative momentum, contradictions
+  across sources, and Grok-powered alpha signals with full provenance
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+category: x-money-tool
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+  api_calls_per_session_max: 500
+tools:
+- name: track_cashtag
+  type: local_function
+  description: Add or remove a cashtag from the user's watchlist with optional alert
+    threshold.
+  module: x_alpha.watchlist
+  function: track
+- name: fetch_cashtag_quote
+  type: local_function
+  description: Pull a live quote for a cashtag — yfinance for equities/FX, coingecko
+    for crypto.
+  module: x_alpha.market
+  function: fetch_quote
+- name: fetch_cashtag_news
+  type: local_function
+  description: Pull NewsAPI headlines for a cashtag's underlying ticker / company
+    / project.
+  module: x_alpha.news
+  function: fetch_for_cashtag
+- name: generate_alpha_report
+  type: local_function
+  description: Generate a Grok-powered alpha report for a cashtag — narrative momentum,
+    contradictions across sources, confidence rating. Never autonomously published;
+    the report stays local until the user explicitly chooses to share.
+  module: x_alpha.report
+  function: build
+- name: simulate_portfolio
+  type: local_function
+  description: Run a what-if portfolio simulation across the user's watchlist with
+    hypothetical positions and a date window.
+  module: x_alpha.portfolio
+  function: simulate
+extensions:
+  constitution:
+  - II
+  - IV
+  - V.1
+  - V.2
+  - VII
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: true
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    data_retention_days: 180
+    pii_handling: local-only
+    public_apis:
+    - name: yfinance
+      base_url: https://query2.finance.yahoo.com
+      auth: none
+      rate_limit: 100
+      privacy: no_pii_sent
+    - name: coingecko
+      base_url: https://api.coingecko.com/api/v3
+      auth: none
+      rate_limit: 30
+      privacy: no_pii_sent
+    - name: newsapi
+      base_url: https://newsapi.org/v2
+      auth_env_var: NEWSAPI_KEY
+      rate_limit: 100
+      privacy: no_pii_sent
+    - name: x_search
+      base_url: via_grok_4.3
+      auth_env_var: XAI_API_KEY
+      privacy: no_pii_sent
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py

@@ -1,0 +1,76 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: x-money-vision-analyzer
+description: Drag-and-drop vision-powered receipt and statement analyzer. Parses receipts
+  with Grok 4.3 vision and one-click imports them into the X Money Companion Dashboard's
+  SQLite
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+category: x-money-tool
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+  api_calls_per_session_max: 100
+tools:
+- name: parse_receipt
+  type: local_function
+  description: Parse one receipt image into structured fields (date, total, currency,
+    counterparty, line items, tax) using Grok 4.3 vision.
+  module: x_vision.receipt
+  function: parse_one
+- name: parse_statement
+  type: local_function
+  description: Parse a multi-page bank/card statement (image or PDF) into a list of
+    structured transactions.
+  module: x_vision.statement
+  function: parse_pages
+- name: import_to_companion_dashboard
+  type: local_function
+  description: 'Write a batch of parsed receipts directly into Tool #1''s SQLite transactions
+    table. CONSENT-GATED — never auto-fires; the runtime always presents the action
+    plan + the user must approve (Constitution Article II).'
+  module: x_vision.importer
+  function: import_batch
+- name: validate_extraction
+  type: local_function
+  description: Re-check a parsed receipt with a second vision pass and flag any contradictions
+    between the two extractions (Article IV — never silently resolve).
+  module: x_vision.validator
+  function: double_check
+- name: categorize_parsed_receipt
+  type: local_function
+  description: 'Assign a category to a parsed receipt before import. Composes with
+    Tool #1''s categorize_transaction when the Companion Dashboard is installed.'
+  module: x_vision.categorize
+  function: categorize
+extensions:
+  constitution:
+  - II
+  - III
+  - IV
+  - V.1
+  - V.2
+  - VII
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: true
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    data_retention_days: 365
+    pii_handling: redacted-cloud
+    public_apis:
+    - name: grok_vision
+      base_url: via_grok_4.3
+      auth_env_var: XAI_API_KEY
+      privacy: image_redacted_on_send
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py

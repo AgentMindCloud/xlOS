@@ -1,0 +1,80 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: x-money-companion-dashboard
+description: Personal X Money command center on Windows — overview, transactions,
+  analytics, Grok insights, tax export, and alerts
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+category: x-money-tool
+cost_limits:
+  usd_per_session_max: 0.5
+  usd_per_day_max: 2.0
+  api_calls_per_session_max: 200
+tools:
+- name: categorize_transaction
+  type: local_function
+  description: Categorize an X Money transaction using Grok 4.3.
+  module: x_money.categorize
+  function: categorize
+- name: fetch_market_quote
+  type: local_function
+  description: Pull a live equity / FX / crypto quote from Yahoo Finance via the local
+    wrapper for context next to a transaction.
+  module: x_money.market
+  function: fetch_quote
+- name: fetch_relevant_news
+  type: local_function
+  description: Fetch headlines from NewsAPI via the local wrapper to add context for
+    a transaction or counterparty.
+  module: x_money.news
+  function: fetch_relevant
+- name: build_tax_export
+  type: local_function
+  description: Assemble the consent-gated tax CSV/PDF export for a date range. Requires
+    explicit user confirmation.
+  module: x_money.tax_export
+  function: build_export
+- name: summarize_alerts
+  type: local_function
+  description: Summarize the user's pending alerts (in-app, never posted to X without
+    consent).
+  module: x_money.alerts
+  function: summarize
+extensions:
+  constitution:
+  - IV
+  - V.1
+  - V.2
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: false
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    data_retention_days: 365
+    pii_handling: local-only
+    public_apis:
+    - name: yfinance
+      base_url: https://query2.finance.yahoo.com
+      auth: none
+      rate_limit: 100
+      privacy: no_pii_sent
+    - name: newsapi
+      base_url: https://newsapi.org/v2
+      auth_env_var: NEWSAPI_KEY
+      rate_limit: 100
+      privacy: no_pii_sent
+    - name: x_search
+      base_url: via_grok_4.3
+      auth_env_var: XAI_API_KEY
+      privacy: no_pii_sent
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py

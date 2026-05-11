@@ -1,0 +1,86 @@
+# Vendored from grok-agent main; migrated v2.15 -> v2.14 + extensions.
+version: '2.14'
+name: x-creator-payout-optimizer
+description: 'Earnings forecasting, content optimization, and tax estimator for X
+  creators. Reads from the X Money Companion Dashboard (Tool #1) and the X Money Vision
+  Analyzer (Tool #4) for the richest possible local data'
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+category: x-money-tool
+cost_limits:
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+  api_calls_per_session_max: 300
+tools:
+- name: forecast_earnings
+  type: local_function
+  description: 'Forecast the user''s next-N-day creator earnings using local Tool
+    #1 transaction history + Tool #4 receipt history (both read-only) + recent X engagement
+    metrics.'
+  module: x_payout.forecast
+  function: forecast
+- name: optimize_content_topic
+  type: local_function
+  description: Suggest content angles for a topic using the user's past engagement
+    + payout patterns.
+  module: x_payout.optimize
+  function: suggest_topic
+- name: estimate_tax_burden
+  type: local_function
+  description: Estimate tax burden on creator earnings for a date range. CONSENT-GATED
+    export. NOT TAX ADVICE — the V.2 disclaimer banner is mandatory on every output
+    of this tool.
+  module: x_payout.tax
+  function: estimate
+- name: fetch_x_metrics
+  type: local_function
+  description: Pull recent X engagement / reach / payouts metrics for the user's handle
+    via Grok 4.3 x_search.
+  module: x_payout.metrics
+  function: fetch_for_handle
+- name: analyze_content_roi
+  type: local_function
+  description: 'Compute content ROI by combining Tool #1 revenue rows with Tool #4
+    parsed-receipt costs for the same period — both read-only.'
+  module: x_payout.roi
+  function: compute
+extensions:
+  constitution:
+  - III
+  - IV
+  - V.1
+  - V.2
+  - VII
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: false
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    data_retention_days: 365
+    pii_handling: local-only
+    public_apis:
+    - name: x_search
+      base_url: via_grok_4.3
+      auth_env_var: XAI_API_KEY
+      privacy: no_pii_sent
+    - name: yfinance
+      base_url: https://query2.finance.yahoo.com
+      auth: none
+      rate_limit: 100
+      privacy: no_pii_sent
+    - name: newsapi
+      base_url: https://newsapi.org/v2
+      auth_env_var: NEWSAPI_KEY
+      rate_limit: 100
+      privacy: no_pii_sent
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py
