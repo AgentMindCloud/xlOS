@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44" height="44" role="img" aria-label="Action">
+  <circle cx="22" cy="22" r="16" fill="none" stroke="#FF1E70" stroke-width="1.5"></circle>
+  <path d="M 18 14 L 30 22 L 18 30 Z" fill="#FF1E70"></path>
+  <circle cx="22" cy="22" r="16" fill="none" stroke="#00E0D5" stroke-width="0.5" stroke-dasharray="3 4" opacity="0.6"></circle>
+</svg>

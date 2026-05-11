@@ -45,6 +45,7 @@ yarn-error.log*
 marketplace/.catalog.json
 marketplace/.next/
 marketplace/node_modules/
+marketplace/next-env.d.ts
 
 # OS
 .DS_Store

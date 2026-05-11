@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="GrokInstall — The community marketplace for Grok-native agents on X">
+  <defs>
+    <radialGradient id="og-plasma" cx="22%" cy="22%" r="55%">
+      <stop offset="0%" stop-color="#FF1E70" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#FF1E70" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FF1E70" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="og-aurora" cx="82%" cy="78%" r="55%">
+      <stop offset="0%" stop-color="#00E0D5" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#00E0D5" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#00E0D5" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="og-wordmark" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF1E70"/>
+      <stop offset="100%" stop-color="#00E0D5"/>
+    </linearGradient>
+    <linearGradient id="og-divider" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF1E70" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#FF1E70" stop-opacity="0.7"/>
+      <stop offset="65%" stop-color="#00E0D5" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#00E0D5" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="og-halftone" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#FFFFFF" fill-opacity="0.05"/>
+    </pattern>
+    <filter id="og-neon" x="-10%" y="-30%" width="120%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="#0A0A0A"/>
+  <rect width="1200" height="630" fill="url(#og-halftone)"/>
+  <rect width="1200" height="630" fill="url(#og-plasma)"/>
+  <rect width="1200" height="630" fill="url(#og-aurora)"/>
+  <text x="80" y="260" font-family="Inter, sans-serif" font-weight="700" font-size="96" letter-spacing="-4" fill="url(#og-wordmark)" filter="url(#og-neon)">GROKINSTALL</text>
+  <text x="80" y="340" font-family="Inter, sans-serif" font-weight="600" font-size="40" fill="#FFFFFF">The community marketplace</text>
+  <text x="80" y="390" font-family="Inter, sans-serif" font-weight="600" font-size="40" fill="#FFFFFF">for Grok-native agents on X</text>
+  <g transform="translate(80, 500)">
+    <rect width="220" height="44" rx="22" fill="rgba(255,30,112,0.12)" stroke="#FF1E70" stroke-width="1"/>
+    <text x="110" y="29" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="16" fill="#FF1E70">BUILT FOR GROK ON X</text>
+  </g>
+  <line x1="0" y1="615" x2="1200" y2="615" stroke="url(#og-divider)" stroke-width="1"/>
+  <text x="80" y="595" font-family="Inter, sans-serif" font-size="18" fill="rgba(255,255,255,0.5)">grokagents.dev · Independent community project · Not affiliated with xAI</text>
+</svg>

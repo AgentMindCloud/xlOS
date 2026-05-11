@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44" height="44" role="img" aria-label="Marketplace">
+  <path d="M 4 14 L 8 6 L 36 6 L 40 14" fill="none" stroke="#FF1E70" stroke-width="1.5" stroke-linejoin="round"></path>
+  <rect x="6" y="14" width="32" height="24" rx="2" fill="none" stroke="#FF1E70" stroke-width="1.5"></rect>
+  <line x1="4" y1="14" x2="40" y2="14" stroke="#FF1E70" stroke-width="1.5"></line>
+  <rect x="12" y="20" width="6" height="6" rx="1" fill="#00E0D5"></rect>
+  <rect x="22" y="20" width="6" height="6" rx="1" fill="#00E0D5" opacity="0.5"></rect>
+  <rect x="12" y="30" width="6" height="4" rx="1" fill="#FF1E70" opacity="0.5"></rect>
+  <rect x="22" y="30" width="6" height="4" rx="1" fill="#FF1E70"></rect>
+</svg>

@@ -1,0 +1,963 @@
+[
+  {
+    "id": "ab-test-suggester",
+    "name": "ab-test-suggester",
+    "tagline": "Local-first A/B test planner for X creators — turns a single post idea into a 6/7-section test plan with 2-3 variants isolated to a single test dimension (headline / visual / cta / timing), 4 official Test Plan Score metrics (Variant cla…",
+    "description": "Local-first A/B test planner for X creators — turns a single post idea into a 6/7-section test plan with 2-3 variants isolated to a single test dimension (headline / visual / cta / timing), 4 official Test Plan Score metrics (Variant clarity / Test isolation / Sample feasibility / Decision actionability), success metrics + statistical notes, multi-variable paradox detection, and >= 3 cross-template bridges. Drafts only — never auto-publishes.",
+    "category": "content",
+    "tags": [
+      "generate_ab_test_plan",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/ab-test-suggester",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "agent-swarm-with-shared-memory",
+    "name": "agent-swarm-with-shared-memory",
+    "tagline": "Collaborative swarm of specialised agents that share long-term memory and reason together in real time for superior collective intelligence.",
+    "description": "Collaborative swarm of specialised agents that share long-term memory and reason together in real time for superior collective intelligence.",
+    "category": "developer",
+    "tags": [
+      "swarm_debate",
+      "shared_memory_read",
+      "shared_memory_append",
+      "super-agent"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/super-agents/agent-swarm-with-shared-memory",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "analytics-summarizer",
+    "name": "analytics-summarizer",
+    "tagline": "Local-first analytics summarizer for X creators — reads creator-supplied X analytics (or seeded demo metrics) and emits a 6/7-section period summary with 4 official Period Performance metrics (Reach Score / Engagement Velocity / Audience…",
+    "description": "Local-first analytics summarizer for X creators — reads creator-supplied X analytics (or seeded demo metrics) and emits a 6/7-section period summary with 4 official Period Performance metrics (Reach Score / Engagement Velocity / Audience Quality / Content Resonance), the vanity-reach paradox (Reach Score > 80 AND Audience Quality < 50), weighted Performance score (0.30·AudienceQuality + 0.25·EngagementVelocity + 0.25·ContentResonance + 0.20·ReachScore), top-performing-content archetypes, tren...",
+    "category": "content",
+    "tags": [
+      "generate_analytics_summary",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/analytics-summarizer",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "brand-voice-trainer",
+    "name": "brand-voice-trainer",
+    "tagline": "Local-first brand voice trainer for X creators — reads a sample of the creator's own past posts and emits a 6/7-section voice profile (tone consistency / structure consistency / vocabulary distinctiveness / voice cohesion), tone/structur…",
+    "description": "Local-first brand voice trainer for X creators — reads a sample of the creator's own past posts and emits a 6/7-section voice profile (tone consistency / structure consistency / vocabulary distinctiveness / voice cohesion), tone/structure/vocabulary signatures, 3-5 training prompts the creator can paste into other templates, generic-polish paradox detection, and >= 3 cross-template bridges. Refuses to train on another account's voice.",
+    "category": "content",
+    "tags": [
+      "generate_voice_profile",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/brand-voice-trainer",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "comment-engagement-booster",
+    "name": "comment-engagement-booster",
+    "tagline": "Local-first comment engagement booster for X creators — turns a single post into 3-5 comment variants tuned to a chosen boost angle (question / controversy / story / poll / all) with 4 official Comment Plan Score metrics (Hook strength /…",
+    "description": "Local-first comment engagement booster for X creators — turns a single post into 3-5 comment variants tuned to a chosen boost angle (question / controversy / story / poll / all) with 4 official Comment Plan Score metrics (Hook strength / Conversation potential / Voice fidelity / Distinct angle), hook-without-substance paradox detection, anti-spam refusal, and >= 3 cross-template bridges. Drafts only — never auto-publishes.",
+    "category": "content",
+    "tags": [
+      "generate_comment_variants",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/comment-engagement-booster",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "competitor-watch",
+    "name": "competitor-watch",
+    "tagline": "Aggregate competitor monitoring for X creators — 4 official Watch Score metrics (Audience overlap / Content velocity / Growth signal / Monetization activity), 3-5 paraphrased competitor profile cards, 3-5 content gaps + 3-5 growth opport…",
+    "description": "Aggregate competitor monitoring for X creators — 4 official Watch Score metrics (Audience overlap / Content velocity / Growth signal / Monetization activity), 3-5 paraphrased competitor profile cards, 3-5 content gaps + 3-5 growth opportunities, cadence-fatigue paradox detection, and >= 3 cross-template bridges. Surfaces named competitors only when explicitly passed as input — never their followers, never their DMs, never their PII.",
+    "category": "content",
+    "tags": [
+      "generate_competitor_watch",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/competitor-watch",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "content-calendar-builder",
+    "name": "content-calendar-builder",
+    "tagline": "Local-first content calendar builder for X creators — reads creator-supplied cadence + niche + voice profile + analytics signals (or seeded demo signals) and emits a 7/8-section structured calendar with 4 official Calendar Plan Score met…",
+    "description": "Local-first content calendar builder for X creators — reads creator-supplied cadence + niche + voice profile + analytics signals (or seeded demo signals) and emits a 7/8-section structured calendar with 4 official Calendar Plan Score metrics (Cadence sustainability / Niche fit / Voice fidelity / Variety), over-scheduling paradox detection in BOTH the Plan Score AND Red Flags sections (avg Cadence sustainability < 50 AND posts_per_week > 7), format-streak guard (≥ 3 consecutive same-format slo...",
+    "category": "content",
+    "tags": [
+      "generate_content_calendar",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/content-calendar-builder",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "content-idea-generator",
+    "name": "content-idea-generator",
+    "tagline": "Local-first content idea generator for X creators — reads creator-supplied performance + voice signals (or seeded demo signals) and emits a 7/8-section structured idea batch with 4 official Idea Plan Score metrics (Niche fit / Trend alig…",
+    "description": "Local-first content idea generator for X creators — reads creator-supplied performance + voice signals (or seeded demo signals) and emits a 7/8-section structured idea batch with 4 official Idea Plan Score metrics (Niche fit / Trend alignment / Voice fidelity / Predicted engagement), derivative-and-thin paradox detection in BOTH the Plan Score AND Red Flags sections (avg Originality < 40 AND avg Voice fidelity < 60), 4-6 idea cards across single / thread / quote-tweet / image-post / reply-thr...",
+    "category": "content",
+    "tags": [
+      "generate_post_idea_batch",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/content-idea-generator",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "content-recycler",
+    "name": "content-recycler",
+    "tagline": "Local-first content recycler for X creators — turns an old X post into 2-3 recycled variants under a chosen angle (update / expand / threadify / repurpose / auto) and target format (tweet / thread / carousel / newsletter / all) with 4 of…",
+    "description": "Local-first content recycler for X creators — turns an old X post into 2-3 recycled variants under a chosen angle (update / expand / threadify / repurpose / auto) and target format (tweet / thread / carousel / newsletter / all) with 4 official Recycle Score metrics (Freshness lift / Format fit / Engagement potential / Differentiation), stale-rehash paradox detection, and >= 3 cross-template bridges. Recycles only the creator's own content. Drafts only — never auto-publishes.",
+    "category": "content",
+    "tags": [
+      "generate_recycled_variants",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/content-recycler",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "cross-platform-reposter",
+    "name": "cross-platform-reposter",
+    "tagline": "Local-first cross-platform repost helper for X creators — turns a single X post into 2-3 variants per target platform (LinkedIn / Threads / Bluesky / Newsletter) with 4 official Variant Score metrics (Voice fidelity / Platform fit / Enga…",
+    "description": "Local-first cross-platform repost helper for X creators — turns a single X post into 2-3 variants per target platform (LinkedIn / Threads / Bluesky / Newsletter) with 4 official Variant Score metrics (Voice fidelity / Platform fit / Engagement potential / Attribution clarity), platform adaptations, voice-drift paradox detection, and >= 3 cross-template bridges. Drafts only — never auto-publishes.",
+    "category": "content",
+    "tags": [
+      "generate_cross_platform_variants",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/cross-platform-reposter",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "cross-reality-action-fabric",
+    "name": "cross-reality-action-fabric",
+    "tagline": "Bridge agent between X / Grok and the user's Windows machine + public web.",
+    "description": "Bridge agent between X / Grok and the user's Windows machine + public web. Every action is explicit, gated, reversible, and provenance-logged.",
+    "category": "developer",
+    "tags": [
+      "web_via_stagehand",
+      "windows_local",
+      "weather_lookup",
+      "flight_search",
+      "x_search",
+      "super-agent"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/super-agents/cross-reality-action-fabric",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "daily-briefing-agent",
+    "name": "daily-briefing-agent",
+    "tagline": "Concise morning briefing for X creators: today's top signals, niche-relevant trends, mention sentiment, action priorities, and 1-3 ready-to-post content ideas.",
+    "description": "Concise morning briefing for X creators: today's top signals, niche-relevant trends, mention sentiment, action priorities, and 1-3 ready-to-post content ideas. Local-first.",
+    "category": "content",
+    "tags": [
+      "generate_daily_briefing",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/daily-briefing-agent",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "dm-triager",
+    "name": "dm-triager",
+    "tagline": "Local-first DM triager for X creators — reads creator-supplied X DM data (or seeded demo DMs) and emits a 7/8-section structured triage report with 4 official Triage Health metrics (Triage urgency rate / Opportunity ratio / Spam pressure…",
+    "description": "Local-first DM triager for X creators — reads creator-supplied X DM data (or seeded demo DMs) and emits a 7/8-section structured triage report with 4 official Triage Health metrics (Triage urgency rate / Opportunity ratio / Spam pressure / Authentic sender share), opportunity-flood paradox detection in both Triage Health and Red Flags sections, 4-bucket distribution (Urgent / Opportunity / Routine / Spam), suggested-action queue (max 6) with spam-burst guard (≥5 spam DMs + >60% token overlap...",
+    "category": "content",
+    "tags": [
+      "generate_dm_triage",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/dm-triager",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "follower-quality-analyzer",
+    "name": "follower-quality-analyzer",
+    "tagline": "Aggregate follower-quality scoring for X creators — 4 standard metrics, paraphrased top-follower archetypes, bot-engagement paradox detection, and ≥3 cross-template bridges.",
+    "description": "Aggregate follower-quality scoring for X creators — 4 standard metrics, paraphrased top-follower archetypes, bot-engagement paradox detection, and ≥3 cross-template bridges. Aggregate-only privacy.",
+    "category": "content",
+    "tags": [
+      "generate_follower_quality_analysis",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/follower-quality-analyzer",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "growth-experiment-runner",
+    "name": "growth-experiment-runner",
+    "tagline": "Local-first growth experiment runner for X creators — reads creator-supplied hypothesis + audience signals (or seeded demo signals) and emits a 7/8-section structured experiment plan with 4 official Experiment Plan Score metrics (Hypothe…",
+    "description": "Local-first growth experiment runner for X creators — reads creator-supplied hypothesis + audience signals (or seeded demo signals) and emits a 7/8-section structured experiment plan with 4 official Experiment Plan Score metrics (Hypothesis specificity / Single-axis isolation / Sample power / Risk avoidance), small-n paradox detection in BOTH the Plan Score AND Red Flags sections (avg Sample power < 40 AND avg Hypothesis specificity > 70), multi-variable guard (any experiment varying > 1 axis...",
+    "category": "content",
+    "tags": [
+      "generate_growth_experiment_plan",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/growth-experiment-runner",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "hashtag-strategy-advisor",
+    "name": "hashtag-strategy-advisor",
+    "tagline": "Local-first hashtag strategy advisor for X creators — turns a post topic into a 6/7-section strategy with 5-10 hashtags scored across 4 standard metrics (Niche relevance / Reach potential / Engagement quality / Cleanliness), spread acros…",
+    "description": "Local-first hashtag strategy advisor for X creators — turns a post topic into a 6/7-section strategy with 5-10 hashtags scored across 4 standard metrics (Niche relevance / Reach potential / Engagement quality / Cleanliness), spread across the 5-category mix (broad-niche / specific-niche / trending / community / branded), with reach-without-relevance paradox detection, anti-engagement-bait refusal, platform-specific count caps (X 0-2 / LinkedIn 0-3), and >= 3 cross-template bridges. Drafts onl...",
+    "category": "content",
+    "tags": [
+      "generate_hashtag_strategy",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/hashtag-strategy-advisor",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "living-narrative-fabric",
+    "name": "living-narrative-fabric",
+    "tagline": "Versioned, provenance-first synthesis across X, news, academia, government, and the open web — with full contradiction detection that never silently picks a winner.",
+    "description": "Versioned, provenance-first synthesis across X, news, academia, government, and the open web — with full contradiction detection that never silently picks a winner.",
+    "category": "developer",
+    "tags": [
+      "synthesize",
+      "rewind_to_version",
+      "flag_contradiction",
+      "export_provenance_report",
+      "run_weekly_eval",
+      "newsapi_fetch",
+      "gnews_fetch",
+      "semantic_scholar_fetch",
+      "data_gov_fetch",
+      "x_search_fetch",
+      "crawl4ai_fetch",
+      "super-agent"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/super-agents/living-narrative-fabric",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "mention-summarizer",
+    "name": "mention-summarizer",
+    "tagline": "Local-first mention summarizer for X creators — reads creator-supplied X mention data (or seeded demo mentions) and emits a 7/8-section structured summary with 4 official Mention Health metrics (Mention volume delta / Net sentiment score…",
+    "description": "Local-first mention summarizer for X creators — reads creator-supplied X mention data (or seeded demo mentions) and emits a 7/8-section structured summary with 4 official Mention Health metrics (Mention volume delta / Net sentiment score / Priority reply rate / Authentic reach share), sentiment-spike paradox detection in both Mention Health and Red Flags sections, 3-band sentiment breakdown, priority reply queue (max 8) with troll-cluster guard (≥5 negative + >60% token overlap → Red Flag), a...",
+    "category": "content",
+    "tags": [
+      "generate_mention_summary",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/mention-summarizer",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "monetization-optimizer",
+    "name": "monetization-optimizer",
+    "tagline": "Local-first monetization optimizer for X creators — reads a creator's X performance + revenue signals (or seeded demo signals) and emits a 7/8-section structured monetization plan with 4 official Monetization Plan Score metrics on a 0-10…",
+    "description": "Local-first monetization optimizer for X creators — reads a creator's X performance + revenue signals (or seeded demo signals) and emits a 7/8-section structured monetization plan with 4 official Monetization Plan Score metrics on a 0-100 scale (Forecast Confidence / Diversification Score / Sponsor Fit Density / Tax Readiness), weighted Performance score (0.30·Diversification + 0.25·TaxReadiness + 0.25·ForecastConfidence + 0.20·SponsorFitDensity), the Concentration-Confidence paradox (top cha...",
+    "category": "content",
+    "tags": [
+      "generate_monetization_plan",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/monetization-optimizer",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "narrative-contradiction-detector",
+    "name": "narrative-contradiction-detector",
+    "tagline": "Actively detects and surfaces contradictions across X, news, government, academic, and personal sources with full evidence and user-guided narrative exploration.",
+    "description": "Actively detects and surfaces contradictions across X, news, government, academic, and personal sources with full evidence and user-guided narrative exploration.",
+    "category": "developer",
+    "tags": [
+      "scan_sources",
+      "find_contradictions",
+      "render_contradiction_report",
+      "super-agent"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/super-agents/narrative-contradiction-detector",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "niche-influencer-finder",
+    "name": "niche-influencer-finder",
+    "tagline": "Aggregate niche-influencer discovery for X creators — 4 official match scores (Authority / Engagement / Audience fit / Collaboration potential), 3-5 paraphrased archetype cards across Micro / Mid / Macro tiers, 3-5 collaboration opportun…",
+    "description": "Aggregate niche-influencer discovery for X creators — 4 official match scores (Authority / Engagement / Audience fit / Collaboration potential), 3-5 paraphrased archetype cards across Micro / Mid / Macro tiers, 3-5 collaboration opportunities, and >= 3 cross-template bridges. Aggregate-only — never names a real account.",
+    "category": "content",
+    "tags": [
+      "generate_niche_influencer_recommendations",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/niche-influencer-finder",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "provenance-first-trust-engine",
+    "name": "provenance-first-trust-engine",
+    "tagline": "Every response comes with a complete clickable provenance report including all sources, confidence scores, and alternative viewpoints for maximum trust and transparency.",
+    "description": "Every response comes with a complete clickable provenance report including all sources, confidence scores, and alternative viewpoints for maximum trust and transparency.",
+    "category": "developer",
+    "tags": [
+      "trace_claims",
+      "verify_source",
+      "render_provenance_report",
+      "super-agent"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/super-agents/provenance-first-trust-engine",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "quote-tweet-suggestor",
+    "name": "quote-tweet-suggestor",
+    "tagline": "Turn any X post into 2-3 high-value quote tweet variants spanning distinct angles (support / contrarian / add-value / question), each <=280 chars and voice-matched, plus optional Grok Imagine visual + cross-template bridges.",
+    "description": "Turn any X post into 2-3 high-value quote tweet variants spanning distinct angles (support / contrarian / add-value / question), each <=280 chars and voice-matched, plus optional Grok Imagine visual + cross-template bridges. Local-first.",
+    "category": "content",
+    "tags": [
+      "generate_quote_tweet_variants",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/quote-tweet-suggestor",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "reply-drafter",
+    "name": "reply-drafter",
+    "tagline": "Local-first reply drafter for X creators — reads a parent X post / thread (and optional voice samples + 7-day trend snapshot + analytics signals) and emits a 6/7-section structured reply plan with 3-10 ready-to-post reply drafts (default…",
+    "description": "Local-first reply drafter for X creators — reads a parent X post / thread (and optional voice samples + 7-day trend snapshot + analytics signals) and emits a 6/7-section structured reply plan with 3-10 ready-to-post reply drafts (default 5), 4 official Reply Plan Score metrics (Niche fit / Trend alignment / Voice fidelity / Predicted engagement), vanity-hook paradox detection (Trend alignment > 80 AND Niche fit < 50), 10 tone-matched archetypes shared with content-idea-generator, content-enga...",
+    "category": "content",
+    "tags": [
+      "generate_reply_drafts",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/reply-drafter",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "research-assistant",
+    "name": "research-assistant",
+    "tagline": "Quick-to-deep research for X creators — multi-source synthesis with key findings, source citations, contradiction flags, and actionable next steps that bridge into the rest of the creator-template suite.",
+    "description": "Quick-to-deep research for X creators — multi-source synthesis with key findings, source citations, contradiction flags, and actionable next steps that bridge into the rest of the creator-template suite. Local-first.",
+    "category": "content",
+    "tags": [
+      "generate_research_summary",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/research-assistant",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "self-evolving-personal-os",
+    "name": "self-evolving-personal-os",
+    "tagline": "Personal second brain on Windows — morning briefings, long-term personal + X memory, auto-evolving workflows, full rewind, and explicit-consent gates on every real-world action.",
+    "description": "Personal second brain on Windows — morning briefings, long-term personal + X memory, auto-evolving workflows, full rewind, and explicit-consent gates on every real-world action.",
+    "category": "developer",
+    "tags": [
+      "morning_brief",
+      "remember_personal",
+      "recall_personal",
+      "evolve_workflow",
+      "apply_workflow_change",
+      "rewind_briefing",
+      "flag_pattern",
+      "export_personal_log",
+      "x_personal_fetch",
+      "gcal_fetch",
+      "gmail_fetch",
+      "local_notes_fetch"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/super-agents/self-evolving-personal-os",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "thread-builder",
+    "name": "thread-builder",
+    "tagline": "Local-first thread builder for X creators — reads a topic / goal (and optional voice samples + analytics signals) and emits a 6/7-section structured thread plan with 3-5 ready-to-post thread variants, 4 standard Thread Plan Score metrics…",
+    "description": "Local-first thread builder for X creators — reads a topic / goal (and optional voice samples + analytics signals) and emits a 6/7-section structured thread plan with 3-5 ready-to-post thread variants, 4 standard Thread Plan Score metrics (Hook strength / Narrative arc coherence / Voice fidelity / Predicted engagement), hook-without-payoff paradox detection, 4-6 alternate hook variations, content-engagement prediction bands (never absolute numbers), and >= 3 cross-template bridges that always...",
+    "category": "content",
+    "tags": [
+      "generate_thread_plan",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/thread-builder",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "trend-aligned-poster",
+    "name": "trend-aligned-poster",
+    "tagline": "Local-first trend-aligned poster for X creators — reads creator-supplied trend data (or seeded demo trends) and emits a 7/8-section structured plan with 4 official Trend Alignment Plan Score metrics (Trend match strength / Niche fit / Vo…",
+    "description": "Local-first trend-aligned poster for X creators — reads creator-supplied trend data (or seeded demo trends) and emits a 7/8-section structured plan with 4 official Trend Alignment Plan Score metrics (Trend match strength / Niche fit / Voice fidelity / Originality), trend-chasing paradox detection in both Trend Alignment Plan Score and Red Flags sections, 3–5 trend watchlist entries, 4–6 post ideas (mix of single + thread formats) with per-idea trend match score and predicted engagement band,...",
+    "category": "content",
+    "tags": [
+      "generate_trend_aligned_post_plan",
+      "creator-template"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/creator/trend-aligned-poster",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "x-creator-payout-optimizer",
+    "name": "x-creator-payout-optimizer",
+    "tagline": "Earnings forecasting, content optimization, and tax estimator for X creators.",
+    "description": "Earnings forecasting, content optimization, and tax estimator for X creators. Reads from the X Money Companion Dashboard (Tool #1) and the X Money Vision Analyzer (Tool #4) for the richest possible local data.",
+    "category": "analytics",
+    "tags": [
+      "forecast_earnings",
+      "optimize_content_topic",
+      "estimate_tax_burden",
+      "fetch_x_metrics",
+      "analyze_content_roi",
+      "creator-payout-optimizer"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/finance/x-creator-payout-optimizer",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "x-money-companion-dashboard",
+    "name": "x-money-companion-dashboard",
+    "tagline": "Personal X Money command center on Windows — overview, transactions, analytics, Grok insights, tax export, and alerts.",
+    "description": "Personal X Money command center on Windows — overview, transactions, analytics, Grok insights, tax export, and alerts.",
+    "category": "analytics",
+    "tags": [
+      "categorize_transaction",
+      "fetch_market_quote",
+      "fetch_relevant_news",
+      "build_tax_export",
+      "summarize_alerts",
+      "finance-dashboard"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/finance/x-money-companion-dashboard",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "x-money-vision-analyzer",
+    "name": "x-money-vision-analyzer",
+    "tagline": "Drag-and-drop vision-powered receipt and statement analyzer.",
+    "description": "Drag-and-drop vision-powered receipt and statement analyzer. Parses receipts with Grok 4.3 vision and one-click imports them into the X Money Companion Dashboard's SQLite.",
+    "category": "analytics",
+    "tags": [
+      "parse_receipt",
+      "parse_statement",
+      "import_to_companion_dashboard",
+      "validate_extraction",
+      "categorize_parsed_receipt",
+      "vision-analyzer"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/finance/x-money-vision-analyzer",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "x-smart-cashtag-alpha-engine",
+    "name": "x-smart-cashtag-alpha-engine",
+    "tagline": "Real-time cashtag intelligence on X — narrative momentum, contradictions across sources, and Grok-powered alpha signals with full provenance.",
+    "description": "Real-time cashtag intelligence on X — narrative momentum, contradictions across sources, and Grok-powered alpha signals with full provenance.",
+    "category": "analytics",
+    "tags": [
+      "track_cashtag",
+      "fetch_cashtag_quote",
+      "fetch_cashtag_news",
+      "generate_alpha_report",
+      "simulate_portfolio",
+      "alpha-engine"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/finance/x-smart-cashtag-alpha-engine",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
+    "id": "zero-config-i-want-to-agent",
+    "name": "zero-config-i-want-to-agent",
+    "tagline": "User states a goal in natural language and the agent assembles tools, APIs, memory, and workflows with zero configuration.",
+    "description": "User states a goal in natural language and the agent assembles tools, APIs, memory, and workflows with zero configuration.",
+    "category": "developer",
+    "tags": [
+      "parse_intent",
+      "assemble_plan",
+      "execute_with_consent",
+      "super-agent"
+    ],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/super-agents/zero-config-i-want-to-agent",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  }
+]

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44" height="44" role="img" aria-label="Scanner">
+  <rect x="6" y="6" width="32" height="32" rx="3" fill="none" stroke="#FF1E70" stroke-width="1.5"></rect>
+  <line x1="6" y1="22" x2="38" y2="22" stroke="#00E0D5" stroke-width="1.5"></line>
+  <circle cx="14" cy="14" r="2" fill="#FF1E70"></circle>
+  <circle cx="22" cy="14" r="2" fill="#FF1E70" opacity="0.5"></circle>
+  <circle cx="30" cy="14" r="2" fill="#FF1E70" opacity="0.3"></circle>
+  <circle cx="14" cy="30" r="2" fill="#FF1E70" opacity="0.5"></circle>
+  <circle cx="22" cy="30" r="2" fill="#FF1E70"></circle>
+  <circle cx="30" cy="30" r="2" fill="#FF1E70" opacity="0.3"></circle>
+</svg>

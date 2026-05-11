@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a0a;
+  --ink: #ffffff;
+  --ink-muted: #e5e5e5;
+  --ink-subtle: rgba(255, 255, 255, 0.5);
+
+  /* Brand palette */
+  --plasma: #ff1e70;
+  --plasma-glow: rgba(255, 30, 112, 0.3);
+  --plasma-soft: rgba(255, 30, 112, 0.18);
+  --aurora: #00e0d5;
+  --aurora-glow: rgba(0, 224, 213, 0.3);
+  --aurora-soft: rgba(0, 224, 213, 0.18);
+
+  /* Legacy accents — kept for safety/data states */
+  --cyan: #00f0ff;
+  --cyan-glow: rgba(0, 240, 255, 0.3);
+  --green: #00ff9d;
+  --green-glow: rgba(0, 255, 157, 0.3);
+  --danger: #ff2d55;
+
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-raised: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(255, 30, 112, 0.45);
+}
+
+@layer base {
+  * {
+    border-color: theme("colors.border.subtle");
+  }
+
+  html {
+    color-scheme: dark;
+    background: var(--bg);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg text-ink font-body antialiased;
+    font-feature-settings: "ss01", "ss02", "cv11";
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background: var(--plasma-glow);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* Scrollbar (webkit) */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--surface-raised);
+    border-radius: 8px;
+    border: 2px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--plasma-soft);
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--surface-raised) var(--bg);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tighter;
+  }
+
+  code,
+  pre,
+  kbd {
+    @apply font-mono;
+  }
+}
+
+@layer utilities {
+  /* Legacy grid — kept as a low-noise backdrop on inner pages */
+  .bg-grid {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-position: center top;
+  }
+
+  .bg-radial-glow {
+    background: radial-gradient(
+      ellipse at 22% 55%,
+      rgba(255, 30, 112, 0.14) 0%,
+      rgba(255, 30, 112, 0.04) 40%,
+      transparent 70%
+    );
+  }
+
+  /* Nebula backdrop — Plasma + Aurora soft circles on a deep field */
+  .bg-nebula {
+    background-color: var(--bg);
+    background-image: radial-gradient(
+        900px circle at 18% 22%,
+        rgba(255, 30, 112, 0.18) 0%,
+        transparent 55%
+      ), radial-gradient(700px circle at 82% 78%, rgba(0, 224, 213, 0.16) 0%, transparent 60%),
+      radial-gradient(500px circle at 60% 30%, rgba(255, 30, 112, 0.06) 0%, transparent 65%);
+  }
+
+  /* Halftone — 1px dots on a 12px grid, subtle Plasma-tinted */
+  .bg-halftone {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 12px 12px;
+    background-position: 0 0;
+  }
+
+  .bg-halftone-plasma {
+    background-image: radial-gradient(rgba(255, 30, 112, 0.18) 1px, transparent 1px);
+    background-size: 14px 14px;
+    background-position: 0 0;
+  }
+
+  .bg-halftone-aurora {
+    background-image: radial-gradient(rgba(0, 224, 213, 0.18) 1px, transparent 1px);
+    background-size: 14px 14px;
+    background-position: 0 0;
+  }
+
+  .text-glow-plasma {
+    text-shadow: 0 0 22px rgba(255, 30, 112, 0.4), 0 0 2px rgba(255, 30, 112, 0.6);
+  }
+
+  .text-glow-aurora {
+    text-shadow: 0 0 18px rgba(0, 224, 213, 0.35), 0 0 2px rgba(0, 224, 213, 0.6);
+  }
+
+  .text-glow-cyan {
+    text-shadow: 0 0 18px rgba(0, 240, 255, 0.35), 0 0 2px rgba(0, 240, 255, 0.6);
+  }
+
+  /* Chromatic aberration — duplicates the glyph outline in Plasma + Aurora */
+  .chromatic-aberration {
+    text-shadow: -1px 0 0 rgba(255, 30, 112, 0.7), 1px 0 0 rgba(0, 224, 213, 0.7), 0 0 18px
+      rgba(255, 30, 112, 0.25);
+  }
+
+  .chromatic-aberration-strong {
+    text-shadow: -2px 0 0 rgba(255, 30, 112, 0.8), 2px 0 0 rgba(0, 224, 213, 0.8), 0 0 28px
+      rgba(255, 30, 112, 0.3);
+  }
+
+  /* Hairline divider that gradients Plasma → Aurora */
+  .plate-divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 30, 112, 0.6) 25%,
+      rgba(0, 224, 213, 0.6) 75%,
+      transparent 100%
+    );
+  }
+
+  /* Gradient text — Plasma → Aurora */
+  .text-plate {
+    background: linear-gradient(90deg, #ff1e70 0%, #00e0d5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.12) 50%,
+      rgba(255, 255, 255, 0.04) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s linear infinite;
+  }
+
+  .glass {
+    background-color: var(--surface);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .glass-raised {
+    background-color: var(--surface-raised);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .hairline-top {
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .marquee-mask {
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+}
