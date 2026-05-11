@@ -1,0 +1,58 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/finance/x-smart-cashtag-alpha-engine/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: x-smart-cashtag-alpha-engine
+description: "Real-time cashtag intelligence on X \u2014 narrative momentum, contradictions\
+  \ across sources, and Grok-powered alpha signals with full provenance."
+category: x-money-tool
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+  - worker
+cost_limits: &id001
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+  api_calls_per_session_max: 500
+tools:
+- name: track_cashtag
+- name: fetch_cashtag_quote
+- name: fetch_cashtag_news
+- name: generate_alpha_report
+- name: simulate_portfolio
+extensions:
+  constitution:
+    rules:
+    - Always show 'Not financial advice' banner on every page (Article V.1).
+    - Always show 'Not tax advice' banner alongside any export or accounting-related
+      output (Article V.2).
+    - "Cite the source for every signal \u2014 never aggregate without provenance\
+      \ (Article IV)."
+    - Flag contradictions across sources; never silently resolve them (Article IV).
+    - All cashtag history stays local under $env:LOCALAPPDATA\grok-agent (Article
+      VII).
+    - Never post an alpha report or signal to X without the publish_alpha_to_x consent
+      gate; posts is currently false in this manifest (Article II).
+    consent_gates:
+    - sync_to_cloud
+    hard_refusals: []
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: true
+  demo_metadata:
+    tagline: Cashtag-aware market intelligence for X.
+    display_name: X Smart Cashtag Alpha Engine
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    cost_limits: *id001
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py

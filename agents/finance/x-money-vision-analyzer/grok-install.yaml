@@ -1,0 +1,64 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/finance/x-money-vision-analyzer/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: x-money-vision-analyzer
+description: Drag-and-drop vision-powered receipt and statement analyzer. Parses receipts
+  with Grok 4.3 vision and one-click imports them into the X Money Companion Dashboard's
+  SQLite.
+category: x-money-tool
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+  - worker
+cost_limits: &id001
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+  api_calls_per_session_max: 100
+tools:
+- name: parse_receipt
+- name: parse_statement
+- name: import_to_companion_dashboard
+- name: validate_extraction
+- name: categorize_parsed_receipt
+extensions:
+  constitution:
+    rules:
+    - Always show 'Not financial advice' banner on every page (Article V.1).
+    - Always show 'Not tax advice' banner on every export and on the Import preview
+      (Article V.2).
+    - Never auto-import to the Companion Dashboard. Every batch passes through the
+      import_to_companion_dashboard consent gate with an explicit user yes (Article
+      II).
+    - Receipt images stay local under $env:LOCALAPPDATA\grok-agent\x-money-vision-analyzer\receipts.
+      Cloud upload is opt-in only (Article VII).
+    - "Cite Grok 4.3 vision provenance on every parsed field \u2014 extraction is\
+      \ a claim, not a fact (Article IV)."
+    - When the second vision pass disagrees with the first, surface BOTH extractions;
+      never silently pick one (Articles III + IV).
+    - 'Tool #4 writes to Tool #1''s SQLite via data/import_receipts.py only. No other
+      cross-tool writes are permitted by this manifest (Article III).'
+    consent_gates:
+    - import_to_companion_dashboard
+    - sync_to_cloud
+    hard_refusals: []
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: true
+  demo_metadata:
+    tagline: Drag, drop, parse, import.
+    display_name: X Money Vision-Powered Receipt & Statement Analyzer
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    cost_limits: *id001
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py

@@ -1,0 +1,57 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/finance/x-money-companion-dashboard/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: x-money-companion-dashboard
+description: "Personal X Money command center on Windows \u2014 overview, transactions,\
+  \ analytics, Grok insights, tax export, and alerts."
+category: x-money-tool
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+  - worker
+cost_limits: &id001
+  usd_per_session_max: 0.5
+  usd_per_day_max: 2.0
+  api_calls_per_session_max: 200
+tools:
+- name: categorize_transaction
+- name: fetch_market_quote
+- name: fetch_relevant_news
+- name: build_tax_export
+- name: summarize_alerts
+extensions:
+  constitution:
+    rules:
+    - Always show 'Not financial advice' banner on every page (Article V.1).
+    - Always show 'Not tax advice' banner on the Tax Export tab (Article V.2).
+    - Never share transaction data outside local SQLite without explicit consent.
+    - All transactions stay local under $env:LOCALAPPDATA\grok-agent.
+    - Cite the source of every market quote and headline shown next to a transaction
+      (Article IV).
+    - 'The Vision Analyzer (Tool #4) is the only sibling tool permitted to write into
+      this SQLite, and only via data/import_receipts.py.'
+    consent_gates:
+    - export_tax_report
+    - sync_to_cloud
+    hard_refusals: []
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: false
+  demo_metadata:
+    tagline: Your X Money command center, on Windows.
+    display_name: X Money Companion Dashboard
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    cost_limits: *id001
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py

@@ -1,0 +1,62 @@
+# Migrated from AgentMindCloud/grok-agent
+# source: templates/finance/x-creator-payout-optimizer/grok-agent.yaml
+# transformed: v2.15 -> v2.14 + extensions per
+# docs/migration/v215-to-v214-extensions.md
+version: '2.14'
+name: x-creator-payout-optimizer
+description: 'Earnings forecasting, content optimization, and tax estimator for X
+  creators. Reads from the X Money Companion Dashboard (Tool #1) and the X Money Vision
+  Analyzer (Tool #4) for the richest possible local data.'
+category: x-money-tool
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+  - web
+  - worker
+cost_limits: &id001
+  usd_per_session_max: 1.0
+  usd_per_day_max: 5.0
+  api_calls_per_session_max: 300
+tools:
+- name: forecast_earnings
+- name: optimize_content_topic
+- name: estimate_tax_burden
+- name: fetch_x_metrics
+- name: analyze_content_roi
+extensions:
+  constitution:
+    rules:
+    - Always show 'Not financial advice' banner on every page (Article V.1).
+    - "Always show 'Not tax advice' banner on every page \u2014 tax estimator is a\
+      \ primary feature, not an aside (Article V.2)."
+    - All earnings, receipt, and forecast data stays local under $env:LOCALAPPDATA\grok-agent\x-creator-payout-optimizer
+      (Article VII).
+    - 'Cross-tool READS only. Tool #1 (transactions) and Tool #4 (receipts + parsed_items)
+      are read-only targets. No cross-tool writes are permitted by this manifest (Article
+      III).'
+    - Forecast outputs cite the data window and the source rows used. No silent extrapolation
+      (Article IV).
+    - Tax estimator output explicitly names the jurisdiction and the assumption set
+      used; the V.2 banner is part of every export.
+    consent_gates:
+    - export_tax_estimate
+    - sync_to_cloud
+    hard_refusals: []
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+    contradiction_detection: false
+  demo_metadata:
+    tagline: Forecast earnings. Optimize content. Estimate taxes.
+    display_name: X Creator Payout Optimizer
+  x_money_specific:
+    disclaimers:
+      not_financial_advice: true
+      not_tax_advice: true
+    cost_limits: *id001
+  xlos_runtime:
+    type: streamlit_app
+    entrypoint: app.py
