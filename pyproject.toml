@@ -10,7 +10,7 @@ dependencies = [
     "pydantic>=2.7,<3",
     "pyyaml>=6.0",
     "jsonschema>=4.21",
-    "click>=8.1",
+    "click>=8.2",
     "platformdirs>=4.2",
     "rich>=13.7",
     "colorama>=0.4 ; sys_platform == 'win32'",
