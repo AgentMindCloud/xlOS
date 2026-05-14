@@ -24,6 +24,12 @@ The Constitution is enforced in three layers:
 The Constitution itself lives at `src/xlos/safety/constitution.md` in
 the repo and is the authoritative source of the rule text.
 
+> **Unconditional core.** Articles **I** (Universal rules), **III** (Hard
+> refusals), and **VII** (Local-first & privacy-first) are scanned on every
+> manifest regardless of declaration. The `extensions.constitution` array
+> in a v2.14 manifest selects which *additional* articles (II, IV, V, VI,
+> VIII) the agent opts into; it can never remove I, III, or VII.
+
 ## The 8 articles at a glance
 
 | Article | Subject                                | Checks |
@@ -73,7 +79,8 @@ the repo and is the authoritative source of the rule text.
 
 - **IV.super-agent-provenance** — super-agents must enable provenance.
 - **IV.super-agent-constitution** — super-agents must declare their
-  Constitution opt-in.
+  `constitution:` section (the additional articles beyond the
+  unconditional core I / III / VII).
 
 ### Article V — Disclaimers
 
