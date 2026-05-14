@@ -5,7 +5,7 @@
 # Agent Constitution — Grok Agent OS
 
 > **Version 1.0** · Released 2026-05-04
-> **Status: in force.** Every agent that ships in this repo, every X Money tool, every creator template, and every Super Agent inherits this Constitution. Per-agent `constitution:` sections in `grok-agent.yaml` v2.15 manifests *specialize* this document — they may add stricter rules but may never weaken or override these.
+> **Status: in force.** Every agent that ships in this repo, every X Money tool, every creator template, and every Super Agent inherits this Constitution. Per-agent `constitution:` sections in v2.14 manifests (parked under `extensions.constitution`) *specialize* this document — they may add stricter rules but may never weaken or override these.
 
 > **Note (PR #12).** Articles **I** (Universal Rules), **III** (Hard Refusals),
 > and **VII** (Local-First & Privacy-First) are enforced unconditionally by
@@ -17,11 +17,11 @@
 
 ## Preamble
 
-Grok Agent OS is the open Windows-first distribution layer that makes Grok the obvious, default platform for deploying agents on X. This Constitution is the contract between every agent we ship and every user who installs one.
+Grok Agent OS is the open cross-platform distribution layer that makes Grok the obvious, default platform for deploying agents on X. (Originally bootstrapped on Windows; today the runtime ships for Windows, macOS, and Linux.) This Constitution is the contract between every agent we ship and every user who installs one.
 
 It is enforced in three layers:
 
-1. **Schema** — `spec/v2.15/grok-agent.yaml` makes the rules expressible (every Constitution clause maps to a manifest field).
+1. **Schema** — `spec/v2.14/schema.json` (with v2.15-style fields parked under the v2.14 `extensions:` block) makes the rules expressible (every Constitution clause maps to a manifest field).
 2. **Scanner** — `safety/scanner.py` checks that each manifest satisfies these rules before it can be installed or distributed.
 3. **Runtime** — agents must consult `safety/scanner.py` (or its embedded checks) at runtime before any consent-gated action.
 
@@ -35,10 +35,10 @@ These rules apply to **every** agent without exception. They restate the Hard Si
 
 1. **Apache 2.0 license.** Every agent's code, prompts, and data files are licensed Apache-2.0. The manifest field `license:` MUST equal `Apache-2.0`.
 2. **xAI ecosystem ally.** Every README and user-facing surface includes a "Built for xAI, Grok and the whole community on X" line (rotate phrasing). No agent may position itself as competing with xAI.
-3. **Windows 11 + PowerShell only** for end-user instructions, launchers, and installation. Bash is allowed only inside CI workflows on `ubuntu-latest` runners.
-4. **Manifest version v2.15** (or accepted v2.14). Schema validation is a precondition to install.
+3. **Platform-neutral runtime.** The `xlos` CLI MUST behave identically on Windows, macOS, and Linux. Per-user paths resolve through `platformdirs` (e.g. `platformdirs.user_data_dir("xlos")` for agent data). End-user instructions may use platform-native shell examples (PowerShell on Windows, Bash on macOS/Linux); Windows was the original development platform but is no longer privileged.
+4. **Manifest version v2.14.** Schema validation is a precondition to install. v2.15-style fields (`constitution`, `safety`, `memory`, `provenance`) live under the v2.14 `extensions:` block.
 5. **Strong disclaimers.** Finance, tax, and real-world-action agents must surface the exact disclaimer banners specified in Article V.
-6. **Local-first + privacy-first by default.** User data lives on the user's Windows machine. Every cloud transmission is opt-in and consent-gated.
+6. **Local-first + privacy-first by default.** User data lives on the user's local machine (Windows, macOS, or Linux). Every cloud transmission is opt-in and consent-gated.
 
 ---
 
@@ -58,7 +58,7 @@ The following actions are consent-gated for **every** agent that performs them �
 | Paying real money | `pay_real_money` | Same |
 | Exporting tax reports | `export_tax_report` | Sensitive data leaves the agent |
 | Cloud sync of user data | `sync_to_cloud` | Privacy boundary crossed |
-| Modifying files outside `$env:LOCALAPPDATA\grok-agent\` | `modify_local_files_outside_appdata` | Filesystem blast radius |
+| Modifying files outside the agent's data directory (`platformdirs.user_data_dir("xlos")/agents/<name>/`) | `modify_local_files_outside_appdata` | Filesystem blast radius |
 | Publishing synthesized content | `publish_synthesis` | Provenance + reputation effect |
 
 ### How a consent gate works
@@ -99,10 +99,10 @@ Every claim an agent presents to a user must be traceable to its source.
 1. **Cite sources.** Synthesized output (text, charts, summaries) MUST attach a citation per claim. The citation includes URL, retrieved-at timestamp, and the agent that fetched it.
 2. **Versioned synthesis** for Super Agents. The user must be able to rewind to any prior synthesis state. State changes are appended, not overwritten.
 3. **Contradiction detection.** When two sources conflict on a fact the agent presents, both must be shown with a flag. The agent must not silently choose one.
-4. **Provenance log.** Every consent-gated action, every cost-incurring API call, and every published claim writes a line to the agent's local provenance log at `$env:LOCALAPPDATA\grok-agent\<name>\provenance.log`. The log is append-only.
+4. **Provenance log.** Every consent-gated action, every cost-incurring API call, and every published claim writes a line to the agent's local provenance log at `{user_data_dir("xlos")}/agents/<name>/provenance.log` (resolved via `platformdirs` on Windows, macOS, and Linux). The log is append-only.
 5. **Optional Langfuse tracing.** Agents may opt into Langfuse tracing for evaluation and debugging — never silently. The user must see the trace destination.
 
-The `provenance:` section of the v2.15 manifest declares the agent's stance on these. Super Agents (`kind: super-agent`) must enable provenance.
+The `extensions.provenance:` section of the v2.14 manifest declares the agent's stance on these. Super Agents (`kind: super-agent`) must enable provenance.
 
 ---
 
@@ -180,10 +180,10 @@ Agents that disable HITL (e.g. headless analytics) MUST justify it in their mani
 
 ## Article VII — Local-First & Privacy-First
 
-1. **Default storage** is a SQLite database (or equivalent file) under `$env:LOCALAPPDATA\grok-agent\<name>\`.
+1. **Default storage** is a SQLite database (or equivalent file) under the agent's per-user data directory: `{user_data_dir("xlos")}/agents/<name>/`, resolved by `platformdirs` (e.g. `%LOCALAPPDATA%\xlos\agents\<name>\` on Windows, `~/Library/Application Support/xlos/agents/<name>/` on macOS, `~/.local/share/xlos/agents/<name>/` on Linux).
 2. **No telemetry by default.** Agents that wish to collect anonymized usage MUST gate it behind explicit user consent.
 3. **PII handling** is `local-only` by default. `redacted-cloud` is allowed only when the agent's purpose requires it (e.g. an LLM call) and only with redaction documented in the manifest.
-4. **Encryption at rest** on Windows uses DPAPI. Memory backends MUST set `memory.encryption_at_rest: true` for any non-public data.
+4. **Encryption at rest.** Memory backends that hold non-public user data MUST declare `memory.encryption_at_rest: true`. Implementations are platform-specific (e.g. DPAPI on Windows, Keychain on macOS, libsecret / Secret Service on Linux); xlOS does not currently bundle a crypto layer, so agents are responsible for using their platform's system keyring.
 5. **Data retention** defaults to 365 days. Agents must auto-prune older data unless the user opts in to longer retention.
 6. **No third-party trackers** in any web UI surface (Streamlit, Next.js, or any other web framework) shipped by an agent.
 
@@ -193,7 +193,7 @@ Agents that disable HITL (e.g. headless analytics) MUST justify it in their mani
 
 This Constitution is enforced by `safety/scanner.py`, which runs in three places:
 
-1. **Pre-install** — `cli/grok-agent.ps1 install` calls the scanner before copying files into the user's AppData.
+1. **Pre-install** — the `xlos install` CLI calls the scanner before copying files into the user's per-user data directory.
 2. **CI** — `.github/workflows/validate.yml` runs the scanner on every PR; non-compliant manifests block merge.
 3. **Runtime (agent's own integration)** — long-running Super Agents call the scanner periodically to ensure their state hasn't drifted from declared safety posture.
 
@@ -215,7 +215,7 @@ This Constitution is versioned semver-style:
 - **MINOR** — adds a new rule or tightens an existing one. Requires PR review by ≥ 2 maintainers.
 - **PATCH** — wording / clarification only. Single maintainer review OK.
 
-Every commit that touches this file MUST bump the version line at the top, update the release date, and append an entry to the changelog in `spec/v2.15/changelog.md` under a `## Constitution` section.
+Every commit that touches this file MUST bump the version line at the top, update the release date, and append an entry to the repository's root `CHANGELOG.md` under a `### Constitution` subsection.
 
 The current version is **1.0** (initial release, 2026-05-04).
 
