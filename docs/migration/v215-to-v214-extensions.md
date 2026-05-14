@@ -65,8 +65,12 @@ accommodates the v2.15 extension surface.
 ## Migration rules at install time
 
 xlOS validates against `spec/v2.14/schema.json`. The Constitution scanner
-reads `extensions.constitution` to decide which article checks apply; agents
-that do not declare `extensions.constitution` are skipped (they are not
-Constitution-checked agents). PowerShell launchers are never committed; the
-runtime is declared in the manifest's `runtime` block and dispatched by
-`xlos run`.
+**always** enforces the core articles — Article I (universal rules),
+Article III (hard refusals), and Article VII (local-first / privacy-first
+defaults) — for every manifest, regardless of what `extensions.constitution`
+declares. Article III in particular forbids `bypass_safety_scanner` itself,
+so the scanner cannot be opt-in. The remaining articles (II, IV, V, VI, VIII)
+are scoped to features the manifest declares and run only when the manifest
+opts into them via `extensions.constitution = [...]`. PowerShell launchers
+are never committed; the runtime is declared in the manifest's `runtime`
+block and dispatched by `xlos run`.

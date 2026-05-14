@@ -4,8 +4,13 @@ Ported from grok-agent/safety/scanner.py. Adapted to:
 
 * accept an in-memory v2.14 manifest dict (no file-path coupling at the
   public API);
-* drive check applicability from ``manifest["extensions"]["constitution"]``
-  (the v2.14 article list) instead of the legacy ``kind`` field;
+* always enforce Articles I, III, and VII regardless of what
+  ``manifest["extensions"]["constitution"]`` declares — see
+  ``_CORE_ARTICLES`` for the rationale (Article III forbids
+  ``bypass_safety_scanner``, so the scanner itself cannot be opt-in);
+* drive *additional* check applicability from
+  ``manifest["extensions"]["constitution"]`` (the v2.14 article list) for
+  Articles II, IV, V, VI, VIII;
 * read v2.15-style fields (``constitution``, ``safety``, ``windows``,
   ``real_time_x``, ``bridges``, ``memory``, ``provenance``) from the
   ``extensions`` block where the migrator parked them;
@@ -813,19 +818,48 @@ def check_scanner_severity_floor(view: dict[str, Any]) -> list[Finding]:
 CHECKS: dict[str, tuple[CheckFn, str]] = _CHECKS
 
 
-def _applicable_articles(manifest: dict[str, Any]) -> set[str] | None:
-    """Return the set of articles the manifest opts into (None = no opt-in)."""
+# Mandatory Constitution articles. These ALWAYS run — a manifest cannot
+# disable them by omitting or partially declaring ``extensions.constitution``.
+#
+#   * Article I   — Universal rules (Apache-2.0 license, no Windows admin,
+#                   manifest version, no anti-xAI positioning).
+#   * Article III — Hard refusals: bright-line "no" actions including
+#                   ``scrape_authenticated_x_content``,
+#                   ``impersonate_user_identity``, ``exfiltrate_user_data``,
+#                   and — meta-critically — ``bypass_safety_scanner`` itself.
+#   * Article VII — Local-first / privacy-first defaults: no third-party
+#                   trackers, AppData-only paths, encryption-at-rest for
+#                   memory holding PII, declared retention windows.
+#
+# Earlier versions of the scanner gated *every* article on the manifest
+# opting in via ``extensions.constitution``. That made the Constitution
+# itself opt-in: any manifest could silently skip Article III by simply
+# omitting the constitution block — which is the exact behavior Article III
+# (``bypass_safety_scanner``) is supposed to forbid. These three articles
+# encode safety guarantees that cannot be left to the manifest author's
+# discretion, so they are enforced unconditionally. Other articles
+# (II, IV, V, VI, VIII) are scoped to features the manifest declares
+# (consent gates, super-agent provenance, finance disclaimers, audit floor)
+# and remain opt-in via ``extensions.constitution``.
+_CORE_ARTICLES: frozenset[str] = frozenset({"I", "III", "VII"})
+
+
+def _applicable_articles(manifest: dict[str, Any]) -> set[str]:
+    """Return the set of articles whose checks should run for this manifest.
+
+    Core articles (see ``_CORE_ARTICLES``) are always included regardless of
+    what the manifest declares. Additional articles are added when the
+    manifest opts in via ``extensions.constitution = [...]``.
+    """
+    articles: set[str] = set(_CORE_ARTICLES)
     extensions = manifest.get("extensions")
-    if not isinstance(extensions, dict):
-        return None
-    declared = extensions.get("constitution")
-    if not isinstance(declared, list):
-        return None
-    articles: set[str] = set()
-    for entry in declared:
-        if isinstance(entry, str):
-            articles.add(entry)
-    return articles or None
+    if isinstance(extensions, dict):
+        declared = extensions.get("constitution")
+        if isinstance(declared, list):
+            for entry in declared:
+                if isinstance(entry, str):
+                    articles.add(entry)
+    return articles
 
 
 def _article_matches(check_article: str, opt_in: set[str]) -> bool:
@@ -841,17 +875,22 @@ def _article_matches(check_article: str, opt_in: set[str]) -> bool:
 def scan_manifest(manifest: dict[str, Any]) -> ScanResult:
     """Scan a v2.14 manifest dict for Constitution violations.
 
-    Manifests that do not declare ``extensions.constitution`` are not
-    Constitution-checked: this function returns an empty result for them.
-    Manifests that declare a list of articles in ``extensions.constitution``
-    run only the checks tagged for those articles.
+    Articles I (universal rules), III (hard refusals), and VII (local-first /
+    privacy-first defaults) are always enforced — a manifest cannot opt out
+    of them by omitting or partially declaring ``extensions.constitution``.
+    Article III in particular forbids ``bypass_safety_scanner``, so making
+    the scanner itself opt-in would be a trivial bypass; see ``_CORE_ARTICLES``.
+
+    Other articles (II, IV, V, VI, VIII) are opt-in: the manifest must list
+    them in ``extensions.constitution`` for those checks to run. They are
+    scoped to features the manifest declares (consent gates, super-agent
+    provenance, finance disclaimers, cost limits, audit floor) and have no
+    meaning for agents that do not use those features.
     """
     name = manifest.get("name") if isinstance(manifest.get("name"), str) else "<unnamed>"
     result = ScanResult(manifest_name=str(name))
 
     opt_in = _applicable_articles(manifest)
-    if opt_in is None:
-        return result
 
     view = _build_view(manifest)
     for check_name, (check_fn, article) in CHECKS.items():
