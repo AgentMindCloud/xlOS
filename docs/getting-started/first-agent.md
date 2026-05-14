@@ -47,9 +47,10 @@ This:
 
 Open `agents/super-agents/living-narrative-fabric/grok-install.yaml`.
 You'll see the standard v2.14 shape plus the xlOS-specific
-`extensions:` block. The extensions carry the Constitution articles the
-agent opts into, multi-agent role declarations, provenance settings,
-and demo metadata.
+`extensions:` block. The extensions carry the *additional* Constitution
+articles the agent opts into beyond the unconditionally enforced core
+(Articles I, III, VII), multi-agent role declarations, provenance
+settings, and demo metadata.
 
 See [v2.14 spec](../v2.14/index.md) for the standard fields and
 [v2.15 → v2.14 + extensions migration](../migration/v215-to-v214-extensions.md)
@@ -81,7 +82,8 @@ xlos doctor
 ```
 
 Reports Python version, install path, schema integrity, scanner state,
-and the Constitution articles each registered agent has opted into.
+and the additional Constitution articles each registered agent has
+opted into beyond the unconditional core (I, III, VII).
 
 ## Step 7 — Try another
 

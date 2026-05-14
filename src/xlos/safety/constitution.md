@@ -7,8 +7,11 @@
 > **Version 1.0** · Released 2026-05-04
 > **Status: in force.** Every agent that ships in this repo, every X Money tool, every creator template, and every Super Agent inherits this Constitution. Per-agent `constitution:` sections in `grok-agent.yaml` v2.15 manifests *specialize* this document — they may add stricter rules but may never weaken or override these.
 
-
-
+> **Note (PR #12).** Articles **I** (Universal Rules), **III** (Hard Refusals),
+> and **VII** (Local-First & Privacy-First) are enforced unconditionally by
+> `safety/scanner.py` on every manifest scan. The `extensions.constitution`
+> field in v2.14 manifests consumed by xlOS selects which *additional*
+> articles (II, IV, V, VI, VIII) apply; it can never remove I, III, or VII.
 
 ---
 

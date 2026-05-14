@@ -51,7 +51,8 @@ locally. It reports:
 
 - Safety profile (`standard` / `strict`).
 - Permission summary (tools, network hosts, filesystem, env).
-- Constitution articles the agent opts into.
+- Additional Constitution articles the agent opts into (beyond the
+  unconditional core I, III, VII).
 - Severity breakdown.
 
 A clean scan unblocks the install button. Failures show the operator
