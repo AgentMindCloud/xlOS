@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500" width="1500" height="500" role="img" aria-labelledby="banner-title banner-desc">
-  <title id="banner-title">grok-install-brand — Brand assets, design tokens, and templates for the GrokInstall ecosystem</title>
+  <title id="banner-title">grok-install-brand — Brand assets, design tokens, and templates for the xlOS ecosystem</title>
   <desc id="banner-desc">Spectral hero banner — Plasma + Aurora nebula on a deep #0A0A0A field with halftone dots, drifting circles, and a pulsing swarm node ring.</desc>
   <defs>
     <radialGradient id="hero-plasma" cx="22%" cy="22%" r="55%">
@@ -41,13 +41,13 @@
 
   <g transform="translate(60, 56)">
     <rect x="-2" y="-14" width="3" height="20" fill="#FF1E70"/>
-    <text x="12" y="2" font-family="Inter, sans-serif" font-size="13" font-weight="500" fill="#FF1E70" letter-spacing="3.5">GROKINSTALL</text>
+    <text x="12" y="2" font-family="Inter, sans-serif" font-size="13" font-weight="500" fill="#FF1E70" letter-spacing="3.5">xlOS</text>
     <text x="12" y="22" font-family="Inter, sans-serif" font-size="11" font-weight="400" fill="#E5E5E5" opacity="0.55" letter-spacing="2">SPECTRAL · ECOSYSTEM</text>
   </g>
 
   <g transform="translate(60, 230)">
     <text x="0" y="0" font-family="'JetBrains Mono', 'SF Mono', Consolas, monospace" font-size="64" font-weight="700" fill="url(#repo-text)" letter-spacing="-1.5" filter="url(#neon-glow)">grok-install-brand</text>
-    <text x="0" y="45" font-family="Inter, sans-serif" font-size="22" font-weight="400" fill="#E5E5E5" opacity="0.88">Brand assets, design tokens, and templates for the GrokInstall ecosystem</text>
+    <text x="0" y="45" font-family="Inter, sans-serif" font-size="22" font-weight="400" fill="#E5E5E5" opacity="0.88">Brand assets, design tokens, and templates for the xlOS ecosystem</text>
   </g>
 
   <g transform="translate(60, 410)">

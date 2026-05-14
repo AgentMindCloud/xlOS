@@ -54,7 +54,7 @@ export function SafetyDistribution({ scores }: { scores: number[] }) {
         </ResponsiveContainer>
       </div>
       <p className="text-[11px] text-ink-subtle">
-        Every agent runs through the GrokInstall safety scanner on submit. Agents under 90 require a
+        Every agent runs through the xlOS safety scanner on submit. Agents under 90 require a
         maintainer review before they re-appear in Trending.
       </p>
     </GlassCard>

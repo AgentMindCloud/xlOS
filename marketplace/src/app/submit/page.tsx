@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Submit your agent',
-  description: 'Propose a Grok-native agent for the GrokInstall marketplace.',
+  description: 'Propose a Grok-native agent for the xlOS marketplace.',
 };
 
 export default function SubmitPage() {

@@ -6,10 +6,10 @@
 
 # Browser extension icons
 
-SVG sources only. Chrome MV3 manifests do **not** accept SVG icons — the
-`icons` block in `../manifest.json` references PNG paths
-(`icon-16.png`, `icon-32.png`, `icon-48.png`, `icon-128.png`) that must
-be generated locally before packing the `.crx`.
+PNG copies (`icon-16.png`, `icon-32.png`, `icon-48.png`, `icon-128.png`) are
+committed alongside the SVGs because Chrome MV3 does not accept SVG icons.
+The `release.yml` workflow re-rasterizes them on tag pushes as a safety net
+so the checked-in PNGs cannot drift from the SVG sources.
 
 ## Source files
 
@@ -21,9 +21,21 @@ be generated locally before packing the `.crx`.
 | `icon-32.svg`    | 32×32 export-ready variant (heavier stroke for readability)   |
 | `icon-16.svg`    | 16×16 export-ready variant                                    |
 
-## One-time PNG conversion
+## Re-generating PNGs locally
 
-ImageMagick works cross-platform:
+`rsvg-convert` (from librsvg) is fastest and matches what CI uses:
+
+```bash
+cd extensions/browser/icons
+for sz in 16 32 48 128; do
+  rsvg-convert -w $sz -h $sz icon-$sz.svg -o icon-$sz.png
+done
+```
+
+Install hints: `sudo apt-get install librsvg2-bin` (Linux) or
+`brew install librsvg` (macOS).
+
+ImageMagick works cross-platform as an alternative:
 
 ```bash
 cd extensions/browser/icons

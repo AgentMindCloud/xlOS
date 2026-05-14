@@ -54,6 +54,46 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+  build-extension-icons:
+    name: Verify browser extension PNG icons match SVG sources
+    runs-on: ubuntu-latest
+    # Independent sanity check — intentionally NOT a `needs:` of any other job
+    # so PNG drift can't block the Python release path.
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install librsvg2-bin
+        run: sudo apt-get update && sudo apt-get install -y librsvg2-bin
+
+      - name: Re-rasterize PNGs from SVG sources into a temp directory
+        run: |
+          mkdir -p /tmp/freshly-rendered-icons
+          cd extensions/browser/icons
+          for sz in 16 32 48 128; do
+            rsvg-convert -w $sz -h $sz icon-$sz.svg -o /tmp/freshly-rendered-icons/icon-$sz.png
+          done
+
+      - name: Diff freshly-rendered PNGs against committed PNGs
+        run: |
+          drift=0
+          for sz in 16 32 48 128; do
+            if ! cmp -s "/tmp/freshly-rendered-icons/icon-$sz.png" "extensions/browser/icons/icon-$sz.png"; then
+              echo "::error::icon-$sz.png drifted from icon-$sz.svg"
+              drift=1
+            fi
+          done
+          if [ "$drift" -ne 0 ]; then
+            echo "One or more committed PNG icons no longer match their SVG source."
+            echo "Re-run the local rasterization and commit the result:"
+            echo "  cd extensions/browser/icons"
+            echo "  for sz in 16 32 48 128; do rsvg-convert -w \$sz -h \$sz icon-\$sz.svg -o icon-\$sz.png; done"
+            exit 1
+          fi
+          echo "All committed PNG icons match their SVG sources."
+
   publish-pypi:
     name: Publish to PyPI
     needs: build-wheels

@@ -2,7 +2,7 @@ import { BRAND } from '@/lib/brand';
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'nodejs';
-export const alt = 'GrokInstall — the community marketplace for Grok-native agents on X';
+export const alt = 'xlOS — the community marketplace for Grok-native agents on X';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -46,7 +46,7 @@ export default function OgImage() {
           color: BRAND.plasma,
         }}
       >
-        GROKINSTALL
+        xlOS
       </div>
       <div
         style={{

@@ -17,8 +17,8 @@ export function InstallTabs({ agentId }: { agentId: string }) {
   const [copied, setCopied] = useState(false);
 
   const snippets: Record<TabKey, string> = {
-    cli: `# Install the GrokInstall CLI, then run:\nnpx grok-install ${agentId}`,
-    vscode: `# In VS Code:\n#   1. Install the “GrokInstall” extension from the Marketplace\n#   2. Cmd-Shift-P → “GrokInstall: Add agent”\n#   3. Paste the agent ID: ${agentId}`,
+    cli: `# Install the xlOS CLI, then run:\nnpx grok-install ${agentId}`,
+    vscode: `# In VS Code:\n#   1. Install the “xlOS” extension from the Marketplace\n#   2. Cmd-Shift-P → “xlOS: Add agent”\n#   3. Paste the agent ID: ${agentId}`,
     action: `# .github/workflows/deploy.yml\n- uses: AgentMindCloud/grok-install-action@v1\n  with:\n    agent: ${agentId}\n    token: \${{ secrets.GROK_INSTALL_TOKEN }}`,
   };
 

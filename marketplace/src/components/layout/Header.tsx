@@ -36,11 +36,11 @@ export function Header() {
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="font-display text-lg tracking-[-0.06em] uppercase text-ink hover:text-aurora transition-colors"
-          aria-label="GrokInstall home"
+          className="font-display text-lg tracking-[-0.06em] text-ink hover:text-aurora transition-colors"
+          aria-label="xlOS home"
         >
-          <span className="text-ink">GROK</span>
-          <span className="text-plasma text-glow-plasma">INSTALL</span>
+          <span className="text-ink">xl</span>
+          <span className="text-plasma text-glow-plasma">OS</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1" aria-label="Primary">

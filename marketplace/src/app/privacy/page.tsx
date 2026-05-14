@@ -9,7 +9,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Privacy',
   description:
-    'How GrokInstall collects telemetry, what it never stores, how to opt out, and the 90-day retention policy.',
+    'How xlOS collects telemetry, what it never stores, how to opt out, and the 90-day retention policy.',
 };
 
 export default function PrivacyPage() {
