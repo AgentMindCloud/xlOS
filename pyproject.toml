@@ -3,7 +3,7 @@ name = "xlos"
 version = "1.0.0-alpha.1"
 description = "Cross-platform developer runtime for Grok agents on X."
 authors = [{ name = "AgentMindCloud" }]
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
