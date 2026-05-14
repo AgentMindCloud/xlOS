@@ -3,34 +3,26 @@ import { Header } from '@/components/layout/Header';
 import { Plausible } from '@/components/layout/Plausible';
 import { SkipToContent } from '@/components/layout/SkipToContent';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
-import { BRAND } from '@/lib/brand';
 import { DISCLAIMER, SITE_NAME, SITE_TAGLINE, SITE_URL } from '@/lib/constants';
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import { Geist, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 
-const body = Inter({
+const geistSans = Geist({
   subsets: ['latin'],
+  variable: '--font-geist',
   display: 'swap',
-  variable: '--font-body',
 });
 
-const display = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
-  display: 'swap',
-  variable: '--font-display',
-});
-
-const mono = JetBrains_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
+  variable: '--font-ibm-plex-mono',
   display: 'swap',
-  variable: '--font-mono',
 });
 
 export const viewport: Viewport = {
-  themeColor: BRAND.bg,
+  themeColor: '#0D0D0D',
   colorScheme: 'dark',
   width: 'device-width',
   initialScale: 1,
@@ -86,10 +78,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${body.variable} ${display.variable} ${mono.variable} dark`}
+      className={`${geistSans.variable} ${ibmPlexMono.variable} dark`}
       suppressHydrationWarning
     >
-      <body className="bg-bg text-ink min-h-dvh font-body antialiased">
+      <body className="bg-bg text-ink min-h-dvh font-sans antialiased">
         <ThemeProvider>
           <SkipToContent />
           <Header />

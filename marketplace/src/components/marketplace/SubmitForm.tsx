@@ -78,7 +78,7 @@ export function SubmitForm() {
             value={form.name}
             onChange={(e) => update('name', e.target.value.slice(0, MAX_NAME))}
             placeholder="Post Autopilot"
-            className={inputClass}
+            className={inputClass(!!errors.name)}
             aria-invalid={!!errors.name}
           />
         </Field>
@@ -87,7 +87,7 @@ export function SubmitForm() {
             value={form.tagline}
             onChange={(e) => update('tagline', e.target.value.slice(0, MAX_TAGLINE))}
             placeholder="Drafts, schedules, and publishes Grok-aware threads on X."
-            className={inputClass}
+            className={inputClass(!!errors.tagline)}
             aria-invalid={!!errors.tagline}
           />
         </Field>
@@ -95,13 +95,13 @@ export function SubmitForm() {
           label="GitHub repo"
           required
           error={errors.repo}
-          help="owner/repo format — we’ll link to this from the listing."
+          help="owner/repo format — we'll link to this from the listing."
         >
           <input
             value={form.repo}
             onChange={(e) => update('repo', e.target.value.slice(0, MAX_REPO))}
             placeholder="your-org/your-agent"
-            className={inputClass}
+            className={inputClass(!!errors.repo)}
             aria-invalid={!!errors.repo}
           />
         </Field>
@@ -110,7 +110,7 @@ export function SubmitForm() {
             value={form.handle}
             onChange={(e) => update('handle', e.target.value.slice(0, 60))}
             placeholder="@yourhandle"
-            className={inputClass}
+            className={inputClass(false)}
           />
         </Field>
 
@@ -128,7 +128,7 @@ export function SubmitForm() {
           </div>
         </Field>
 
-        <Field label="Certifications" help="Pick any that apply. We’ll verify before merging.">
+        <Field label="Certifications" help="Pick any that apply. We'll verify before merging.">
           <div className="flex flex-wrap gap-1.5">
             {(Object.keys(CERTIFICATION_LABELS) as Certification[]).map((c) => (
               <Pill key={c} active={form.certifications.includes(c)} onClick={() => toggleCert(c)}>
@@ -149,7 +149,7 @@ export function SubmitForm() {
             onChange={(e) => update('yaml', e.target.value.slice(0, MAX_YAML))}
             placeholder={'apiVersion: grokinstall.dev/v1\nkind: Agent\nmetadata:\n  id: your-agent'}
             rows={10}
-            className={cn(inputClass, 'font-mono text-[13px] leading-6 resize-y')}
+            className={cn(inputClass(!!errors.yaml), 'font-mono text-[13px] leading-6 resize-y')}
             aria-invalid={!!errors.yaml}
           />
         </Field>
@@ -179,13 +179,19 @@ export function SubmitForm() {
       </form>
 
       <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">
-        <GlassCard padding="lg" className="relative overflow-hidden flex flex-col gap-3">
+        <GlassCard
+          elevation="lifted"
+          padding="lg"
+          className="relative overflow-hidden flex flex-col gap-3 cinnabar-gradient-soft"
+        >
           <div className="absolute inset-x-0 top-0 plate-divider" aria-hidden />
-          <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-aurora">Preview</p>
-          <h3 className="font-display text-xl tracking-tight text-ink">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
+            Preview
+          </p>
+          <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
             {form.name || 'Your agent name'}
           </h3>
-          <p className="text-sm text-ink-muted">
+          <p className="text-sm text-ink-700 leading-relaxed">
             {form.tagline || 'A one-line tagline goes here.'}
           </p>
           {form.certifications.length ? (
@@ -193,7 +199,7 @@ export function SubmitForm() {
               {form.certifications.map((c) => (
                 <span
                   key={c}
-                  className="inline-flex rounded-sm border border-plasma/40 bg-plasma/5 text-plasma px-2 py-0.5 text-[11px]"
+                  className="inline-flex rounded-sm border border-cinnabar-500/40 cinnabar-gradient-soft text-cinnabar-300 px-2 py-0.5 text-[11px] font-mono"
                 >
                   {CERTIFICATION_LABELS[c]}
                 </span>
@@ -202,11 +208,11 @@ export function SubmitForm() {
           ) : null}
         </GlassCard>
 
-        <GlassCard padding="md" className="text-xs text-ink-muted leading-relaxed">
-          <p className="text-ink">How it works</p>
-          <ol className="mt-2 space-y-1 text-ink-subtle list-decimal list-inside">
+        <GlassCard padding="md" className="text-xs text-ink-700 leading-relaxed">
+          <p className="text-ink-900 font-display font-semibold">How it works</p>
+          <ol className="mt-2 space-y-1 text-ink-700 list-decimal list-inside">
             <li>Fill in the fields on the left.</li>
-            <li>Click “Open pre-filled PR” — GitHub opens with the PR body ready.</li>
+            <li>Click &ldquo;Open pre-filled PR&rdquo; — GitHub opens with the PR body ready.</li>
             <li>Finish the PR title, hit Create, we review weekly.</li>
           </ol>
         </GlassCard>
@@ -230,13 +236,13 @@ function Field({
 }) {
   return (
     <fieldset className="flex flex-col gap-1.5 border-0 p-0">
-      <legend className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.18em] text-aurora mb-1">
+      <legend className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-ink-700 mb-1">
         {label}
-        {required ? <span className="text-plasma">*</span> : null}
+        {required ? <span className="text-cinnabar-400">*</span> : null}
       </legend>
       {children}
-      {help ? <span className="text-[11px] text-ink-subtle">{help}</span> : null}
-      {error ? <span className="text-[11px] text-danger">{error}</span> : null}
+      {help ? <span className="text-[11px] text-ink-600">{help}</span> : null}
+      {error ? <span className="text-[11px] font-mono text-danger">{error}</span> : null}
     </fieldset>
   );
 }
@@ -256,10 +262,10 @@ function Pill({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        'inline-flex rounded-sm border px-2.5 py-1 text-xs font-medium transition-all duration-150 ease-gi',
+        'inline-flex rounded-sm border px-2.5 py-1 text-xs font-mono font-medium transition-all duration-150 ease-gi',
         active
-          ? 'border-plasma bg-plasma/10 text-plasma shadow-plasmaGlowSoft'
-          : 'border-border-subtle bg-surface text-ink-muted hover:border-aurora/50 hover:text-ink'
+          ? 'cinnabar-gradient-soft border-cinnabar-500/40 text-cinnabar-300 shadow-cinnabar-glow-soft'
+          : 'bg-ink-100 border-ink-300/60 text-ink-700 hover:border-cinnabar-400/40 hover:text-ink-900'
       )}
     >
       {children}
@@ -267,11 +273,13 @@ function Pill({
   );
 }
 
-const inputClass = cn(
-  'w-full rounded-md border border-border-subtle bg-surface px-3 py-2.5',
-  'text-sm text-ink placeholder:text-ink-subtle',
-  'focus:outline-none focus:border-plasma/50 focus:shadow-plasmaGlowSoft transition-all'
-);
+function inputClass(hasError: boolean) {
+  return cn(
+    'w-full rounded-md glass-card px-3 py-2.5 text-sm text-ink-900 placeholder:text-ink-600 transition-all',
+    'focus:outline-none focus:border-cinnabar-400/60 focus:shadow-cinnabar-glow-soft',
+    hasError && 'border-danger/60'
+  );
+}
 
 function validate(f: Form): Partial<Record<keyof Form, string>> {
   const e: Partial<Record<keyof Form, string>> = {};

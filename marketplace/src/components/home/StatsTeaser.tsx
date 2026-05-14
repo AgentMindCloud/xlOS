@@ -11,10 +11,10 @@ export interface StatsTeaserData {
 }
 
 const TONE_CLASSES: Record<'plasma' | 'aurora' | 'green' | 'cyan', string> = {
-  plasma: 'text-plasma',
-  aurora: 'text-aurora',
-  green: 'text-green',
-  cyan: 'text-cyan',
+  plasma: 'text-cinnabar-400',
+  aurora: 'text-cinnabar-300',
+  green: 'text-success',
+  cyan: 'text-cinnabar-200',
 };
 
 export function StatsTeaser({ data }: { data: StatsTeaserData }) {
@@ -59,7 +59,7 @@ export function StatsTeaser({ data }: { data: StatsTeaserData }) {
               {s.icon}
               <span className="text-[11px] uppercase tracking-[0.18em] font-mono">{s.label}</span>
             </div>
-            <div className="font-display text-2xl tracking-tight tabular-nums text-ink md:text-3xl">
+            <div className="font-display text-2xl tracking-tight tabular-nums text-ink-900 md:text-3xl">
               {s.value}
             </div>
           </GlassCard>

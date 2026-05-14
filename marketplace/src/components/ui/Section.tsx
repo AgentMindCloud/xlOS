@@ -21,12 +21,14 @@ export function SectionHeader({
   title,
   description,
   action,
+  tone = 'neutral',
   className,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   action?: ReactNode;
+  tone?: 'neutral' | 'cinnabar';
   className?: string;
 }) {
   return (
@@ -38,12 +40,26 @@ export function SectionHeader({
     >
       <div className="flex flex-col gap-2 max-w-2xl">
         {eyebrow ? (
-          <p className="text-xs uppercase tracking-[0.2em] text-aurora font-mono">{eyebrow}</p>
+          <p
+            className={cn(
+              'font-mono text-[11px] uppercase tracking-[0.22em]',
+              tone === 'cinnabar' ? 'text-cinnabar-400' : 'text-cinnabar-400'
+            )}
+          >
+            {eyebrow}
+          </p>
         ) : null}
-        <h2 className="font-display text-2xl md:text-3xl lg:text-4xl tracking-tighter text-ink">
+        <h2
+          className={cn(
+            'font-display text-2xl md:text-3xl lg:text-4xl tracking-tight text-ink-900',
+            tone === 'cinnabar' && '[&_em]:not-italic [&_em]:cinnabar-text'
+          )}
+        >
           {title}
         </h2>
-        {description ? <p className="text-ink-muted text-sm md:text-base">{description}</p> : null}
+        {description ? (
+          <p className="text-ink-700 text-sm md:text-base leading-relaxed">{description}</p>
+        ) : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>

@@ -6,18 +6,30 @@ type Variant = 'primary' | 'secondary' | 'aurora' | 'success' | 'danger' | 'ghos
 type Size = 'sm' | 'md' | 'lg';
 
 const variants: Record<Variant, string> = {
+  // Primary: solid cinnabar gradient, lifts on hover, cinnabar glow.
   primary:
-    'bg-plasma text-ink font-semibold hover:shadow-plasmaGlow hover:brightness-110 active:brightness-95 border border-plasma',
+    'cinnabar-gradient text-ink-900 font-semibold border border-cinnabar-500 ' +
+    'hover:shadow-cinnabar-glow hover:-translate-y-px active:translate-y-0 active:brightness-95',
+  // Secondary: glass-card surface, ink text, cinnabar border on hover.
   secondary:
-    'bg-transparent text-aurora border border-aurora/60 hover:bg-aurora/10 hover:border-aurora hover:shadow-auroraGlowSoft',
+    'glass-card text-ink-800 font-medium ' +
+    'hover:border-cinnabar-400/60 hover:text-ink-900 hover:shadow-cinnabar-glow-soft',
+  // Aurora (legacy variant kept for back-compat) — softer cinnabar fill.
   aurora:
-    'bg-aurora text-bg font-semibold hover:shadow-auroraGlow hover:brightness-110 active:brightness-95 border border-aurora',
+    'bg-cinnabar-400 text-ink-900 font-semibold border border-cinnabar-400 ' +
+    'hover:shadow-cinnabar-glow-lg hover:brightness-110 active:brightness-95',
+  // Success (semantic — kept green for clarity).
   success:
-    'bg-green text-bg font-semibold hover:shadow-greenGlow hover:brightness-110 active:brightness-95 border border-green',
+    'bg-success text-ink-0 font-semibold border border-success ' +
+    'hover:brightness-110 active:brightness-95 hover:shadow-greenGlow',
+  // Danger (semantic — kept red).
   danger:
-    'bg-danger text-ink font-semibold hover:brightness-110 active:brightness-95 border border-danger',
+    'bg-danger text-ink-900 font-semibold border border-danger ' +
+    'hover:brightness-110 active:brightness-95',
+  // Ghost: transparent, cinnabar on hover.
   ghost:
-    'bg-transparent text-ink-muted border border-border-subtle hover:border-border-focus hover:text-ink hover:bg-surface',
+    'bg-transparent text-ink-700 border border-transparent ' +
+    'hover:text-cinnabar-400 hover:bg-ink-100/40',
 };
 
 const sizes: Record<Size, string> = {
@@ -48,9 +60,9 @@ type LinkProps = CommonProps & {
 
 function baseClasses(variant: Variant, size: Size, fullWidth: boolean | undefined) {
   return cn(
-    'inline-flex items-center justify-center gap-2 font-body font-medium tracking-tight',
+    'inline-flex items-center justify-center gap-2 font-sans font-medium tracking-tight',
     'transition-all duration-200 ease-gi',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plasma/60 focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cinnabar-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-0',
     'disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none',
     variants[variant],
     sizes[size],

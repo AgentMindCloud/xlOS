@@ -5,24 +5,30 @@ export function StatPill({
   icon,
   label,
   value,
-  tone = 'plasma',
+  tone = 'neutral',
   className,
 }: {
   icon?: ReactNode;
   label?: string;
   value: string | number;
-  tone?: 'plasma' | 'aurora' | 'cyan' | 'green' | 'neutral';
+  tone?: 'plasma' | 'aurora' | 'cyan' | 'green' | 'neutral' | 'cinnabar';
   className?: string;
 }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1 text-xs font-medium',
-        tone === 'plasma' && 'bg-plasma/5 text-plasma border border-plasma/30',
-        tone === 'aurora' && 'bg-aurora/5 text-aurora border border-aurora/30',
-        tone === 'cyan' && 'bg-cyan/5 text-cyan border border-cyan/30',
-        tone === 'green' && 'bg-green/5 text-green border border-green/30',
-        tone === 'neutral' && 'bg-surface text-ink-muted border border-border-subtle',
+        'inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1 text-xs font-mono',
+        // Cinnabar canonical
+        tone === 'cinnabar' &&
+          'cinnabar-gradient-soft text-cinnabar-300 border border-cinnabar-500/40',
+        // Legacy tones now point at cinnabar / semantic surfaces
+        tone === 'plasma' &&
+          'cinnabar-gradient-soft text-cinnabar-300 border border-cinnabar-500/40',
+        tone === 'aurora' &&
+          'cinnabar-gradient-soft text-cinnabar-300 border border-cinnabar-400/40',
+        tone === 'cyan' && 'bg-ink-100 text-ink-800 border border-ink-300',
+        tone === 'green' && 'bg-success/10 text-success border border-success/40',
+        tone === 'neutral' && 'glass-card text-ink-700 border-ink-300/60',
         className
       )}
     >
@@ -30,7 +36,7 @@ export function StatPill({
         <span className="shrink-0 flex items-center [&>svg]:h-3.5 [&>svg]:w-3.5">{icon}</span>
       ) : null}
       <span className="tabular-nums">{value}</span>
-      {label ? <span className="text-ink-subtle font-normal">{label}</span> : null}
+      {label ? <span className="text-ink-600 font-normal font-mono">{label}</span> : null}
     </span>
   );
 }

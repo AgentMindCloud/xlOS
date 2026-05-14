@@ -12,14 +12,15 @@ export const metadata: Metadata = {
 export default function SubmitPage() {
   return (
     <div className="flex flex-col gap-10 pb-16">
-      <section className="relative overflow-hidden border-b border-border-subtle">
+      <section className="relative overflow-hidden border-b border-ink-300/40">
         <NebulaBackdrop intensity="normal" />
         <CircuitTrace className="opacity-25 mix-blend-screen" density="sparse" />
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-14 pb-10">
           <SectionHeader
             eyebrow="Submit"
+            tone="cinnabar"
             title="Ship your Grok-native agent."
-            description="Fill in the details below and we’ll open a pre-populated pull request on awesome-grok-agents. Review is weekly."
+            description="Fill in the details below and we'll open a pre-populated pull request on awesome-grok-agents. Review is weekly."
           />
         </div>
         <div className="plate-divider" aria-hidden />

@@ -53,20 +53,22 @@ export function SectionTeasers() {
                 <div
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-sm border',
-                    t.tone === 'plasma' && 'border-plasma/40 text-plasma bg-plasma/5',
-                    t.tone === 'aurora' && 'border-aurora/40 text-aurora bg-aurora/5',
-                    t.tone === 'green' && 'border-green/40 text-green bg-green/5'
+                    t.tone === 'plasma' &&
+                      'border-cinnabar-500/40 bg-cinnabar-500/5 text-cinnabar-400',
+                    t.tone === 'aurora' &&
+                      'border-cinnabar-400/40 bg-cinnabar-400/5 text-cinnabar-300',
+                    t.tone === 'green' && 'border-success/40 bg-success/5 text-success'
                   )}
                 >
                   <Icon className="h-4 w-4" />
                 </div>
-                <ArrowUpRight className="h-4 w-4 text-ink-subtle group-hover:text-plasma transition-colors" />
+                <ArrowUpRight className="h-4 w-4 text-ink-600 transition-colors group-hover:text-cinnabar-400" />
               </div>
               <div className="flex flex-col gap-1">
-                <h3 className="font-display text-lg tracking-tight text-ink group-hover:text-plasma transition-colors">
+                <h3 className="font-display text-lg tracking-tight text-ink-900 transition-colors group-hover:text-cinnabar-400">
                   {t.title}
                 </h3>
-                <p className="text-xs text-ink-muted">{t.blurb}</p>
+                <p className="text-xs text-ink-700">{t.blurb}</p>
               </div>
             </GlassCard>
           </Link>

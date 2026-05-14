@@ -20,17 +20,17 @@ export function FeaturedCarousel({ agents }: { agents: AgentWithStats[] }) {
             className="flex h-full flex-col gap-5"
           >
             <div className="flex items-start justify-between">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-aurora font-mono">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-cinnabar-300">
                 {CATEGORY_LABELS[agent.category]}
               </span>
-              <ArrowUpRight className="h-4 w-4 text-ink-subtle group-hover:text-plasma transition-colors" />
+              <ArrowUpRight className="h-4 w-4 text-ink-600 transition-colors group-hover:text-cinnabar-400" />
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="font-display text-2xl tracking-tight text-ink group-hover:text-plasma transition-colors">
+              <h3 className="font-display text-2xl tracking-tight text-ink-900 transition-colors group-hover:text-cinnabar-400">
                 {agent.name}
               </h3>
-              <p className="text-sm text-ink-muted">{agent.tagline}</p>
+              <p className="text-sm text-ink-700">{agent.tagline}</p>
             </div>
 
             <CertificationBadgeRow slugs={agent.certifications} max={4} size="sm" />

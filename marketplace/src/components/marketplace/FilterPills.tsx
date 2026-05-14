@@ -64,7 +64,7 @@ export function FilterPills({
         <button
           type="button"
           onClick={onClear}
-          className="self-start text-xs text-ink-subtle hover:text-ink underline-offset-4 hover:underline"
+          className="self-start font-mono text-xs text-ink-600 hover:text-cinnabar-400 underline-offset-4 hover:underline transition-colors"
         >
           Clear all filters
         </button>
@@ -76,7 +76,9 @@ export function FilterPills({
 function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-aurora">{label}</span>
+      <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
+        {label}
+      </span>
       {children}
     </div>
   );
@@ -97,10 +99,10 @@ function Pill({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        'inline-flex items-center gap-1 rounded-sm border px-2.5 py-1 text-xs font-medium transition-all duration-150 ease-gi',
+        'inline-flex items-center gap-1 rounded-sm border px-2.5 py-1 text-xs font-mono font-medium transition-all duration-150 ease-gi',
         active
-          ? 'border-plasma bg-plasma/10 text-plasma shadow-plasmaGlowSoft'
-          : 'border-border-subtle bg-surface text-ink-muted hover:border-aurora/50 hover:text-ink'
+          ? 'cinnabar-gradient-soft border-cinnabar-500/40 text-cinnabar-300 shadow-cinnabar-glow-soft'
+          : 'bg-ink-100 border-ink-300/60 text-ink-700 hover:border-cinnabar-400/40 hover:text-ink-900'
       )}
     >
       {active ? <Check className="h-3 w-3" /> : null}

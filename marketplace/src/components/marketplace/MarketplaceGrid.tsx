@@ -139,21 +139,27 @@ export function MarketplaceGrid({ agents }: { agents: AgentWithStats[] }) {
         />
       </aside>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-ink-subtle">
-            Showing <span className="text-ink tabular-nums">{visible.length}</span> of{' '}
-            <span className="text-ink tabular-nums">{agents.length}</span> agents
+          <span className="font-mono text-xs text-ink-600">
+            Showing <span className="text-ink-900 tabular-nums">{visible.length}</span> of{' '}
+            <span className="text-ink-900 tabular-nums">{agents.length}</span> agents
           </span>
         </div>
 
         {visible.length === 0 ? (
-          <GlassCard padding="lg" className="flex flex-col items-center gap-3 py-16 text-center">
-            <p className="font-display text-xl text-ink">No agents match those filters.</p>
-            <p className="text-sm text-ink-muted max-w-md">
+          <GlassCard
+            elevation="lifted"
+            padding="lg"
+            className="flex flex-col items-center gap-3 py-16 text-center"
+          >
+            <p className="font-display text-2xl font-semibold cinnabar-text">
+              No agents match those filters.
+            </p>
+            <p className="text-sm text-ink-700 max-w-md leading-relaxed">
               Try clearing a filter — or help us grow the gallery by submitting yours.
             </p>
-            <div className="flex gap-2">
+            <div className="flex gap-2 pt-2">
               <AccentButton variant="secondary" size="sm" onClick={clearAll}>
                 Clear filters
               </AccentButton>
@@ -163,7 +169,7 @@ export function MarketplaceGrid({ agents }: { agents: AgentWithStats[] }) {
             </div>
           </GlassCard>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 lg:gap-7">
             {visible.map((agent) => (
               <AgentCard key={agent.id} agent={agent} />
             ))}
@@ -172,15 +178,16 @@ export function MarketplaceGrid({ agents }: { agents: AgentWithStats[] }) {
 
         <GlassCard
           as="section"
+          elevation="lifted"
           padding="lg"
           className="relative mt-6 overflow-hidden flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between"
         >
           <div className="absolute inset-x-0 top-0 plate-divider" aria-hidden />
           <div>
-            <h3 className="font-display text-xl text-ink">
-              Shipping a <span className="text-plate">Grok-native</span> agent?
+            <h3 className="font-display text-xl font-semibold text-ink-900">
+              Shipping a <span className="cinnabar-text">Grok-native</span> agent?
             </h3>
-            <p className="text-sm text-ink-muted mt-1 max-w-xl">
+            <p className="text-sm text-ink-700 mt-1 max-w-xl leading-relaxed">
               Open a PR against awesome-grok-agents with your YAML manifest. We review weekly and
               boost new certs in the weekly digest.
             </p>

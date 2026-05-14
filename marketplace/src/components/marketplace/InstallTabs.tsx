@@ -18,7 +18,7 @@ export function InstallTabs({ agentId }: { agentId: string }) {
 
   const snippets: Record<TabKey, string> = {
     cli: `# Install the GrokInstall CLI, then run:\nnpx grok-install ${agentId}`,
-    vscode: `# In VS Code:\n#   1. Install the “GrokInstall” extension from the Marketplace\n#   2. Cmd-Shift-P → “GrokInstall: Add agent”\n#   3. Paste the agent ID: ${agentId}`,
+    vscode: `# In VS Code:\n#   1. Install the "GrokInstall" extension from the Marketplace\n#   2. Cmd-Shift-P → "GrokInstall: Add agent"\n#   3. Paste the agent ID: ${agentId}`,
     action: `# .github/workflows/deploy.yml\n- uses: AgentMindCloud/grok-install-action@v1\n  with:\n    agent: ${agentId}\n    token: \${{ secrets.GROK_INSTALL_TOKEN }}`,
   };
 
@@ -33,9 +33,9 @@ export function InstallTabs({ agentId }: { agentId: string }) {
   }
 
   return (
-    <div className="rounded-md border border-border-subtle bg-bg/40">
-      <div className="flex items-center justify-between border-b border-border-subtle px-3">
-        <div className="flex" role="tablist" aria-label="Install instructions">
+    <div className="glass-card-strong rounded-md overflow-hidden">
+      <div className="flex items-center justify-between border-b border-ink-300/40 px-3">
+        <div className="flex gap-1 py-1.5" role="tablist" aria-label="Install instructions">
           {TABS.map((t) => (
             <button
               key={t.key}
@@ -44,11 +44,10 @@ export function InstallTabs({ agentId }: { agentId: string }) {
               aria-selected={tab === t.key}
               onClick={() => setTab(t.key)}
               className={cn(
-                'inline-flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors',
-                'border-b-2 -mb-px',
+                'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium rounded-sm transition-all duration-150',
                 tab === t.key
-                  ? 'border-cyan text-cyan'
-                  : 'border-transparent text-ink-subtle hover:text-ink'
+                  ? 'cinnabar-gradient text-ink-900 shadow-cinnabar-glow-soft'
+                  : 'text-ink-600 hover:text-cinnabar-300 hover:bg-ink-100/40'
               )}
             >
               {t.icon}
@@ -59,14 +58,19 @@ export function InstallTabs({ agentId }: { agentId: string }) {
         <button
           type="button"
           onClick={copy}
-          className="inline-flex items-center gap-1.5 text-xs text-ink-subtle hover:text-cyan"
+          className={cn(
+            'inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-sm transition-all',
+            copied
+              ? 'cinnabar-gradient text-ink-900'
+              : 'text-ink-600 hover:text-cinnabar-300 hover:bg-ink-100/40'
+          )}
           aria-label="Copy install command"
         >
           {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
           {copied ? 'Copied' : 'Copy'}
         </button>
       </div>
-      <pre className="overflow-x-auto p-4 text-[13px] leading-6 font-mono text-ink-muted whitespace-pre">
+      <pre className="overflow-x-auto p-4 text-[13px] leading-6 font-mono text-ink-800 whitespace-pre">
         <code>{snippets[tab]}</code>
       </pre>
     </div>

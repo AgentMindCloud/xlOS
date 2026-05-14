@@ -60,44 +60,58 @@ export default async function AgentDetailPage({
   return (
     <div className="flex flex-col gap-10 pb-16">
       <TrackAgentView agentId={agent.id} />
-      <section className="relative overflow-hidden border-b border-border-subtle">
-        <CircuitTrace density="sparse" />
-        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-10 pb-8">
+      <section className="relative overflow-hidden border-b border-ink-300/40">
+        <div className="absolute inset-0 bg-nebula opacity-90" aria-hidden />
+        <CircuitTrace density="sparse" className="opacity-50" />
+        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-10 pb-10">
           <Link
             href="/marketplace"
-            className="inline-flex items-center gap-1.5 text-xs text-ink-subtle hover:text-cyan transition-colors"
+            className="inline-flex items-center gap-1.5 font-mono text-xs text-ink-600 hover:text-cinnabar-400 transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Marketplace
           </Link>
 
-          <div className="mt-6 flex flex-col gap-4">
-            <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">
-              {CATEGORY_LABELS[agent.category]}
-            </span>
-            <h1 className="font-display text-3xl tracking-tightest text-ink sm:text-4xl md:text-5xl">
-              {agent.name}
-            </h1>
-            <p className="max-w-2xl text-base text-ink-muted sm:text-lg">{agent.tagline}</p>
-            <CertificationBadgeRow slugs={agent.certifications} size="md" />
-            <div className="flex flex-wrap items-center gap-1.5 pt-2">
-              <StatPill icon={<Star />} value={formatCount(stars)} label="stars" tone="cyan" />
-              <StatPill
-                icon={<Download />}
-                value={formatCount(agent.installs)}
-                label="installs"
-                tone="green"
-              />
-              {typeof agent.safetyScore === 'number' ? (
+          <GlassCard
+            elevation="lifted"
+            padding="lg"
+            className="relative mt-6 overflow-hidden cinnabar-gradient-soft"
+          >
+            <div className="flex flex-col gap-5">
+              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
+                {CATEGORY_LABELS[agent.category]}
+              </span>
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-ink-900">
+                <span className="cinnabar-text">{agent.name}</span>
+              </h1>
+              <p className="max-w-2xl text-base sm:text-lg leading-relaxed text-ink-700">
+                {agent.tagline}
+              </p>
+              <CertificationBadgeRow slugs={agent.certifications} size="md" />
+              <div className="flex flex-wrap items-center gap-1.5 pt-2">
                 <StatPill
-                  icon={<ShieldCheck />}
-                  value={`${agent.safetyScore}/100`}
-                  label="safety"
-                  tone="cyan"
+                  icon={<Star className="text-cinnabar-400" />}
+                  value={formatCount(stars)}
+                  label="stars"
+                  tone="cinnabar"
                 />
-              ) : null}
-              <StatPill value={`Updated ${formatRelative(agent.updated_at)}`} tone="neutral" />
+                <StatPill
+                  icon={<Download />}
+                  value={formatCount(agent.installs)}
+                  label="installs"
+                  tone="cinnabar"
+                />
+                {typeof agent.safetyScore === 'number' ? (
+                  <StatPill
+                    icon={<ShieldCheck />}
+                    value={`${agent.safetyScore}/100`}
+                    label="safety"
+                    tone="neutral"
+                  />
+                ) : null}
+                <StatPill value={`Updated ${formatRelative(agent.updated_at)}`} tone="neutral" />
+              </div>
             </div>
-          </div>
+          </GlassCard>
         </div>
       </section>
 
@@ -105,14 +119,14 @@ export default async function AgentDetailPage({
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_340px]">
           <div className="flex flex-col gap-8">
             <GlassCard padding="lg">
-              <h2 className="font-display text-xl text-ink mb-3">Overview</h2>
-              <p className="text-ink-muted leading-relaxed">{agent.description}</p>
+              <h2 className="font-display text-xl font-semibold text-ink-900 mb-3">Overview</h2>
+              <p className="text-ink-800 leading-relaxed">{agent.description}</p>
               {agent.tags.length ? (
                 <div className="mt-5 flex flex-wrap gap-1.5">
                   {agent.tags.map((t) => (
                     <span
                       key={t}
-                      className="inline-flex rounded-sm border border-border-subtle bg-surface px-2 py-0.5 text-[11px] text-ink-subtle font-mono"
+                      className="inline-flex rounded-sm border border-ink-300 bg-ink-100 px-2 py-0.5 text-[11px] font-mono text-ink-700"
                     >
                       #{t}
                     </span>
@@ -123,7 +137,7 @@ export default async function AgentDetailPage({
 
             {agent.yaml ? (
               <div>
-                <h2 className="font-display text-xl text-ink mb-3">Manifest</h2>
+                <h2 className="font-display text-xl font-semibold text-ink-900 mb-3">Manifest</h2>
                 <YamlSnippet
                   code={agent.yaml.content}
                   filename={agent.yaml.filename}
@@ -134,7 +148,7 @@ export default async function AgentDetailPage({
 
             {agent.visuals ? (
               <div>
-                <h2 className="font-display text-xl text-ink mb-3">Preview</h2>
+                <h2 className="font-display text-xl font-semibold text-ink-900 mb-3">Preview</h2>
                 <AgentPreviewCard
                   agentId={agent.id}
                   agentName={agent.name}
@@ -143,8 +157,8 @@ export default async function AgentDetailPage({
               </div>
             ) : agent.demo_url ? (
               <div>
-                <h2 className="font-display text-xl text-ink mb-3">Demo</h2>
-                <div className="aspect-video overflow-hidden rounded-md border border-border-subtle bg-surface">
+                <h2 className="font-display text-xl font-semibold text-ink-900 mb-3">Demo</h2>
+                <div className="aspect-video overflow-hidden rounded-md border border-ink-300 bg-ink-100">
                   <iframe
                     src={agent.demo_url}
                     title={`${agent.name} demo`}
@@ -157,13 +171,13 @@ export default async function AgentDetailPage({
             ) : null}
 
             <div>
-              <h2 className="font-display text-xl text-ink mb-3">Install</h2>
+              <h2 className="font-display text-xl font-semibold text-ink-900 mb-3">Install</h2>
               <InstallTabs agentId={agent.id} />
             </div>
           </div>
 
           <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">
-            <GlassCard elevation="hero" padding="md" className="flex flex-col gap-4">
+            <GlassCard elevation="lifted" padding="md" className="flex flex-col gap-4">
               <InstallOnX agentId={agent.id} repo={agent.repo} agentName={agent.name} />
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <AccentButton
@@ -201,7 +215,7 @@ export default async function AgentDetailPage({
               </div>
               <Link
                 href={`/stats/agents/${agent.id}` as never}
-                className="text-center text-xs text-cyan hover:underline"
+                className="text-center font-mono text-xs text-cinnabar-400 hover:text-cinnabar-300 hover:underline transition-colors"
               >
                 View install stats →
               </Link>

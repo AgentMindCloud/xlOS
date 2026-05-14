@@ -36,12 +36,13 @@ export default async function MarketplacePage() {
 
   return (
     <div className="flex flex-col gap-10 pb-10">
-      <section className="relative overflow-hidden border-b border-border-subtle">
+      <section className="relative overflow-hidden border-b border-ink-300/40">
         <NebulaBackdrop intensity="normal" />
         <CircuitTrace className="opacity-25 mix-blend-screen" density="sparse" />
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-14 pb-10">
           <SectionHeader
             eyebrow="Marketplace"
+            tone="cinnabar"
             title="Every Grok-native agent, one click away."
             description="Search, filter by certification, and compare install counts. New certifications ship weekly."
           />

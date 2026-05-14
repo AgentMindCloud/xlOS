@@ -1,5 +1,4 @@
 import { getAgentById } from '@/lib/agents';
-import { BRAND } from '@/lib/brand';
 import { CATEGORY_LABELS, CERTIFICATION_LABELS, SITE_NAME } from '@/lib/constants';
 import { ImageResponse } from 'next/og';
 
@@ -7,6 +6,14 @@ export const runtime = 'nodejs';
 export const alt = 'GrokInstall agent';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
+
+// Cinnabar Glass canon — kept inline for next/og (no Tailwind in this context).
+const CINNABAR = '#C73E1D';
+const CINNABAR_LIGHT = '#E03C31';
+const INK_0 = '#0D0D0D';
+const INK_900 = '#FAFAFA';
+const INK_800 = '#D4D4D8';
+const INK_700 = '#A1A1AA';
 
 export default async function OgImage({ params }: { params: { id: string } }) {
   const agent = await getAgentById(params.id);
@@ -24,13 +31,13 @@ export default async function OgImage({ params }: { params: { id: string } }) {
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: '72px',
-        background: BRAND.bg,
+        background: INK_0,
         backgroundImage: [
-          'radial-gradient(900px circle at 18% 22%, rgba(255,30,112,0.20), rgba(255,30,112,0) 60%)',
-          'radial-gradient(700px circle at 82% 78%, rgba(0,224,213,0.16), rgba(0,224,213,0) 60%)',
+          'radial-gradient(900px circle at 18% 22%, rgba(199,62,29,0.30), rgba(199,62,29,0) 60%)',
+          'radial-gradient(700px circle at 82% 78%, rgba(224,60,49,0.18), rgba(224,60,49,0) 60%)',
         ].join(', '),
-        color: BRAND.ink,
-        fontFamily: 'Inter, system-ui, sans-serif',
+        color: INK_900,
+        fontFamily: 'Geist, Inter, system-ui, sans-serif',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -39,9 +46,10 @@ export default async function OgImage({ params }: { params: { id: string } }) {
             display: 'flex',
             fontSize: 18,
             letterSpacing: '0.22em',
-            color: BRAND.aurora,
+            color: CINNABAR_LIGHT,
             textTransform: 'uppercase',
             fontWeight: 600,
+            fontFamily: 'IBM Plex Mono, ui-monospace, monospace',
           }}
         >
           {`GROKINSTALL · ${category}`}
@@ -63,6 +71,7 @@ export default async function OgImage({ params }: { params: { id: string } }) {
             letterSpacing: '-0.04em',
             fontWeight: 700,
             maxWidth: 1080,
+            color: INK_900,
           }}
         >
           {title}
@@ -71,7 +80,7 @@ export default async function OgImage({ params }: { params: { id: string } }) {
           style={{
             fontSize: 32,
             lineHeight: 1.2,
-            color: BRAND.inkMuted,
+            color: INK_800,
             maxWidth: 980,
             fontWeight: 500,
           }}
@@ -96,9 +105,10 @@ export default async function OgImage({ params }: { params: { id: string } }) {
                 fontSize: 20,
                 padding: '8px 14px',
                 borderRadius: 8,
-                border: '1px solid rgba(255,30,112,0.45)',
-                color: BRAND.plasma,
-                background: 'rgba(255,30,112,0.08)',
+                border: `1px solid ${CINNABAR_LIGHT}80`,
+                color: CINNABAR,
+                background: 'rgba(199,62,29,0.15)',
+                fontFamily: 'IBM Plex Mono, ui-monospace, monospace',
               }}
             >
               {c}
@@ -108,7 +118,7 @@ export default async function OgImage({ params }: { params: { id: string } }) {
         <div
           style={{
             fontSize: 18,
-            color: BRAND.inkSubtle,
+            color: INK_700,
           }}
         >
           grokagents.dev · Not affiliated with xAI

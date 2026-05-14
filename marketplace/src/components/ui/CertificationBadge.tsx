@@ -12,20 +12,22 @@ const ICONS: Record<Certification, typeof ShieldCheck> = {
   'vscode-verified': Code2,
 };
 
-const TONE: Record<Certification, 'plasma' | 'aurora' | 'green' | 'cyan'> = {
-  'grok-native': 'plasma',
-  'safety-max': 'green',
-  'voice-ready': 'aurora',
-  'swarm-ready': 'plasma',
-  'action-certified': 'aurora',
-  'vscode-verified': 'cyan',
+// Primary certifications (cinnabar accent) — the high-signal ones we want
+// to make sing. Others render with neutral ink chrome.
+type Tone = 'primary' | 'neutral';
+
+const TONE: Record<Certification, Tone> = {
+  'grok-native': 'primary',
+  'safety-max': 'primary',
+  'voice-ready': 'neutral',
+  'swarm-ready': 'primary',
+  'action-certified': 'neutral',
+  'vscode-verified': 'neutral',
 };
 
-const TONE_CLASSES: Record<'plasma' | 'aurora' | 'green' | 'cyan', string> = {
-  plasma: 'border-plasma/40 bg-plasma/5 text-plasma',
-  aurora: 'border-aurora/40 bg-aurora/5 text-aurora',
-  green: 'border-green/40 bg-green/5 text-green',
-  cyan: 'border-cyan/40 bg-cyan/5 text-cyan',
+const TONE_CLASSES: Record<Tone, string> = {
+  primary: 'cinnabar-gradient-soft border-cinnabar-400/50 text-cinnabar-300',
+  neutral: 'bg-ink-200 border-ink-300 text-ink-800',
 };
 
 export function CertificationBadge({
@@ -43,7 +45,7 @@ export function CertificationBadge({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-sm border font-medium tracking-tight',
+        'inline-flex items-center gap-1.5 rounded-sm border font-mono font-medium tracking-tight',
         TONE_CLASSES[tone],
         size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs',
         className
@@ -75,7 +77,7 @@ export function CertificationBadgeRow({
         <CertificationBadge key={s} slug={s} size={size} />
       ))}
       {overflow > 0 ? (
-        <span className="inline-flex items-center rounded-sm border border-border-subtle bg-surface px-2 py-0.5 text-[11px] text-ink-subtle">
+        <span className="inline-flex items-center rounded-sm border border-ink-300 bg-ink-100 px-2 py-0.5 text-[11px] text-ink-700 font-mono">
           +{overflow}
         </span>
       ) : null}

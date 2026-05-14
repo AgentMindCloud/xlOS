@@ -17,25 +17,25 @@ export function SearchBar({
   return (
     <div
       className={cn(
-        'glass flex items-center gap-2 rounded-md px-3 h-11 transition-colors',
-        'focus-within:border-plasma/50 focus-within:shadow-plasmaGlowSoft',
+        'glass-card flex items-center gap-2 rounded-md px-3 h-11 transition-all',
+        'focus-within:border-cinnabar-400/60 focus-within:shadow-cinnabar-glow-soft',
         className
       )}
     >
-      <Search className="h-4 w-4 text-ink-subtle shrink-0" aria-hidden />
+      <Search className="h-4 w-4 text-ink-600 shrink-0" aria-hidden />
       <input
         type="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full bg-transparent border-none outline-none text-sm text-ink placeholder:text-ink-subtle"
+        className="w-full bg-transparent border-none outline-none text-sm font-mono text-ink-900 placeholder:text-ink-600 placeholder:font-mono"
         aria-label="Search agents"
       />
       {value ? (
         <button
           type="button"
           onClick={() => onChange('')}
-          className="text-ink-subtle hover:text-ink"
+          className="text-ink-600 hover:text-cinnabar-400 transition-colors"
           aria-label="Clear search"
         >
           <X className="h-4 w-4" />

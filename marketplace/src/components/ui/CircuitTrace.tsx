@@ -17,7 +17,10 @@ export function CircuitTrace({
       aria-hidden
       viewBox="0 0 1600 800"
       preserveAspectRatio="xMidYMid slice"
-      className={cn('pointer-events-none absolute inset-0 h-full w-full text-aurora', className)}
+      className={cn(
+        'pointer-events-none absolute inset-0 h-full w-full text-cinnabar-400',
+        className
+      )}
     >
       <defs>
         <radialGradient id="ct-glow" cx="20%" cy="55%" r="60%">
