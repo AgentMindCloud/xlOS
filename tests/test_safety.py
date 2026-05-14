@@ -27,13 +27,152 @@ def _base_manifest() -> dict[str, Any]:
     }
 
 
-def test_no_extensions_constitution_returns_empty_result() -> None:
+def test_clean_manifest_without_opt_in_passes_core_articles() -> None:
+    """A minimal valid manifest produces no findings even when
+    ``extensions.constitution`` is not declared.
+
+    Articles I, III, and VII run unconditionally (see ``_CORE_ARTICLES`` in
+    ``scanner.py``), but the base manifest is benign — Apache-2.0 license by
+    default, version 2.14, no Windows admin, no consent gates, no trackers —
+    so the mandatory checks all pass cleanly.
+    """
     manifest = _base_manifest()
     result = scan_manifest(manifest)
     assert isinstance(result, ScanResult)
     assert result.findings == []
     assert not result.has_errors
     assert result.max_severity == "info"
+
+
+# --- Constitution bypass regression tests -----------------------------------
+#
+# Articles I, III, and VII are MANDATORY: a manifest cannot escape them by
+# omitting the ``extensions.constitution`` opt-in list. The tests below pin
+# that contract in place. Earlier scanner builds let any manifest skip
+# Article III (including the ``bypass_safety_scanner`` hard-refusal) just by
+# leaving ``extensions.constitution`` undeclared — these regressions block
+# that bypass from coming back.
+
+
+def test_article_iii_hard_refusal_runs_with_no_extensions_key() -> None:
+    """Article III hard refusal must fire when ``extensions`` is absent
+    entirely. We surface the offending consent gate via the legacy v2.15
+    ``constitution`` field at the top level of the manifest, then strip
+    ``extensions`` so there is nothing to opt in with."""
+    manifest = _base_manifest()
+    # No "extensions" key at all. To exercise the Article III check on
+    # consent_gates, we plant the v2.15 block where the scanner's
+    # _build_view will eventually look — under extensions — but we keep the
+    # opt-in list out so the legacy gate would have skipped it.
+    manifest["extensions"] = {
+        "constitution_v215": {
+            "consent_gates": ["bypass_safety_scanner"],
+        },
+    }
+    # Sanity check: no opt-in list is declared.
+    assert "constitution" not in manifest["extensions"]
+
+    result = scan_manifest(manifest)
+    codes = {f.code for f in result.findings if f.severity == "error"}
+    assert "HR-008" in codes, (
+        "Article III hard-refusal must fire even with no extensions.constitution "
+        "opt-in; this is the constitution-bypass regression."
+    )
+
+
+@pytest.mark.parametrize(
+    "blacklisted_action",
+    [
+        "scrape_authenticated_x_content",
+        "impersonate_user_identity",
+        "bypass_safety_scanner",
+        "exfiltrate_user_data",
+    ],
+)
+def test_every_hard_refusal_fires_without_opt_in(blacklisted_action: str) -> None:
+    """Every action on the Article III hard-refusal blacklist must trigger
+    HR-008 even when the manifest declares no Constitution opt-in."""
+    manifest = _base_manifest()
+    manifest["extensions"] = {
+        # Deliberately no "constitution" opt-in.
+        "constitution_v215": {"consent_gates": [blacklisted_action]},
+    }
+    result = scan_manifest(manifest)
+    codes = {f.code for f in result.findings if f.severity == "error"}
+    assert "HR-008" in codes, (
+        f"hard-refusal action '{blacklisted_action}' must be flagged "
+        "without requiring extensions.constitution opt-in"
+    )
+
+
+def test_article_i_license_check_runs_without_opt_in() -> None:
+    """Article I license check must fire without a Constitution opt-in."""
+    manifest = _base_manifest()
+    manifest["license"] = "MIT"  # Not Apache-2.0
+    # No extensions.constitution opt-in.
+    result = scan_manifest(manifest)
+    codes = {f.code for f in result.findings if f.severity == "error"}
+    assert "LIC-002" in codes
+
+
+def test_article_i_windows_admin_check_runs_without_opt_in() -> None:
+    """Article I requires_admin check must fire without a Constitution opt-in."""
+    manifest = _base_manifest()
+    manifest["extensions"] = {
+        # No "constitution" opt-in.
+        "windows_legacy": {"requires_admin": True},
+    }
+    result = scan_manifest(manifest)
+    codes = {f.code for f in result.findings if f.severity == "error"}
+    assert "WIN-001" in codes
+
+
+def test_article_vii_tracker_check_runs_without_opt_in() -> None:
+    """Article VII no-trackers rule must fire without a Constitution opt-in.
+
+    The check inspects manifest content for tracker *domains*, so the test
+    plants the literal domain string in ``dependencies.python`` (the scanner
+    serializes that list into the search blob)."""
+    manifest = _base_manifest()
+    manifest["dependencies"] = {
+        "python": ["analytics-sdk @ https://mixpanel.com/dist.tar.gz"],
+    }
+    # No extensions.constitution opt-in.
+    result = scan_manifest(manifest)
+    codes = {f.code for f in result.findings if f.severity == "error"}
+    assert "PII-005" in codes
+
+
+def test_partial_opt_in_does_not_disable_article_iii() -> None:
+    """Opting in to only Article II must not silently disable Article III."""
+    manifest = _base_manifest()
+    manifest["extensions"] = {
+        "constitution": ["II"],  # Article II opt-in only.
+        "constitution_v215": {
+            "consent_gates": ["exfiltrate_user_data"],  # Article III violation.
+        },
+    }
+    result = scan_manifest(manifest)
+    codes = {f.code for f in result.findings if f.severity == "error"}
+    assert "HR-008" in codes
+
+
+def test_optional_article_ii_still_requires_opt_in() -> None:
+    """Article II remains opt-in. Without ``"II"`` in
+    ``extensions.constitution``, the publish-gate check (CG-002) must NOT
+    fire — Articles II, IV, V, VI, VIII are scoped to features the manifest
+    declares and only run when the manifest opts into them."""
+    manifest = _base_manifest()
+    manifest["extensions"] = {
+        # Deliberately no "constitution" key.
+        "real_time_x": {"posts": True, "consent_required": True},
+    }
+    result = scan_manifest(manifest)
+    codes = {f.code for f in result.findings}
+    assert "CG-002" not in codes, (
+        "Article II checks must remain opt-in via extensions.constitution; "
+        "only core articles I, III, VII run unconditionally."
+    )
 
 
 def test_extensions_constitution_a1_runs_only_article_i_checks() -> None:
