@@ -1,11 +1,25 @@
 [project]
 name = "xlos"
-version = "1.0.0-alpha.1"
+version = "1.0.0"
 description = "Cross-platform developer runtime for Grok agents on X."
 authors = [{ name = "AgentMindCloud" }]
 license = "Apache-2.0"
 readme = "README.md"
 requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+    "Environment :: Console",
+]
 dependencies = [
     "pydantic>=2.7,<3",
     "pyyaml>=6.0",
@@ -34,6 +48,13 @@ dev = [
 [project.scripts]
 xlos = "xlos.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/AgentMindCloud/xlOS"
+Repository = "https://github.com/AgentMindCloud/xlOS"
+Documentation = "https://agentmindcloud.github.io/xlOS/"
+Issues = "https://github.com/AgentMindCloud/xlOS/issues"
+Changelog = "https://github.com/AgentMindCloud/xlOS/blob/main/CHANGELOG.md"
+
 [build-system]
 requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
@@ -44,6 +65,7 @@ packages = ["src/xlos"]
 [tool.hatch.build.targets.wheel.force-include]
 "spec/v2.14/schema.json" = "xlos/_resources/schema.json"
 "src/xlos/safety/constitution.md" = "xlos/safety/constitution.md"
+"src/xlos/py.typed" = "xlos/py.typed"
 
 [tool.ruff]
 line-length = 100
