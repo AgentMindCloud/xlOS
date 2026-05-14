@@ -68,6 +68,9 @@ desktop.ini
 *.sublime-workspace
 *.sublime-project
 
+# MkDocs build output
+/site/
+
 # xlOS scratch
 .scratch/
 # Claude Code worktrees (transient sub-agent isolation)
