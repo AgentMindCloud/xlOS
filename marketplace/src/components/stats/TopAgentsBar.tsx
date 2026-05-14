@@ -21,8 +21,12 @@ export function TopAgentsBar({ data }: { data: TopAgent[] }) {
   return (
     <GlassCard padding="lg" className="flex flex-col gap-4">
       <div>
-        <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">Top agents</p>
-        <h3 className="font-display text-xl tracking-tight text-ink">Lifetime vs 7-day installs</h3>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
+          Top agents
+        </p>
+        <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
+          Lifetime vs 7-day installs
+        </h3>
       </div>
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">

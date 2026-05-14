@@ -29,10 +29,12 @@ export function SafetyDistribution({ scores }: { scores: number[] }) {
   return (
     <GlassCard padding="lg" className="flex flex-col gap-4">
       <div>
-        <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
           Safety score distribution
         </p>
-        <h3 className="font-display text-xl tracking-tight text-ink">How safe is the catalogue?</h3>
+        <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
+          How safe is the catalogue?
+        </h3>
       </div>
       <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">
@@ -53,7 +55,7 @@ export function SafetyDistribution({ scores }: { scores: number[] }) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <p className="text-[11px] text-ink-subtle">
+      <p className="text-[11px] text-ink-600">
         Every agent runs through the GrokInstall safety scanner on submit. Agents under 90 require a
         maintainer review before they re-appear in Trending.
       </p>

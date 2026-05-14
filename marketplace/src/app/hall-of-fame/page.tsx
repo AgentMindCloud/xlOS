@@ -27,10 +27,10 @@ function rankIcon(rank: number) {
 }
 
 function rankTone(rank: number) {
-  if (rank === 1) return 'from-cyan/30 via-cyan/10';
-  if (rank === 2) return 'from-cyan/20 via-cyan/5';
-  if (rank === 3) return 'from-green/20 via-green/5';
-  return 'from-surface via-surface';
+  if (rank === 1) return 'from-cinnabar-500/30 via-cinnabar-500/10';
+  if (rank === 2) return 'from-cinnabar-400/20 via-cinnabar-400/5';
+  if (rank === 3) return 'from-cinnabar-600/20 via-cinnabar-600/5';
+  return 'from-ink-100 via-ink-100';
 }
 
 export default async function HallOfFamePage() {
@@ -49,11 +49,12 @@ export default async function HallOfFamePage() {
 
   return (
     <div className="flex flex-col gap-10 pb-16">
-      <section className="relative overflow-hidden border-b border-border-subtle">
+      <section className="relative overflow-hidden border-b border-ink-300/40">
         <CircuitTrace density="dense" />
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-14 pb-10">
           <SectionHeader
             eyebrow="Hall of Fame"
+            tone="cinnabar"
             title="The 10 most-installed agents of all time."
             description="A rolling leaderboard powered by live install signals. Updated every 5 minutes."
           />
@@ -74,7 +75,7 @@ export default async function HallOfFamePage() {
                   <GlassCard
                     padding="lg"
                     interactive
-                    elevation={rank <= 3 ? 'hero' : 'default'}
+                    elevation={rank <= 3 ? 'lifted' : 'raised'}
                     className={cn(
                       'relative overflow-hidden flex flex-col gap-4 md:flex-row md:items-center md:gap-6',
                       'before:pointer-events-none before:absolute before:inset-0 before:-z-[1]',
@@ -85,10 +86,11 @@ export default async function HallOfFamePage() {
                     <div
                       className={cn(
                         'flex h-14 w-14 shrink-0 items-center justify-center rounded-md border',
-                        rank === 1 && 'border-cyan text-cyan shadow-cyanGlow',
-                        rank === 2 && 'border-cyan/60 text-cyan',
-                        rank === 3 && 'border-green/60 text-green',
-                        rank > 3 && 'border-border-subtle text-ink-muted'
+                        rank === 1 &&
+                          'cinnabar-gradient text-ink-900 border-cinnabar-500 shadow-cinnabar-glow',
+                        rank === 2 && 'border-cinnabar-400/60 text-cinnabar-400',
+                        rank === 3 && 'border-cinnabar-500/40 text-cinnabar-500',
+                        rank > 3 && 'border-ink-300 text-ink-700'
                       )}
                     >
                       <span className="flex flex-col items-center leading-none">
@@ -107,18 +109,20 @@ export default async function HallOfFamePage() {
                             alt=""
                             width={20}
                             height={20}
-                            className="h-5 w-5 rounded-sm border border-border-subtle"
+                            className="h-5 w-5 rounded-sm border border-ink-300"
                             unoptimized
                           />
                         ) : null}
-                        <span className="text-xs text-ink-subtle truncate">
+                        <span className="font-mono text-xs text-ink-600 truncate">
                           {agent.creator.handle}
                         </span>
                       </div>
-                      <h2 className="font-display text-xl tracking-tight text-ink group-hover:text-cyan transition-colors md:text-2xl">
+                      <h2 className="font-display text-xl font-semibold tracking-tight text-ink-900 group-hover:text-cinnabar-300 transition-colors md:text-2xl">
                         {agent.name}
                       </h2>
-                      <p className="text-sm text-ink-muted line-clamp-2">{agent.tagline}</p>
+                      <p className="text-sm text-ink-700 line-clamp-2 leading-relaxed">
+                        {agent.tagline}
+                      </p>
                       <CertificationBadgeRow
                         slugs={agent.certifications}
                         max={4}
@@ -128,8 +132,12 @@ export default async function HallOfFamePage() {
                     </div>
 
                     <div className="flex shrink-0 items-center gap-2">
-                      <StatPill value={formatCount(agent.installs)} label="installs" tone="green" />
-                      <StatPill value={formatCount(starCount)} label="stars" tone="cyan" />
+                      <StatPill
+                        value={formatCount(agent.installs)}
+                        label="installs"
+                        tone="cinnabar"
+                      />
+                      <StatPill value={formatCount(starCount)} label="stars" tone="neutral" />
                     </div>
                   </GlassCard>
                 </Link>

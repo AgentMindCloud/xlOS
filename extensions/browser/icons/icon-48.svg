@@ -3,14 +3,24 @@
   Copyright 2026 AgentMindCloud
   Licensed under the Apache License, Version 2.0
   http://www.apache.org/licenses/LICENSE-2.0
+  48x48 — balanced stroke. Cinnabar Glass palette.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 128 128" role="img" aria-label="xlOS">
-  <rect width="128" height="128" rx="22" ry="22" fill="#1A1A1A"/>
-  <g transform="translate(64 64)" fill="#F4E9D8" opacity="0.18">
-    <circle r="44"/>
-    <circle r="18" fill="#1A1A1A"/>
-  </g>
-  <g fill="none" stroke="#E34234" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 92 44 A 32 32 0 1 0 92 84 L 70 84 L 70 66 L 92 66"/>
+  <defs>
+    <linearGradient id="xlosCinnabar48" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C73E1D"/>
+      <stop offset="100%" stop-color="#E03C31"/>
+    </linearGradient>
+    <radialGradient id="xlosGlow48" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#ED5C45" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ED5C45" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="128" height="128" rx="22" ry="22" fill="#0D0D0D"/>
+  <rect x="1" y="1" width="126" height="126" rx="21" ry="21" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <rect width="128" height="128" rx="22" ry="22" fill="url(#xlosGlow48)"/>
+  <g stroke="url(#xlosCinnabar48)" stroke-width="14" stroke-linecap="round" fill="none">
+    <line x1="40" y1="40" x2="88" y2="88"/>
+    <line x1="88" y1="40" x2="40" y2="88"/>
   </g>
 </svg>

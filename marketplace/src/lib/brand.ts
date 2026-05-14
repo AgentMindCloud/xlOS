@@ -1,22 +1,27 @@
 /**
  * Raw brand hex values — ONLY for places that can't consume Tailwind, such as
- * `next/og` ImageResponse and Next.js `themeColor` metadata. Everywhere else,
- * use Tailwind utilities backed by these tokens (`bg-bg`, `text-plasma`, etc.)
- * so the locked brand system stays the single source of truth.
+ * `next/og` ImageResponse, Recharts dot fills, and Next.js `themeColor`
+ * metadata. Everywhere else, use Tailwind utilities backed by these tokens
+ * (`bg-ink-0`, `text-cinnabar-500`, etc.) so the locked brand system stays
+ * the single source of truth.
  *
- * Brand palette: Plasma + Aurora are the primary identity now;
- * Cyan + Green stay as legacy accents for safety / success / data states.
+ * Cinnabar Glass palette — cinnabar primary, ink-ramp neutrals. Legacy
+ * key names (plasma/aurora/cyan/green) kept so older callsites resolve
+ * without churn.
  */
 export const BRAND = {
-  bg: '#0A0A0A',
-  ink: '#FFFFFF',
-  inkMuted: '#E5E5E5',
-  inkSubtle: 'rgba(255,255,255,0.5)',
-  plasma: '#FF1E70',
-  plasmaGlow: 'rgba(255,30,112,0.30)',
-  aurora: '#00E0D5',
-  auroraGlow: 'rgba(0,224,213,0.30)',
-  cyan: '#00F0FF',
-  green: '#00FF9D',
-  danger: '#FF2D55',
+  bg: '#0D0D0D', // ink.0
+  ink: '#FAFAFA', // ink.900
+  inkMuted: '#D4D4D8', // ink.800
+  inkSubtle: '#A1A1AA', // ink.700
+  plasma: '#C73E1D', // cinnabar.500 (primary)
+  plasmaGlow: 'rgba(199,62,29,0.30)',
+  aurora: '#E03C31', // cinnabar.400
+  auroraGlow: 'rgba(224,60,49,0.30)',
+  cyan: '#C73E1D', // legacy alias → cinnabar.500
+  green: '#22C55E', // semantic success preserved
+  danger: '#EF4444',
+  cinnabar: '#C73E1D',
+  cinnabarLight: '#E03C31',
+  cinnabarDark: '#A82F14',
 } as const;

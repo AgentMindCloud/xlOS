@@ -69,10 +69,10 @@ export function GrowthChart({
     <GlassCard padding="lg" className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
             Growth · {period.toUpperCase()}
           </p>
-          <h3 className="font-display text-xl tracking-tight text-ink">
+          <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
             {METRIC_LABEL[metric]} over time
           </h3>
         </div>
@@ -143,7 +143,7 @@ function TabGroup<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <div className="inline-flex rounded-md border border-border-subtle bg-surface p-0.5">
+    <div className="inline-flex rounded-md border border-ink-300 bg-ink-100 p-0.5">
       {options.map((o) => (
         <button
           key={o.value}
@@ -151,7 +151,9 @@ function TabGroup<T extends string>({
           onClick={() => onChange(o.value)}
           className={cn(
             'px-2.5 py-1 text-[11px] font-medium font-mono uppercase tracking-wider rounded-sm transition-colors',
-            value === o.value ? 'bg-cyan/15 text-cyan' : 'text-ink-subtle hover:text-ink'
+            value === o.value
+              ? 'cinnabar-gradient-soft text-cinnabar-300 border border-cinnabar-500/40'
+              : 'text-ink-600 hover:text-ink-900'
           )}
           aria-pressed={value === o.value}
         >

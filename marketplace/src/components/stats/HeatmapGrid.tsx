@@ -34,10 +34,12 @@ export function HeatmapGrid({ data }: { data: HeatmapCell[] }) {
   return (
     <GlassCard padding="lg" className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
           Activity heatmap · 30d
         </p>
-        <h3 className="font-display text-xl tracking-tight text-ink">Day-of-week × hour (UTC)</h3>
+        <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
+          Day-of-week × hour (UTC)
+        </h3>
       </div>
 
       <div className="overflow-x-auto">
@@ -49,7 +51,7 @@ export function HeatmapGrid({ data }: { data: HeatmapCell[] }) {
           {HOURS.map((h) => (
             <div
               key={`h-${h}`}
-              className="text-center font-mono text-[9px] tracking-wide text-ink-subtle"
+              className="text-center font-mono text-[9px] tracking-wide text-ink-600"
             >
               {h % 3 === 0 ? h.toString().padStart(2, '0') : ''}
             </div>
@@ -67,7 +69,7 @@ export function HeatmapGrid({ data }: { data: HeatmapCell[] }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between text-[10px] font-mono text-ink-subtle uppercase tracking-wider">
+      <div className="flex items-center justify-between text-[10px] font-mono text-ink-600 uppercase tracking-wider">
         <span>
           {hover
             ? `${DAYS[hover.dow]} · ${String(hover.hour).padStart(2, '0')}:00 UTC — ${hover.count} deploys`
@@ -90,7 +92,7 @@ export function HeatmapGrid({ data }: { data: HeatmapCell[] }) {
 function cellColor(intensity: number): string {
   if (intensity <= 0) return 'rgba(255, 255, 255, 0.04)';
   const alpha = Math.min(0.92, 0.08 + intensity * 0.84);
-  return `rgba(0, 240, 255, ${alpha.toFixed(3)})`;
+  return `rgba(199, 62, 29, ${alpha.toFixed(3)})`;
 }
 
 function DayRow({
@@ -108,7 +110,7 @@ function DayRow({
 }) {
   return (
     <>
-      <div className="pr-2 text-right font-mono text-[10px] uppercase tracking-wider text-ink-subtle leading-[16px]">
+      <div className="pr-2 text-right font-mono text-[10px] uppercase tracking-wider text-ink-600 leading-[16px]">
         {label}
       </div>
       {HOURS.map((h) => {
@@ -122,7 +124,7 @@ function DayRow({
             onMouseLeave={() => onHover(null)}
             onFocus={() => onHover({ dow, hour: h, count: v })}
             onBlur={() => onHover(null)}
-            className="h-4 w-full rounded-[2px] border border-border-subtle/40 transition-colors hover:ring-1 hover:ring-cyan/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70"
+            className="h-4 w-full rounded-[2px] border border-ink-300/40 transition-colors hover:ring-1 hover:ring-cinnabar-400/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cinnabar-400/70"
             style={{ background: cellColor(intensity(dow, h)) }}
           />
         );

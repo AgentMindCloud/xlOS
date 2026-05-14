@@ -59,11 +59,13 @@ export function ImpactStories({ categories, posts, apiSaved }: ImpactStoriesInpu
         const Icon = ICONS[i % ICONS.length]!;
         return (
           <GlassCard key={s.title} padding="lg" className="flex flex-col gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-sm border border-cyan/40 bg-cyan/5 text-cyan">
+            <div className="flex h-8 w-8 items-center justify-center rounded-sm border border-cinnabar-500/40 cinnabar-gradient-soft text-cinnabar-400">
               <Icon className="h-4 w-4" />
             </div>
-            <h3 className="font-display text-lg tracking-tight text-ink">{s.title}</h3>
-            <p className="text-sm text-ink-muted leading-relaxed">{s.body}</p>
+            <h3 className="font-display text-lg font-semibold tracking-tight text-ink-900">
+              {s.title}
+            </h3>
+            <p className="text-sm text-ink-700 leading-relaxed">{s.body}</p>
           </GlassCard>
         );
       })}

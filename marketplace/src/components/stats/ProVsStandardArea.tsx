@@ -29,8 +29,12 @@ export function ProVsStandardArea({ series }: { series: ProVsStandardPoint[] }) 
   return (
     <GlassCard padding="lg" className="flex flex-col gap-4">
       <div>
-        <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">Deploys · 30d</p>
-        <h3 className="font-display text-xl tracking-tight text-ink">Pro Mode vs Standard</h3>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
+          Deploys · 30d
+        </p>
+        <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
+          Pro Mode vs Standard
+        </h3>
       </div>
       <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">

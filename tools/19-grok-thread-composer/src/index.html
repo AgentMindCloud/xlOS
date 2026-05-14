@@ -3,56 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grok Thread Composer — x-platform-toolkit</title>
+<title>Grok Thread Composer · xlOS</title>
 <meta name="description" content="Write threads grounded in what's actually happening on X right now.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-<!-- Inlined from tools/shared/ui-kit/{tokens,components}.css for self-contained dev — keep in sync if the shared kit changes. -->
+<!-- Inlined Cinnabar Glass token set for self-contained dev — keep in sync if the shared kit changes. -->
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap');
-
 :root {
-  /* Backgrounds */
-  --bg-pure: #000000;
-  --bg-soft: #0a0a0f;
-  --bg-card: #111118;
-  --bg-elevated: #16161f;
+  /* Cinnabar palette */
+  --cinnabar: #C73E1D;
+  --cinnabar-light: #E03C31;
+  --cinnabar-dark: #A82F14;
+  --cinnabar-deep: #2A0A04;
+  --cinnabar-glow: #ED5C45;
 
-  /* Borders */
-  --border-subtle: #1f1f2e;
-  --border-glow: rgba(34, 211, 238, 0.2);
+  /* Ink scale */
+  --ink-0: #0D0D0D;
+  --ink-50: #111113;
+  --ink-100: #15151A;
+  --ink-200: #1C1C22;
+  --ink-300: #25252C;
+  --ink-400: #36363D;
+  --ink-700: #A1A1AA;
+  --ink-800: #D4D4D8;
+  --ink-900: #FAFAFA;
 
-  /* Neon accents */
-  --neon-cyan: #22d3ee;
-  --neon-purple: #a855f7;
-  --neon-magenta: #ec4899;
-  --neon-lime: #a3e635;
-  --neon-amber: #fbbf24;
-
-  /* Text */
-  --text-primary: #ffffff;
-  --text-secondary: #a1a1aa;
-  --text-muted: #52525b;
+  /* Glass */
+  --glass-surface: rgba(255, 255, 255, 0.04);
+  --glass-surface-strong: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-strong: rgba(255, 255, 255, 0.12);
 
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #22d3ee 0%, #a855f7 100%);
-  --gradient-magenta: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
-  --gradient-warm: linear-gradient(135deg, #ec4899 0%, #fbbf24 100%);
+  --gradient-cinnabar: linear-gradient(135deg, #C73E1D 0%, #E03C31 100%);
+  --gradient-cinnabar-text: linear-gradient(135deg, #ED5C45 0%, #C73E1D 100%);
 
-  /* Shadows / glows */
-  --glow-cyan: 0 0 20px rgba(34, 211, 238, 0.15);
-  --glow-purple: 0 0 20px rgba(168, 85, 247, 0.15);
-  --glow-magenta: 0 0 20px rgba(236, 72, 153, 0.15);
-  --glow-lime: 0 0 20px rgba(163, 230, 53, 0.15);
+  /* Glow */
+  --glow-cinnabar: 0 0 20px rgba(199, 62, 29, 0.22);
 
-  /* Typography families */
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --font-body: 'Inter', system-ui, sans-serif;
+  /* Typography */
+  --font-sans: 'Geist', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Radii */
   --radius-sm: 4px;
   --radius-md: 6px;
-  --radius-lg: 8px;
+  --radius-lg: 12px;
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -73,40 +71,49 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  background: var(--bg-pure);
-  color: var(--text-primary);
-  font-family: var(--font-body);
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(199,62,29,0.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(42,10,4,0.55), transparent 60%),
+    var(--ink-0);
+  color: var(--ink-800);
+  font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.6;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
-.scanlines { position: relative; }
-.scanlines::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 3px);
-  pointer-events: none;
-}
-
 h1, h2, h3, h4 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.02em;
+  color: var(--ink-900);
 }
 h1 { font-size: 48px; margin-bottom: var(--space-4); }
 h2 { font-size: 32px; margin-bottom: var(--space-3); }
 h3 { font-size: 22px; margin-bottom: var(--space-2); }
 
 .gradient-text {
-  background: var(--gradient-primary);
+  background: var(--gradient-cinnabar-text);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   display: inline-block;
+}
+.cinnabar-text {
+  background: var(--gradient-cinnabar-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass {
+  background: var(--glass-surface);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37), inset 0 1px 0 0 rgba(255,255,255,0.04);
 }
 
 .brand-bar {
@@ -114,16 +121,21 @@ h3 { font-size: 22px; margin-bottom: var(--space-2); }
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4) var(--space-6);
-  border-bottom: 1px solid var(--border-subtle);
-  background: var(--bg-soft);
+  border-bottom: 1px solid var(--glass-border);
+  background: var(--glass-surface);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
 }
 .brand-mark {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-700);
 }
 .brand-mark .icon {
   display: inline-flex;
@@ -131,17 +143,20 @@ h3 { font-size: 22px; margin-bottom: var(--space-2); }
   justify-content: center;
   width: 28px;
   height: 28px;
-  border: 1px solid var(--neon-cyan);
   border-radius: var(--radius-sm);
-  color: var(--neon-cyan);
+  background: var(--gradient-cinnabar);
+  color: var(--ink-900);
   font-weight: 700;
+  font-family: var(--font-sans);
+  box-shadow: 0 0 12px rgba(199,62,29,0.35);
 }
 .brand-mark .name {
-  background: var(--gradient-primary);
+  background: var(--gradient-cinnabar-text);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   font-weight: 700;
+  letter-spacing: 0.18em;
 }
 
 .btn {
@@ -150,9 +165,9 @@ h3 { font-size: 22px; margin-bottom: var(--space-2); }
   gap: var(--space-2);
   padding: 10px 18px;
   background: transparent;
-  border: 1px solid var(--neon-cyan);
+  border: 1px solid var(--cinnabar);
   border-radius: var(--radius-md);
-  color: var(--neon-cyan);
+  color: var(--cinnabar-light);
   font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 500;
@@ -161,71 +176,54 @@ h3 { font-size: 22px; margin-bottom: var(--space-2); }
   cursor: pointer;
   transition: all var(--transition-fast);
 }
-.btn:hover { background: rgba(34, 211, 238, 0.08); box-shadow: var(--glow-cyan); }
-.btn-primary { background: var(--neon-cyan); color: var(--bg-pure); }
-.btn-primary:hover { background: var(--neon-cyan); box-shadow: var(--glow-cyan); filter: brightness(1.1); }
-.btn-purple { border-color: var(--neon-purple); color: var(--neon-purple); }
-.btn-purple:hover { background: rgba(168, 85, 247, 0.08); box-shadow: var(--glow-purple); }
+.btn:hover { background: rgba(199,62,29,0.10); box-shadow: var(--glow-cinnabar); }
+.btn-primary { background: var(--gradient-cinnabar); color: var(--ink-900); border-color: transparent; }
+.btn-primary:hover { box-shadow: var(--glow-cinnabar); filter: brightness(1.08); }
 
 .card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: var(--glass-surface);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   transition: border-color var(--transition-base);
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37), inset 0 1px 0 0 rgba(255,255,255,0.04);
 }
-.card:hover { border-color: var(--border-glow); }
-.card-glow { border-color: var(--neon-cyan); box-shadow: var(--glow-cyan); }
+.card:hover { border-color: var(--glass-border-strong); }
+.card-glow { border-color: var(--cinnabar); box-shadow: var(--glow-cinnabar); }
 
 .badge {
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
-  background: rgba(34, 211, 238, 0.08);
-  border: 1px solid var(--neon-cyan);
+  background: rgba(199,62,29,0.10);
+  border: 1px solid var(--cinnabar);
   border-radius: var(--radius-sm);
-  color: var(--neon-cyan);
+  color: var(--cinnabar-glow);
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
-.badge-purple { background: rgba(168, 85, 247, 0.08); border-color: var(--neon-purple); color: var(--neon-purple); }
-.badge-magenta { background: rgba(236, 72, 153, 0.08); border-color: var(--neon-magenta); color: var(--neon-magenta); }
-.badge-lime { background: rgba(163, 230, 53, 0.08); border-color: var(--neon-lime); color: var(--neon-lime); }
 
 .input, .textarea {
   width: 100%;
-  background: var(--bg-soft);
-  border: 1px solid var(--border-subtle);
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   padding: 12px 14px;
-  color: var(--text-primary);
+  color: var(--ink-900);
   font-family: var(--font-mono);
   font-size: 14px;
   transition: all var(--transition-fast);
 }
-.input:focus, .textarea:focus { outline: none; border-color: var(--neon-cyan); box-shadow: var(--glow-cyan); }
-.textarea { min-height: 120px; resize: vertical; font-family: var(--font-body); }
+.input:focus, .textarea:focus { outline: none; border-color: var(--cinnabar); box-shadow: var(--glow-cinnabar); }
+.textarea { min-height: 120px; resize: vertical; font-family: var(--font-sans); }
 
-.table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.table th {
-  text-align: left;
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.table td { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border-subtle); }
-.table tr:hover td { background: var(--bg-elevated); }
-
-.text-muted { color: var(--text-muted); }
-.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--ink-700); opacity: 0.7; }
+.text-secondary { color: var(--ink-700); }
 .mono { font-family: var(--font-mono); }
 
 @media (max-width: 768px) {
@@ -241,8 +239,8 @@ h3 { font-size: 22px; margin-bottom: var(--space-2); }
 <!-- Stub shell. Real composer UI is TODO per SPEC.md "User journey" section. -->
 <header class="brand-bar">
   <div class="brand-mark">
-    <span class="icon">X</span>
-    <span class="name">x-platform-toolkit</span>
+    <span class="icon">x</span>
+    <span class="name">xlOS · tools</span>
   </div>
   <div class="brand-mark">
     <span class="badge mono">19</span>
@@ -263,7 +261,7 @@ h3 { font-size: 22px; margin-bottom: var(--space-2); }
   </div>
 </main>
 
-<footer style="border-top:1px solid var(--border-subtle); padding:24px; text-align:center; margin-top:64px;">
+<footer style="border-top:1px solid var(--glass-border); padding:24px; text-align:center; margin-top:64px;">
   <p class="text-muted mono" style="font-size:12px; letter-spacing:0.1em;">
     APACHE 2.0  ·  PART OF THE GROK-INSTALL FAMILY
   </p>

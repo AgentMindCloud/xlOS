@@ -55,23 +55,23 @@ export default async function AgentStatsPage({
 
   return (
     <div className="flex flex-col gap-10 pb-16">
-      <section className="relative overflow-hidden border-b border-border-subtle">
+      <section className="relative overflow-hidden border-b border-ink-300/40">
         <CircuitTrace density="sparse" />
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-10 pb-8">
           <Link
             href="/stats"
-            className="inline-flex items-center gap-1.5 text-xs text-ink-subtle hover:text-cyan transition-colors"
+            className="inline-flex items-center gap-1.5 font-mono text-xs text-ink-600 hover:text-cinnabar-400 transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> All stats
           </Link>
           <div className="mt-4 flex flex-col gap-3">
-            <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
               Stats · {CATEGORY_LABELS[agent.category]}
             </span>
-            <h1 className="font-display text-3xl tracking-tightest text-ink sm:text-4xl">
-              {agent.name}
+            <h1 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-ink-900">
+              <span className="cinnabar-text">{agent.name}</span>
             </h1>
-            <p className="max-w-2xl text-ink-muted">{agent.tagline}</p>
+            <p className="max-w-2xl text-ink-700 leading-relaxed">{agent.tagline}</p>
             <CertificationBadgeRow slugs={agent.certifications} size="sm" />
           </div>
         </div>
@@ -98,30 +98,32 @@ export default async function AgentStatsPage({
             <GlassCard padding="lg" className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
                     Top referrers · 30d
                   </p>
-                  <h3 className="font-display text-xl tracking-tight text-ink">
+                  <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
                     Where the traffic comes from
                   </h3>
                 </div>
                 {!plausibleConfigured() ? (
-                  <span className="rounded-sm border border-border-subtle bg-surface px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] text-ink-subtle font-mono">
+                  <span className="rounded-sm border border-ink-300 bg-ink-100 px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] text-ink-600 font-mono">
                     Plausible off
                   </span>
                 ) : null}
               </div>
               {referrers.length ? (
-                <ul className="flex flex-col divide-y divide-border-subtle">
+                <ul className="flex flex-col divide-y divide-ink-300/40">
                   {referrers.map((r) => (
                     <li key={r.source} className="flex items-center justify-between py-2 text-sm">
-                      <span className="text-ink-muted truncate">{r.source}</span>
-                      <span className="font-mono tabular-nums text-cyan">{r.visitors}</span>
+                      <span className="text-ink-700 truncate">{r.source}</span>
+                      <span className="font-mono tabular-nums text-cinnabar-400">
+                        {r.visitors}
+                      </span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-ink-subtle">
+                <p className="text-sm text-ink-600">
                   No referrer data yet. Wire Plausible and referrers show up here within 30 minutes.
                 </p>
               )}
@@ -130,30 +132,30 @@ export default async function AgentStatsPage({
             <GlassCard padding="lg" className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
                     Top searches · 30d
                   </p>
-                  <h3 className="font-display text-xl tracking-tight text-ink">
+                  <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
                     What people typed to find this
                   </h3>
                 </div>
                 {!plausibleConfigured() ? (
-                  <span className="rounded-sm border border-border-subtle bg-surface px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] text-ink-subtle font-mono">
+                  <span className="rounded-sm border border-ink-300 bg-ink-100 px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] text-ink-600 font-mono">
                     Plausible off
                   </span>
                 ) : null}
               </div>
               {queries.length ? (
-                <ul className="flex flex-col divide-y divide-border-subtle">
+                <ul className="flex flex-col divide-y divide-ink-300/40">
                   {queries.map((r) => (
                     <li key={r.q} className="flex items-center justify-between py-2 text-sm">
-                      <span className="text-ink-muted truncate">“{r.q}”</span>
-                      <span className="font-mono tabular-nums text-cyan">{r.events}</span>
+                      <span className="text-ink-700 truncate">&ldquo;{r.q}&rdquo;</span>
+                      <span className="font-mono tabular-nums text-cinnabar-400">{r.events}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-ink-subtle">
+                <p className="text-sm text-ink-600">
                   No search data yet — showcase your agent, and the terms people used to find it
                   populate here.
                 </p>

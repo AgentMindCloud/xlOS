@@ -12,18 +12,22 @@ interface AgentPreviewCardProps {
   visuals: AgentVisuals;
 }
 
+// All accent variants now map to cinnabar tints (primary cinnabar-500,
+// light cinnabar-400, deep cinnabar-600) — the legacy plasma/aurora/cyan/green
+// keys are kept on the type so existing manifests parse, but every variant
+// renders in the Cinnabar Glass canon.
 const ACCENT_HEADLINE: Record<VisualAccent, string> = {
-  plasma: 'text-plasma',
-  aurora: 'text-aurora',
-  cyan: 'text-cyan',
-  green: 'text-green',
+  plasma: 'text-cinnabar-400',
+  aurora: 'text-cinnabar-400',
+  cyan: 'text-cinnabar-300',
+  green: 'text-cinnabar-500',
 };
 
 const ACCENT_SHADOW: Record<VisualAccent, string> = {
-  plasma: 'shadow-plasmaGlow',
-  aurora: 'shadow-auroraGlow',
-  cyan: 'shadow-cyanGlow',
-  green: 'shadow-greenGlow',
+  plasma: 'shadow-cinnabar-glow',
+  aurora: 'shadow-cinnabar-glow-lg',
+  cyan: 'shadow-cinnabar-glow-soft',
+  green: 'shadow-cinnabar-glow',
 };
 
 export function AgentPreviewCard({ agentId, agentName, visuals }: AgentPreviewCardProps) {
@@ -33,7 +37,7 @@ export function AgentPreviewCard({ agentId, agentName, visuals }: AgentPreviewCa
   if (style === 'minimal') {
     return (
       <section
-        className={`${styles.card} ${styles.minimal} relative overflow-hidden rounded-md border border-border-subtle bg-surface p-6`}
+        className={`${styles.card} ${styles.minimal} relative overflow-hidden rounded-md border border-ink-300 bg-ink-100 p-6`}
         data-visual-style="minimal"
         data-visual-accent={accent_color}
       >
@@ -45,10 +49,12 @@ export function AgentPreviewCard({ agentId, agentName, visuals }: AgentPreviewCa
             agentName={agentName}
           />
           {headline ? (
-            <h3 className={`font-display text-xl tracking-tight ${headlineClass}`}>{headline}</h3>
+            <h3 className={`font-display text-xl font-semibold tracking-tight ${headlineClass}`}>
+              {headline}
+            </h3>
           ) : null}
           {subheadline ? (
-            <p className="text-sm text-ink-muted leading-relaxed">{subheadline}</p>
+            <p className="text-sm text-ink-700 leading-relaxed">{subheadline}</p>
           ) : null}
         </div>
         <TrackVisualsBlock agentId={agentId} accentColor={accent_color} style={style} />
@@ -56,7 +62,7 @@ export function AgentPreviewCard({ agentId, agentName, visuals }: AgentPreviewCa
     );
   }
 
-  const elevation = style === 'futuristic' ? 'hero' : 'raised';
+  const elevation = style === 'futuristic' ? 'lifted' : 'raised';
   const glow = ACCENT_SHADOW[accent_color];
 
   return (
@@ -77,10 +83,12 @@ export function AgentPreviewCard({ agentId, agentName, visuals }: AgentPreviewCa
           agentName={agentName}
         />
         {headline ? (
-          <h3 className={`font-display text-2xl tracking-tight ${headlineClass}`}>{headline}</h3>
+          <h3 className={`font-display text-2xl font-semibold tracking-tight ${headlineClass}`}>
+            {headline}
+          </h3>
         ) : null}
         {subheadline ? (
-          <p className="text-base text-ink-muted leading-relaxed">{subheadline}</p>
+          <p className="text-base text-ink-700 leading-relaxed">{subheadline}</p>
         ) : null}
       </div>
       <TrackVisualsBlock agentId={agentId} accentColor={accent_color} style={style} />

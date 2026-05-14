@@ -62,20 +62,22 @@ export function InstallVolumeChart({
     <GlassCard padding="lg" className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
             Install volume · 30d
           </p>
-          <h3 className="font-display text-xl tracking-tight text-ink">Daily install signals</h3>
+          <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
+            Daily install signals
+          </h3>
         </div>
         <label className="flex flex-col gap-1">
           <span className="sr-only">Agent</span>
           <select
             value={agentId}
             onChange={(e) => setAgentId(e.target.value)}
-            className="glass rounded-md px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-border-focus"
+            className="glass-card rounded-md px-3 py-1.5 text-xs font-mono text-ink-900 focus:outline-none focus:border-cinnabar-400/60 focus:shadow-cinnabar-glow-soft"
           >
             {agents.map((a) => (
-              <option key={a.id} value={a.id} className="bg-bg">
+              <option key={a.id} value={a.id} className="bg-ink-0">
                 {a.name}
               </option>
             ))}

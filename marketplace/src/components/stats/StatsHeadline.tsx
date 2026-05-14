@@ -32,11 +32,11 @@ export function StatsHeadline({ data }: { data: StatsHeadlineData }) {
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
       {items.map((i) => (
         <GlassCard key={i.label} padding="md" className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-2 text-cyan">
+          <div className="flex items-center gap-2 text-cinnabar-400">
             {i.icon}
-            <span className="text-[11px] uppercase tracking-[0.18em] font-mono">{i.label}</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em]">{i.label}</span>
           </div>
-          <div className="font-display text-2xl tracking-tight tabular-nums text-ink md:text-3xl">
+          <div className="font-display text-2xl font-semibold tabular-nums text-ink-900 md:text-3xl">
             {i.value}
           </div>
         </GlassCard>

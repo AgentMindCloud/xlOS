@@ -22,14 +22,16 @@ export function SectionFunnel({
     <GlassCard padding="lg" className="flex flex-col gap-4">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] font-mono text-cyan">Funnel · 30d</p>
-          <h3 className="font-display text-xl tracking-tight text-ink">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
+            Funnel · 30d
+          </p>
+          <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
             Marketplace → Agent → Install
           </h3>
         </div>
         {!plausibleConfigured ? (
           <span
-            className="rounded-sm border border-border-subtle bg-surface px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] text-ink-subtle font-mono"
+            className="rounded-sm border border-ink-300 bg-ink-100 px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] text-ink-600 font-mono"
             title="Set PLAUSIBLE_API_KEY to wire this panel"
           >
             Plausible off
@@ -55,7 +57,7 @@ export function SectionFunnel({
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <p className="text-[11px] text-ink-subtle">
+      <p className="text-[11px] text-ink-600">
         Steps: pageview → agent_viewed → install_clicked. Drop-off between columns is the
         opportunity to improve the listing page.
       </p>
