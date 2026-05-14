@@ -88,8 +88,8 @@ opted into beyond the unconditional core (I, III, VII).
 ## Step 7 — Try another
 
 ```bash
-xlos install agents/creator/x-engagement-coach/grok-install.yaml
-xlos run x-engagement-coach
+xlos install agents/creator/reply-drafter/grok-install.yaml
+xlos run reply-drafter
 ```
 
 Repeat with any of the 33 bundled agents to get a feel for the
