@@ -4,7 +4,7 @@ import { formatCount } from '@/lib/utils';
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'nodejs';
-export const alt = 'GrokInstall adoption dashboard — live';
+export const alt = 'xlOS adoption dashboard — live';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -44,7 +44,7 @@ export default async function StatsSnapshotOg() {
           fontWeight: 600,
         }}
       >
-        GROKINSTALL · ADOPTION DASHBOARD
+        xlOS · ADOPTION DASHBOARD
       </div>
 
       <div

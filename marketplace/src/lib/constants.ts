@@ -1,11 +1,11 @@
 import type { Category, Certification } from './types';
 
-export const SITE_NAME = 'GrokInstall';
+export const SITE_NAME = 'xlOS';
 export const SITE_TAGLINE = 'Built for Grok on X';
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://grokagents.dev';
 
 export const DISCLAIMER =
-  'GrokInstall is an independent community project. Not affiliated with xAI, Grok, or X.';
+  'xlOS is an independent community project. Not affiliated with xAI, Grok, or X.';
 
 export const FEATURED_AGENTS_URL =
   'https://raw.githubusercontent.com/AgentMindCloud/awesome-grok-agents/main/featured-agents.json';

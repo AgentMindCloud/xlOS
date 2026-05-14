@@ -60,9 +60,9 @@ export function Footer() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
           <div className="md:col-span-1">
-            <Link href="/" className="font-display text-lg tracking-[-0.06em] uppercase">
-              <span className="text-ink">GROK</span>
-              <span className="text-plasma text-glow-plasma">INSTALL</span>
+            <Link href="/" className="font-display text-lg tracking-[-0.06em]">
+              <span className="text-ink">xl</span>
+              <span className="text-plasma text-glow-plasma">OS</span>
             </Link>
             <p className="mt-3 text-sm text-ink-muted">{SITE_TAGLINE}</p>
             <div className="mt-4 flex gap-3">
@@ -132,7 +132,7 @@ export function Footer() {
           <div className="absolute inset-x-0 top-0 plate-divider" aria-hidden />
           <p className="text-xs text-ink-subtle max-w-xl">{DISCLAIMER}</p>
           <p className="text-xs text-ink-subtle mt-4 sm:mt-0">
-            © {year} GrokInstall · Built by{' '}
+            © {year} xlOS · Built by{' '}
             <a
               href="https://x.com/JanSol0s"
               target="_blank"

@@ -38,7 +38,7 @@ export async function generateMetadata({
     title: agent.name,
     description: agent.tagline,
     openGraph: {
-      title: `${agent.name} · GrokInstall`,
+      title: `${agent.name} · xlOS`,
       description: agent.tagline,
       images: ['/og-default.svg'],
     },

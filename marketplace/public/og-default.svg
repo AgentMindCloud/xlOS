@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="GrokInstall — The community marketplace for Grok-native agents on X">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="xlOS — The community marketplace for Grok-native agents on X">
   <defs>
     <radialGradient id="og-plasma" cx="22%" cy="22%" r="55%">
       <stop offset="0%" stop-color="#FF1E70" stop-opacity="0.22"/>
@@ -32,7 +32,7 @@
   <rect width="1200" height="630" fill="url(#og-halftone)"/>
   <rect width="1200" height="630" fill="url(#og-plasma)"/>
   <rect width="1200" height="630" fill="url(#og-aurora)"/>
-  <text x="80" y="260" font-family="Inter, sans-serif" font-weight="700" font-size="96" letter-spacing="-4" fill="url(#og-wordmark)" filter="url(#og-neon)">GROKINSTALL</text>
+  <text x="80" y="260" font-family="Inter, sans-serif" font-weight="700" font-size="160" letter-spacing="-6" fill="url(#og-wordmark)" filter="url(#og-neon)">xlOS</text>
   <text x="80" y="340" font-family="Inter, sans-serif" font-weight="600" font-size="40" fill="#FFFFFF">The community marketplace</text>
   <text x="80" y="390" font-family="Inter, sans-serif" font-weight="600" font-size="40" fill="#FFFFFF">for Grok-native agents on X</text>
   <g transform="translate(80, 500)">

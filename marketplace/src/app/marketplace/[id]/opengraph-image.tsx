@@ -4,7 +4,7 @@ import { CATEGORY_LABELS, CERTIFICATION_LABELS, SITE_NAME } from '@/lib/constant
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'nodejs';
-export const alt = 'GrokInstall agent';
+export const alt = 'xlOS agent';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -44,7 +44,7 @@ export default async function OgImage({ params }: { params: { id: string } }) {
             fontWeight: 600,
           }}
         >
-          {`GROKINSTALL · ${category}`}
+          {`xlOS · ${category}`}
         </div>
       </div>
 
