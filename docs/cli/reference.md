@@ -108,14 +108,13 @@ xlos doctor
 
 Reports:
 
-- Python version, executable path, install method.
-- Local registry path and integrity.
-- Schema vendor (`spec/v2.14/schema.json`) sha256 match.
-- Constitution scanner status (count of registered checks, by article).
-- Per-agent install state.
+- Python version (`sys.version`).
+- Platform (`sys.platform`).
+- Per-user install directory (resolved via `platformdirs`) and whether
+  it is writable.
 
-Use this first when something is off — it surfaces most environment
-issues in one pass.
+Use this first when something is off — it confirms the environment
+xlOS will install agents into.
 
 ## Python API
 
@@ -132,7 +131,8 @@ list_command(json_output=True)
 doctor_command()
 ```
 
-The Constitution scanner is `xlos.safety.scanner.scan(manifest_dict)`.
+The Constitution scanner is `xlos.safety.scan_manifest(manifest_dict)`
+(also re-exported as `xlos.safety.scanner.scan_manifest`).
 
 ## Cross-platform notes
 

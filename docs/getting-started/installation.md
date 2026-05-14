@@ -38,9 +38,9 @@ description: Install xlOS, verify the toolchain, and set your env vars. Works id
 xlos --version
 ```
 
-`xlos doctor` runs a deeper diagnostic that checks Python version,
-import paths, the schema-vendored copy of `grok-install.yaml`, and the
-Constitution scanner:
+`xlos doctor` reports your Python version, platform, and the per-user
+install directory (with whether it is writable). Run it first when
+something looks off:
 
 ```bash
 xlos doctor

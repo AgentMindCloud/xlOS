@@ -81,15 +81,14 @@ If anything's off:
 xlos doctor
 ```
 
-Reports Python version, install path, schema integrity, scanner state,
-and the additional Constitution articles each registered agent has
-opted into beyond the unconditional core (I, III, VII).
+Reports Python version, platform, and the per-user install directory
+(with whether it is writable).
 
 ## Step 7 — Try another
 
 ```bash
-xlos install agents/creator/x-engagement-coach/grok-install.yaml
-xlos run x-engagement-coach
+xlos install agents/creator/comment-engagement-booster/grok-install.yaml
+xlos run comment-engagement-booster
 ```
 
 Repeat with any of the 33 bundled agents to get a feel for the
