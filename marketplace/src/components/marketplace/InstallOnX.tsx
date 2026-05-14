@@ -70,16 +70,17 @@ export function InstallOnX({
           fullWidth
           aria-label={`Install ${agentName} on X`}
           className={cn(
-            'relative overflow-hidden transition-shadow hover:shadow-greenGlow',
+            'relative overflow-hidden transition-shadow hover:shadow-cinnabar-glow-lg',
             bumping && 'animate-[install-pop_450ms_ease]'
           )}
         >
           Install on X
         </AccentButton>
       </div>
-      <p className="text-[11px] text-ink-subtle leading-relaxed">
-        Tapping <span className="text-cyan">Install on X</span> opens a pre-filled post tagging
-        <span className="text-cyan"> @grok</span> with the agent link. Share it to install.
+      <p className="text-[11px] text-ink-600 leading-relaxed font-mono">
+        Tapping <span className="text-cinnabar-400">Install on X</span> opens a pre-filled post
+        tagging
+        <span className="text-cinnabar-400"> @grok</span> with the agent link. Share it to install.
       </p>
       <style>{`
         @keyframes install-pop {

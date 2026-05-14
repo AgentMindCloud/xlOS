@@ -1,6 +1,6 @@
+import { AccentButton } from '@/components/ui/AccentButton';
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { AccentButton } from '@/components/ui/AccentButton';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { CheckCircle2, Github, Shield, XCircle } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -33,7 +33,9 @@ export default function PrivacyPage() {
             <GlassCard padding="lg" className="flex flex-col gap-3">
               <div className="flex items-center gap-2 text-success">
                 <CheckCircle2 className="h-5 w-5" />
-                <p className="font-display text-lg font-semibold tracking-tight text-ink-900">What we collect</p>
+                <p className="font-display text-lg font-semibold tracking-tight text-ink-900">
+                  What we collect
+                </p>
               </div>
               <ul className="flex flex-col gap-2 text-sm text-ink-700 leading-relaxed">
                 <li>
@@ -83,7 +85,9 @@ export default function PrivacyPage() {
           <GlassCard padding="lg" className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-cinnabar-400" />
-              <p className="font-display text-lg font-semibold tracking-tight text-ink-900">How to opt out</p>
+              <p className="font-display text-lg font-semibold tracking-tight text-ink-900">
+                How to opt out
+              </p>
             </div>
             <ol className="flex flex-col gap-2 text-sm text-ink-700 leading-relaxed list-decimal list-inside">
               <li>
@@ -91,13 +95,14 @@ export default function PrivacyPage() {
                 <code className="font-mono text-cinnabar-400">--no-telemetry</code>.
               </li>
               <li>
-                Or set <code className="font-mono text-cinnabar-400">GROKINSTALL_TELEMETRY=0</code> in your
-                shell profile.
+                Or set <code className="font-mono text-cinnabar-400">GROKINSTALL_TELEMETRY=0</code>{' '}
+                in your shell profile.
               </li>
               <li>
                 Or delete{' '}
-                <code className="font-mono text-cinnabar-400">~/.config/grok-install/anon_id</code> and
-                re-run <code className="font-mono text-cinnabar-400">grok-install reset --telemetry</code>.
+                <code className="font-mono text-cinnabar-400">~/.config/grok-install/anon_id</code>{' '}
+                and re-run{' '}
+                <code className="font-mono text-cinnabar-400">grok-install reset --telemetry</code>.
               </li>
               <li>
                 Previously-sent events remain in the aggregate counters (they're already anonymised)
@@ -107,7 +112,9 @@ export default function PrivacyPage() {
           </GlassCard>
 
           <GlassCard padding="lg" className="flex flex-col gap-3">
-            <p className="font-display text-lg font-semibold tracking-tight text-ink-900">Browser analytics events</p>
+            <p className="font-display text-lg font-semibold tracking-tight text-ink-900">
+              Browser analytics events
+            </p>
             <p className="text-sm text-ink-700 leading-relaxed">
               Plausible records cookieless page views plus a short list of custom events so we can
               see which surfaces people actually use. Each event name and every property value is
@@ -126,7 +133,8 @@ export default function PrivacyPage() {
               </li>
               <li>
                 <code className="font-mono text-cinnabar-400">search_used</code> — properties:{' '}
-                <code className="font-mono text-cinnabar-400">q</code> (lowercased, truncated to 40 chars)
+                <code className="font-mono text-cinnabar-400">q</code> (lowercased, truncated to 40
+                chars)
               </li>
               <li>
                 <code className="font-mono text-cinnabar-400">filter_applied</code> — properties:{' '}
@@ -143,14 +151,16 @@ export default function PrivacyPage() {
                 <code className="font-mono text-cinnabar-400">style</code> (one of{' '}
                 <code className="font-mono text-cinnabar-400">futuristic</code> /{' '}
                 <code className="font-mono text-cinnabar-400">premium</code> /{' '}
-                <code className="font-mono text-cinnabar-400">minimal</code>). Fires once per preview card
-                mount so we can see which visual presets perform best.
+                <code className="font-mono text-cinnabar-400">minimal</code>). Fires once per
+                preview card mount so we can see which visual presets perform best.
               </li>
             </ul>
           </GlassCard>
 
           <GlassCard padding="lg" className="flex flex-col gap-3">
-            <p className="font-display text-lg font-semibold tracking-tight text-ink-900">Retention</p>
+            <p className="font-display text-lg font-semibold tracking-tight text-ink-900">
+              Retention
+            </p>
             <ul className="flex flex-col gap-2 text-sm text-ink-700 leading-relaxed">
               <li>
                 <span className="text-ink-900">Individual events</span>: purged after{' '}
@@ -161,16 +171,18 @@ export default function PrivacyPage() {
                 .
               </li>
               <li>
-                <span className="text-ink-900">Aggregated counters</span>: retained indefinitely. These
-                are non-reversible sums (total installs, posts generated, API calls saved) — no
-                row-level data remains.
+                <span className="text-ink-900">Aggregated counters</span>: retained indefinitely.
+                These are non-reversible sums (total installs, posts generated, API calls saved) —
+                no row-level data remains.
               </li>
               <li>Back-ups are end-to-end encrypted and follow the same 90-day window.</li>
             </ul>
           </GlassCard>
 
           <GlassCard padding="lg" className="flex flex-col gap-3">
-            <p className="font-display text-lg font-semibold tracking-tight text-ink-900">Read the source</p>
+            <p className="font-display text-lg font-semibold tracking-tight text-ink-900">
+              Read the source
+            </p>
             <p className="text-sm text-ink-700">
               Every line of the telemetry pipeline — from the CLI emitter to the receive endpoint to
               the retention job — is open-source. Audit it, submit a PR, or build your own fork.

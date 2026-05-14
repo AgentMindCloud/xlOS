@@ -1,8 +1,8 @@
 import { AgentCard } from '@/components/marketplace/AgentCard';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { NebulaBackdrop } from '@/components/ui/NebulaBackdrop';
-import { AccentButton } from '@/components/ui/AccentButton';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { getStarCounts } from '@/lib/github';
 import type { SectionMeta } from '@/lib/sections';

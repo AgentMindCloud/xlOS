@@ -1,7 +1,7 @@
 'use client';
 
-import { GlassCard } from '@/components/ui/GlassCard';
 import { AccentButton } from '@/components/ui/AccentButton';
+import { GlassCard } from '@/components/ui/GlassCard';
 import { CATEGORY_LABELS, CERTIFICATION_LABELS } from '@/lib/constants';
 import type { Category, Certification } from '@/lib/types';
 import { cn } from '@/lib/utils';

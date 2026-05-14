@@ -1,9 +1,9 @@
 import { InstallVolumeChart } from '@/components/stats/InstallVolumeChart';
 import { StatsHeadline } from '@/components/stats/StatsHeadline';
+import { AccentButton } from '@/components/ui/AccentButton';
 import { CertificationBadgeRow } from '@/components/ui/CertificationBadge';
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { AccentButton } from '@/components/ui/AccentButton';
 import { Section } from '@/components/ui/Section';
 import { getAgentById, getAgents } from '@/lib/agents';
 import { CATEGORY_LABELS } from '@/lib/constants';
@@ -116,9 +116,7 @@ export default async function AgentStatsPage({
                   {referrers.map((r) => (
                     <li key={r.source} className="flex items-center justify-between py-2 text-sm">
                       <span className="text-ink-700 truncate">{r.source}</span>
-                      <span className="font-mono tabular-nums text-cinnabar-400">
-                        {r.visitors}
-                      </span>
+                      <span className="font-mono tabular-nums text-cinnabar-400">{r.visitors}</span>
                     </li>
                   ))}
                 </ul>

@@ -1,6 +1,6 @@
+import { AccentButton } from '@/components/ui/AccentButton';
 import { CircuitTrace } from '@/components/ui/CircuitTrace';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { AccentButton } from '@/components/ui/AccentButton';
 import { Compass, Home } from 'lucide-react';
 
 export default function NotFound() {

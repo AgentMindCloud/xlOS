@@ -24,17 +24,14 @@ export async function YamlSnippet({
 
   return (
     <figure
-      className={cn(
-        'overflow-hidden rounded-md border border-border-subtle bg-bg font-mono text-sm',
-        className
-      )}
+      className={cn('overflow-hidden rounded-md glass-card-strong font-mono text-sm', className)}
     >
       {filename ? (
-        <figcaption className="flex items-center justify-between border-b border-border-subtle bg-bg/60 px-4 py-2">
-          <span className="text-[11px] uppercase tracking-[0.2em] font-mono text-cyan">
+        <figcaption className="flex items-center justify-between border-b border-ink-300/40 px-4 py-2">
+          <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-cinnabar-400">
             {filename}
           </span>
-          <span className="text-[10px] uppercase tracking-[0.18em] font-mono text-ink-subtle">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-600">
             {lang}
           </span>
         </figcaption>

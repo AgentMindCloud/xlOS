@@ -1,7 +1,7 @@
 'use client';
 
-import { GlassCard } from '@/components/ui/GlassCard';
 import { AccentButton } from '@/components/ui/AccentButton';
+import { GlassCard } from '@/components/ui/GlassCard';
 import { trackFilter, trackSearch } from '@/lib/tracking';
 import type { AgentWithStats, Category, Certification, SortKey } from '@/lib/types';
 import { debounce, fuzzyMatch } from '@/lib/utils';
