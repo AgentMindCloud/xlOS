@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Safe Agent Builder — grok-install</title>
+<style>
+  :root { --bg:#0d0f12; --panel:#15181d; --ink:#e8eaed; --mut:#9aa0a6;
+          --acc:#e2563b; --line:#262b31; --ok:#3fb950; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  .wrap { max-width:1040px; margin:0 auto; padding:32px 20px 64px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  p.sub { color:var(--mut); margin:0 0 28px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:820px){ .grid{ grid-template-columns:1fr; } }
+  .panel { background:var(--panel); border:1px solid var(--line);
+           border-radius:12px; padding:20px; }
+  label { display:block; font-size:13px; color:var(--mut); margin:14px 0 6px; }
+  input, textarea, select { width:100%; background:#0f1216; color:var(--ink);
+           border:1px solid var(--line); border-radius:8px; padding:9px 11px;
+           font:inherit; }
+  textarea { min-height:78px; resize:vertical; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  .row label { margin-top:4px; }
+  .chk { display:flex; align-items:center; gap:7px; color:var(--ink);
+         font-size:13px; background:#0f1216; border:1px solid var(--line);
+         padding:7px 10px; border-radius:8px; }
+  .chk input { width:auto; }
+  pre { margin:0; background:#0f1216; border:1px solid var(--line);
+        border-radius:8px; padding:16px; overflow:auto; font-size:13px;
+        color:#cdd3da; white-space:pre; min-height:340px; }
+  .bar { display:flex; gap:10px; align-items:center; margin-top:14px; }
+  button { background:var(--acc); color:#fff; border:0; border-radius:8px;
+           padding:10px 16px; font:inherit; font-weight:600; cursor:pointer; }
+  .note { font-size:12.5px; color:var(--mut); margin-top:14px; }
+  .err { color:var(--acc); font-size:12.5px; margin-top:8px; min-height:16px; }
+  code { background:#0f1216; padding:1px 5px; border-radius:4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Safe Agent Builder</h1>
+  <p class="sub">Build a valid <code>grok-install.yaml</code> (v2.14) in the
+  browser. Nothing is uploaded — this generates a manifest you then validate
+  with <code>grok-install/validator/validate.py</code> and install with
+  <code>xlos install</code>.</p>
+
+  <div class="grid">
+    <div class="panel">
+      <label for="name">Agent name (slug: lowercase, hyphens, 2–63)</label>
+      <input id="name" value="my-agent" autocomplete="off" />
+
+      <label for="desc">Description (10–500 chars, honest)</label>
+      <textarea id="desc">Describe exactly what this agent does and what it explicitly does not do.</textarea>
+
+      <label for="model">Runtime model</label>
+      <select id="model">
+        <option>grok-4.3</option><option>grok-4</option><option>grok-3</option>
+      </select>
+
+      <label for="cat">Category</label>
+      <select id="cat">
+        <option value="creator-template">creator-template</option>
+        <option value="super-agent">super-agent</option>
+        <option value="x-money-tool">x-money-tool</option>
+      </select>
+
+      <label for="tier">Tier</label>
+      <select id="tier">
+        <option value="light">light — no install, in-chat</option>
+        <option value="heavy">heavy — full local stack</option>
+      </select>
+
+      <label>Deploy targets</label>
+      <div class="row" id="targets">
+        <span class="chk"><input type="checkbox" value="ide" checked />ide</span>
+        <span class="chk"><input type="checkbox" value="action" />action</span>
+        <span class="chk"><input type="checkbox" value="worker" />worker</span>
+        <span class="chk"><input type="checkbox" value="web" />web</span>
+      </div>
+
+      <div class="bar">
+        <button id="copy">Copy YAML</button>
+        <span class="note">Articles I, III, VII are always included — they are
+        enforced unconditionally regardless.</span>
+      </div>
+      <div class="err" id="err"></div>
+    </div>
+
+    <div class="panel">
+      <label>Generated grok-install.yaml</label>
+      <pre id="out"></pre>
+      <p class="note">Heavy adds <code>runtime_dispatch</code> pointing at a
+      Python module you must actually ship under <code>impl/</code> with
+      passing tests before the agent is labelled <em>available</em>.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  function slugOk(s){ return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s) && s.length>=2 && s.length<=63; }
+  function build() {
+    var name=$("name").value.trim(), desc=$("desc").value.trim();
+    var model=$("model").value, cat=$("cat").value, tier=$("tier").value;
+    var tgts=[].slice.call($("targets").querySelectorAll("input:checked")).map(function(c){return c.value;});
+    var err="";
+    if(!slugOk(name)) err="Name must be a lowercase hyphenated slug, 2–63 chars.";
+    else if(desc.length<10||desc.length>500) err="Description must be 10–500 characters.";
+    else if(tgts.length===0) err="Pick at least one deploy target.";
+    $("err").textContent=err;
+    var L=[];
+    L.push("version: '2.14'");
+    L.push("name: "+name);
+    L.push("description: >-");
+    L.push("  "+desc.replace(/\s+/g," "));
+    L.push("runtime:");
+    L.push("  engine: grok");
+    L.push("  model: "+model);
+    L.push("deploy:");
+    L.push("  targets:");
+    tgts.forEach(function(t){ L.push("    - "+t); });
+    L.push("category: "+cat);
+    L.push("extensions:");
+    L.push("  tier: "+tier);
+    L.push("  constitution:");
+    L.push("    - I");
+    L.push("    - III");
+    L.push("    - VII");
+    if(tier==="heavy"){
+      L.push("  runtime_dispatch:");
+      L.push("    type: python_module");
+      L.push("    module: "+(name.replace(/-/g,"_")||"my_agent"));
+    }
+    $("out").textContent=L.join("\n")+"\n";
+  }
+  ["name","desc","model","cat","tier"].forEach(function(id){
+    $(id).addEventListener("input",build); $(id).addEventListener("change",build);
+  });
+  $("targets").addEventListener("change",build);
+  $("copy").addEventListener("click",function(){
+    navigator.clipboard && navigator.clipboard.writeText($("out").textContent);
+  });
+  build();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+{
+  "repo": "AgentMindCloud/xlOS",
+  "generated_by": "scripts/build_repo_map.py",
+  "summary": {
+    "agents_total": 33,
+    "available": 0,
+    "spec": 33
+  },
+  "sections": {
+    "grok-install/": "Agent install standard: standard, validator, templates, mint flow.",
+    "agents/": "The agent library (creator-x-co-pilot, super-agents, creator, finance).",
+    "src/xlos/": "The cross-platform Python runtime: CLI, install, run, validators, safety.",
+    "spec/v2.14/": "Vendored read-only v2.14 schema (source of truth; see VENDOR.md).",
+    "packages/grok_paradoxes/": "Standalone tested package; Living Narrative Fabric builds on it.",
+    "tools/": "X-native creator tools (single-file HTML + one hybrid).",
+    "marketplace/": "Next.js 15 discovery surface (status-driven, honest).",
+    "extensions/browser/": "Manifest v3 browser extension (one-click install from X).",
+    "docs/": "CLI reference, authoring guide, v2.15->v2.14 migration mapping, Constitution."
+  },
+  "agents": [
+    {
+      "name": "ab-test-suggester",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/ab-test-suggester",
+      "run": "\u2014"
+    },
+    {
+      "name": "analytics-summarizer",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/analytics-summarizer",
+      "run": "\u2014"
+    },
+    {
+      "name": "brand-voice-trainer",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/brand-voice-trainer",
+      "run": "\u2014"
+    },
+    {
+      "name": "comment-engagement-booster",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/comment-engagement-booster",
+      "run": "\u2014"
+    },
+    {
+      "name": "competitor-watch",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/competitor-watch",
+      "run": "\u2014"
+    },
+    {
+      "name": "content-calendar-builder",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/content-calendar-builder",
+      "run": "\u2014"
+    },
+    {
+      "name": "content-idea-generator",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/content-idea-generator",
+      "run": "\u2014"
+    },
+    {
+      "name": "content-recycler",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/content-recycler",
+      "run": "\u2014"
+    },
+    {
+      "name": "cross-platform-reposter",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/cross-platform-reposter",
+      "run": "\u2014"
+    },
+    {
+      "name": "daily-briefing-agent",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/daily-briefing-agent",
+      "run": "\u2014"
+    },
+    {
+      "name": "dm-triager",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/dm-triager",
+      "run": "\u2014"
+    },
+    {
+      "name": "follower-quality-analyzer",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/follower-quality-analyzer",
+      "run": "\u2014"
+    },
+    {
+      "name": "growth-experiment-runner",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/growth-experiment-runner",
+      "run": "\u2014"
+    },
+    {
+      "name": "hashtag-strategy-advisor",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/hashtag-strategy-advisor",
+      "run": "\u2014"
+    },
+    {
+      "name": "mention-summarizer",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/mention-summarizer",
+      "run": "\u2014"
+    },
+    {
+      "name": "monetization-optimizer",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/monetization-optimizer",
+      "run": "\u2014"
+    },
+    {
+      "name": "niche-influencer-finder",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/niche-influencer-finder",
+      "run": "\u2014"
+    },
+    {
+      "name": "quote-tweet-suggestor",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/quote-tweet-suggestor",
+      "run": "\u2014"
+    },
+    {
+      "name": "reply-drafter",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/reply-drafter",
+      "run": "\u2014"
+    },
+    {
+      "name": "research-assistant",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/research-assistant",
+      "run": "\u2014"
+    },
+    {
+      "name": "thread-builder",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/thread-builder",
+      "run": "\u2014"
+    },
+    {
+      "name": "trend-aligned-poster",
+      "section": "creator",
+      "category": "creator-template",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/creator/trend-aligned-poster",
+      "run": "\u2014"
+    },
+    {
+      "name": "x-creator-payout-optimizer",
+      "section": "finance",
+      "category": "x-money-tool",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/finance/x-creator-payout-optimizer",
+      "run": "\u2014"
+    },
+    {
+      "name": "x-money-companion-dashboard",
+      "section": "finance",
+      "category": "x-money-tool",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/finance/x-money-companion-dashboard",
+      "run": "\u2014"
+    },
+    {
+      "name": "x-money-vision-analyzer",
+      "section": "finance",
+      "category": "x-money-tool",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/finance/x-money-vision-analyzer",
+      "run": "\u2014"
+    },
+    {
+      "name": "x-smart-cashtag-alpha-engine",
+      "section": "finance",
+      "category": "x-money-tool",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/finance/x-smart-cashtag-alpha-engine",
+      "run": "\u2014"
+    },
+    {
+      "name": "agent-swarm-with-shared-memory",
+      "section": "super-agents",
+      "category": "super-agent",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/super-agents/agent-swarm-with-shared-memory",
+      "run": "\u2014"
+    },
+    {
+      "name": "cross-reality-action-fabric",
+      "section": "super-agents",
+      "category": "super-agent",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/super-agents/cross-reality-action-fabric",
+      "run": "\u2014"
+    },
+    {
+      "name": "living-narrative-fabric",
+      "section": "super-agents",
+      "category": "super-agent",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/super-agents/living-narrative-fabric",
+      "run": "\u2014"
+    },
+    {
+      "name": "narrative-contradiction-detector",
+      "section": "super-agents",
+      "category": "super-agent",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/super-agents/narrative-contradiction-detector",
+      "run": "\u2014"
+    },
+    {
+      "name": "provenance-first-trust-engine",
+      "section": "super-agents",
+      "category": "super-agent",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/super-agents/provenance-first-trust-engine",
+      "run": "\u2014"
+    },
+    {
+      "name": "self-evolving-personal-os",
+      "section": "super-agents",
+      "category": "super-agent",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/super-agents/self-evolving-personal-os",
+      "run": "\u2014"
+    },
+    {
+      "name": "zero-config-i-want-to-agent",
+      "section": "super-agents",
+      "category": "super-agent",
+      "tier": "heavy",
+      "status": "spec",
+      "path": "agents/super-agents/zero-config-i-want-to-agent",
+      "run": "\u2014"
+    }
+  ]
+}

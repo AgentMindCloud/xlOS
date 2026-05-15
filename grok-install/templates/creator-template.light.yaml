@@ -1,0 +1,21 @@
+# Light creator template — zero install, runs in-chat on Grok/X.
+# The agent IS the prompt at light/prompt.md. No runtime_dispatch.
+version: '2.14'
+name: my-light-creator-agent
+description: >-
+  One-paragraph, honest description of exactly what this agent does in-chat
+  and what it explicitly does not do. 10-500 characters.
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+    - ide
+category: creator-template
+extensions:
+  tier: light
+  constitution:
+    - I
+    - III
+    - VII
+  # Light agents must not claim memory or provenance they do not have.

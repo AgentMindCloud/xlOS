@@ -1,0 +1,43 @@
+# Heavy super-agent template — orchestrator + memory + provenance + eval.
+# Super-agents are Heavy by nature; offer a Light companion only if it can
+# honestly deliver in-chat without the local stack.
+version: '2.14'
+name: my-super-agent
+description: >-
+  One-paragraph, honest description of the multi-source / multi-step job this
+  super-agent does, and the hard guarantees it makes. 10-500 characters.
+runtime:
+  engine: grok
+  model: grok-4
+deploy:
+  targets:
+    - ide
+category: super-agent
+cost_limits:
+  usd_per_session_max: 2.0
+  usd_per_day_max: 10.0
+extensions:
+  tier: heavy
+  constitution:
+    - I
+    - II
+    - III
+    - IV
+    - VII
+  multi_agent_roles:
+    role: orchestrator
+    delegates_to: []
+  provenance:
+    enabled: true
+    append_only: true
+    cite_sources: true
+  # Super-agents require a constitution section with >=1 rule (Article IV).
+  constitution_v215:
+    file: constitution.md
+    rules:
+      - Every claim carries a source citation; provenance is append-only.
+      - Contradictions are surfaced, never silently resolved.
+      - No real-world action without an explicit, scoped user consent.
+  runtime_dispatch:
+    type: python_module
+    module: my_super_agent

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agent Status Ledger — grok-install</title>
+<style>
+  :root { --bg:#0d0f12; --panel:#15181d; --ink:#e8eaed; --mut:#9aa0a6;
+          --acc:#e2563b; --line:#262b31; --ok:#3fb950; --spec:#d29922; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:15px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  .wrap { max-width:1040px; margin:0 auto; padding:32px 20px 64px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  p.sub { color:var(--mut); margin:0 0 24px; }
+  .cards { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:24px; }
+  .card { background:var(--panel); border:1px solid var(--line);
+          border-radius:12px; padding:16px 20px; min-width:150px; }
+  .card .n { font-size:28px; font-weight:700; }
+  .card .l { color:var(--mut); font-size:13px; }
+  table { width:100%; border-collapse:collapse; background:var(--panel);
+          border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  th,td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--line);
+          font-size:13.5px; }
+  th { color:var(--mut); font-weight:600; }
+  tr:last-child td { border-bottom:0; }
+  .pill { font-size:12px; padding:2px 9px; border-radius:999px; font-weight:600; }
+  .available { background:rgba(63,185,80,.15); color:var(--ok); }
+  .spec { background:rgba(210,153,34,.15); color:var(--spec); }
+  .msg { background:var(--panel); border:1px solid var(--line);
+         border-radius:12px; padding:20px; color:var(--mut); }
+  code { background:#0f1216; padding:1px 5px; border-radius:4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Agent Status Ledger</h1>
+  <p class="sub">The honest ledger. An agent is <span class="pill available">available</span>
+  only when it runs end-to-end with passing tests; otherwise it is a
+  <span class="pill spec">spec</span> (manifest-only, implementation being
+  rebuilt). Source of truth: <code>repo-map.json</code>.</p>
+
+  <div class="cards" id="cards"></div>
+  <div id="body"></div>
+</div>
+
+<script>
+(function () {
+  var body=document.getElementById("body"), cards=document.getElementById("cards");
+  function guidance(reason){
+    body.innerHTML='<div class="msg">'+reason+'<br><br>Generate it from the '+
+      'repo root with <code>python scripts/build_repo_map.py</code>, or serve '+
+      'this folder over http so the dashboard can read <code>repo-map.json</code>.</div>';
+  }
+  fetch("../../repo-map.json").then(function(r){
+    if(!r.ok) throw new Error("not served");
+    return r.json();
+  }).then(function(map){
+    var agents=(map.agents||[]);
+    var avail=agents.filter(function(a){return a.status==="available";}).length;
+    var spec=agents.length-avail;
+    cards.innerHTML=
+      card(agents.length,"agents indexed")+
+      card(avail,"available (runs + tests)")+
+      card(spec,"spec (being rebuilt)");
+    var rows=agents.map(function(a){
+      return "<tr><td>"+esc(a.name)+"</td><td>"+esc(a.section||"")+"</td><td>"+
+        esc(a.tier||"")+"</td><td><span class='pill "+(a.status==="available"?"available":"spec")+
+        "'>"+esc(a.status||"spec")+"</span></td><td><code>"+esc(a.run||"—")+"</code></td></tr>";
+    }).join("");
+    body.innerHTML="<table><thead><tr><th>Agent</th><th>Section</th><th>Tier</th>"+
+      "<th>Status</th><th>Run</th></tr></thead><tbody>"+rows+"</tbody></table>";
+  }).catch(function(){ guidance("Could not load <code>repo-map.json</code> (open from filesystem or not generated yet)."); });
+  function card(n,l){ return '<div class="card"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
+  function esc(s){ return String(s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}); }
+})();
+</script>
+</body>
+</html>

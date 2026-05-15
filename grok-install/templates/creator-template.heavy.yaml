@@ -1,0 +1,29 @@
+# Heavy creator template — full local xlOS stack.
+# `xlos run <name>` dispatches `python -m <module>` from runtime_dispatch.
+# Ship a real impl/ package and passing tests before labelling available.
+version: '2.14'
+name: my-heavy-creator-agent
+description: >-
+  One-paragraph, honest description of what this agent does locally, the
+  inputs it needs, and what it explicitly does not do. 10-500 characters.
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+    - action
+    - ide
+category: creator-template
+cost_limits:
+  usd_per_session_max: 0.3
+  usd_per_day_max: 1.0
+extensions:
+  tier: heavy
+  constitution:
+    - I
+    - II
+    - III
+    - VII
+  runtime_dispatch:
+    type: python_module
+    module: my_heavy_creator_agent
