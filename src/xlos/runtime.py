@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -69,18 +70,40 @@ def run_command(name: str) -> None:
     Any other type prints a not-yet-implemented message and exits non-zero
     via ``click.ClickException``.
     """
-    _, manifest = _load_installed_manifest(name)
+    manifest_path, manifest = _load_installed_manifest(name)
+    agent_dir = manifest_path.parent
     rd = _runtime_dispatch(manifest)
     if rd is None:
         raise click.ClickException(f"agent {name!r} has no extensions.runtime_dispatch block")
     rd_type = rd.get("type")
+
+    # workdir: a path under the installed agent (e.g. "impl") that the agent's
+    # code runs from. Recovered agents keep a flat module layout, so cwd +
+    # PYTHONPATH must point at it for `import graph` / `from connectors…`.
+    workdir = agent_dir
+    rel = rd.get("workdir")
+    if isinstance(rel, str) and rel:
+        candidate = (agent_dir / rel).resolve()
+        if agent_dir.resolve() in candidate.parents or candidate == agent_dir.resolve():
+            workdir = candidate
+    raw_args = rd.get("args") or []
+    args = [str(a) for a in raw_args] if isinstance(raw_args, list) else []
+    env = {
+        **os.environ,
+        "PYTHONPATH": os.pathsep.join([str(workdir), os.environ.get("PYTHONPATH", "")]).rstrip(
+            os.pathsep
+        ),
+    }
+
     if rd_type == "streamlit_app":
         entrypoint = rd.get("entrypoint")
         if not isinstance(entrypoint, str) or not entrypoint:
             raise click.ClickException(
                 f"agent {name!r} runtime_dispatch.streamlit_app missing entrypoint"
             )
-        subprocess.run(["streamlit", "run", entrypoint], check=False)
+        subprocess.run(
+            ["streamlit", "run", entrypoint, *args], cwd=str(workdir), env=env, check=False
+        )
         return
     if rd_type == "python_module":
         module = rd.get("module")
@@ -88,7 +111,10 @@ def run_command(name: str) -> None:
             raise click.ClickException(
                 f"agent {name!r} runtime_dispatch.python_module missing module"
             )
-        subprocess.run([sys.executable, "-m", module], check=False)
+        console.print(f"[dim]running {module} {shlex.join(args)} (cwd={workdir.name})[/dim]")
+        subprocess.run(
+            [sys.executable, "-m", module, *args], cwd=str(workdir), env=env, check=False
+        )
         return
     raise click.ClickException(f"runtime_dispatch.type={rd_type!r} not yet implemented in xlOS")
 

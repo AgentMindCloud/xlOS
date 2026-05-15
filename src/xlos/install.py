@@ -7,6 +7,7 @@ under the per-user agents directory.
 
 from __future__ import annotations
 
+import shutil
 import sys
 from pathlib import Path
 from typing import Any
@@ -63,7 +64,30 @@ def install_command(manifest: str | None, from_stdin: bool) -> None:
     install_dir = install_root / name
     lock_path = Path(f"{install_dir}.lock")
 
+    # When installing from a manifest *file*, the agent's implementation
+    # lives alongside it. A manifest with a runtime_dispatch block is inert
+    # without that code, so copy the agent payload — not just the YAML.
+    # Only a defined allowlist is copied (never the whole parent dir): this
+    # is intentional about what an "agent" comprises and cannot recurse into
+    # the install root. stdin installs stay manifest-only.
+    payload_dirs = ("impl", "light", "tests", "examples")
+    payload_files = ("constitution.md", "README.md", "DEMO.md")
+    source_dir = Path(manifest).parent if manifest is not None else None
+    ignore = shutil.ignore_patterns("__pycache__", "*.pyc", ".venv")
+
     with FileLock(str(lock_path)):
         install_dir.mkdir(parents=True, exist_ok=True)
+        if source_dir is not None and source_dir.is_dir():
+            for sub in payload_dirs:
+                src = source_dir / sub
+                if src.is_dir():
+                    dst = install_dir / sub
+                    if dst.exists():
+                        shutil.rmtree(dst)
+                    shutil.copytree(src, dst, ignore=ignore)
+            for fname in payload_files:
+                src = source_dir / fname
+                if src.is_file():
+                    shutil.copy2(src, install_dir / fname)
         target = install_dir / "grok-install.yaml"
         target.write_text(text, encoding="utf-8")

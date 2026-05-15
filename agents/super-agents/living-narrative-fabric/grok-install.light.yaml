@@ -1,0 +1,28 @@
+# Living Narrative Fabric — LIGHT tier.
+# Zero install: the agent IS light/prompt.md, run in-chat on Grok/X.
+# Categorised as a creator-template (not super-agent) on purpose: Light has
+# NO append-only provenance subsystem or rewindable memory — claiming the
+# super-agent provenance contract here would be a false claim. The Heavy
+# tier (grok-install.yaml) is the provenance-keeping super-agent.
+version: '2.14'
+name: living-narrative-fabric-light
+description: >-
+  Light, in-chat tier of Living Narrative Fabric: single-shot provenance-first
+  synthesis that cites every claim and surfaces contradictions without ever
+  silently picking a winner. No persistent memory or provenance log — that is
+  the Heavy tier (xlos run living-narrative-fabric).
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+    - ide
+category: creator-template
+extensions:
+  tier: light
+  constitution:
+    - I
+    - III
+    - VII
+  light_prompt: light/prompt.md
+  heavy_variant: living-narrative-fabric

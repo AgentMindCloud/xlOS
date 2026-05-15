@@ -3,8 +3,8 @@
   "generated_by": "scripts/build_repo_map.py",
   "summary": {
     "agents_total": 33,
-    "available": 0,
-    "spec": 33
+    "available": 1,
+    "spec": 32
   },
   "sections": {
     "grok-install/": "Agent install standard: standard, validator, templates, mint flow.",
@@ -275,9 +275,9 @@
       "section": "super-agents",
       "category": "super-agent",
       "tier": "heavy",
-      "status": "spec",
+      "status": "available",
       "path": "agents/super-agents/living-narrative-fabric",
-      "run": "\u2014"
+      "run": "xlos run living-narrative-fabric"
     },
     {
       "name": "narrative-contradiction-detector",

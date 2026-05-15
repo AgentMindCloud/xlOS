@@ -395,7 +395,7 @@
     "tagline": "Versioned, provenance-first synthesis across X, news, academia, government, and the open web — with full contradiction detection that never silently picks a winner.",
     "description": "Versioned, provenance-first synthesis across X, news, academia, government, and the open web — with full contradiction detection that never silently picks a winner.",
     "category": "developer",
-    "status": "spec",
+    "status": "available",
     "tags": [
       "synthesize",
       "rewind_to_version",
@@ -410,7 +410,11 @@
       "crawl4ai_fetch",
       "super-agent"
     ],
-    "certifications": [],
+    "certifications": [
+      "grok-native",
+      "safety-max",
+      "vscode-verified"
+    ],
     "creator": {
       "handle": "@AgentMindCloud",
       "github": "AgentMindCloud",

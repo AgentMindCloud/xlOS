@@ -143,6 +143,7 @@ cost_limits:
   usd_per_day_max: 10.0
   tokens_per_session_max: 500000
 extensions:
+  tier: heavy
   constitution:
   - I
   - II
@@ -296,4 +297,10 @@ extensions:
   runtime_dispatch:
     type: python_module
     module: orchestrator
+    workdir: impl
+    args:
+    - --topic
+    - Grok Agent OS launch
+    - --time-range
+    - 7d
   original_kind: super-agent
