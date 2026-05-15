@@ -2,7 +2,7 @@
 
 Machine-readable source: [`repo-map.json`](repo-map.json). This is the honesty ledger — `available` means it runs end-to-end with passing tests; `spec` means manifest-only (implementation being rebuilt).
 
-**33 agents** — 1 available, 32 spec.
+**34 agents** — 2 available, 32 spec.
 
 ## Sections
 
@@ -46,6 +46,7 @@ Machine-readable source: [`repo-map.json`](repo-map.json). This is the honesty l
 | x-money-companion-dashboard | finance | heavy | spec | `—` |
 | x-money-vision-analyzer | finance | heavy | spec | `—` |
 | x-smart-cashtag-alpha-engine | finance | heavy | spec | `—` |
+| creator-x-co-pilot | flagship | light | available | `agents/flagship/creator-x-co-pilot/light/prompt.md` |
 | agent-swarm-with-shared-memory | super-agents | heavy | spec | `—` |
 | cross-reality-action-fabric | super-agents | heavy | spec | `—` |
 | living-narrative-fabric | super-agents | heavy | available | `xlos run living-narrative-fabric` |

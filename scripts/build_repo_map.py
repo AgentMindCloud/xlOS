@@ -35,9 +35,7 @@ SECTIONS = {
 
 def _status(agent_dir: Path) -> str:
     impl = agent_dir / "impl"
-    if impl.is_dir() and any(
-        p.suffix == ".py" or p.is_dir() for p in impl.iterdir()
-    ):
+    if impl.is_dir() and any(p.suffix == ".py" or p.is_dir() for p in impl.iterdir()):
         return "available"
     if (agent_dir / "light" / "prompt.md").is_file():
         return "available"
@@ -102,9 +100,7 @@ def main() -> int:
         "sections": SECTIONS,
         "agents": agents,
     }
-    (ROOT / "repo-map.json").write_text(
-        json.dumps(repo_map, indent=2) + "\n", encoding="utf-8"
-    )
+    (ROOT / "repo-map.json").write_text(json.dumps(repo_map, indent=2) + "\n", encoding="utf-8")
 
     lines = [
         "# Repo Map",
@@ -120,7 +116,13 @@ def main() -> int:
     ]
     for path, desc in SECTIONS.items():
         lines.append(f"- `{path}` — {desc}")
-    lines += ["", "## Agents", "", "| Agent | Section | Tier | Status | Run |", "|---|---|---|---|---|"]
+    lines += [
+        "",
+        "## Agents",
+        "",
+        "| Agent | Section | Tier | Status | Run |",
+        "|---|---|---|---|---|",
+    ]
     for a in agents:
         lines.append(
             f"| {a['name']} | {a['section']} | {a['tier']} | {a['status']} | `{a['run']}` |"

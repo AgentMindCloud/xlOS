@@ -2,8 +2,8 @@
   "repo": "AgentMindCloud/xlOS",
   "generated_by": "scripts/build_repo_map.py",
   "summary": {
-    "agents_total": 33,
-    "available": 1,
+    "agents_total": 34,
+    "available": 2,
     "spec": 32
   },
   "sections": {
@@ -251,6 +251,15 @@
       "status": "spec",
       "path": "agents/finance/x-smart-cashtag-alpha-engine",
       "run": "\u2014"
+    },
+    {
+      "name": "creator-x-co-pilot",
+      "section": "flagship",
+      "category": "creator-template",
+      "tier": "light",
+      "status": "available",
+      "path": "agents/flagship/creator-x-co-pilot",
+      "run": "agents/flagship/creator-x-co-pilot/light/prompt.md"
     },
     {
       "name": "agent-swarm-with-shared-memory",

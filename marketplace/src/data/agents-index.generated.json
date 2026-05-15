@@ -218,6 +218,31 @@
     "featured": false
   },
   {
+    "id": "creator-x-co-pilot",
+    "name": "creator-x-co-pilot",
+    "tagline": "The flagship X creator co-pilot: in one chat it ideates, drafts replies and threads in your voice, gives a quick analytics read, and adds cited context — composing the strongest creator patterns with Living Narrative Fabric's cite-everyt…",
+    "description": "The flagship X creator co-pilot: in one chat it ideates, drafts replies and threads in your voice, gives a quick analytics read, and adds cited context — composing the strongest creator patterns with Living Narrative Fabric's cite-everything, never-resolve-contradictions discipline. Zero install.",
+    "category": "content",
+    "status": "available",
+    "tags": [],
+    "certifications": [
+      "grok-native",
+      "action-certified",
+      "vscode-verified"
+    ],
+    "creator": {
+      "handle": "@AgentMindCloud",
+      "github": "AgentMindCloud",
+      "avatar": "https://avatars.githubusercontent.com/AgentMindCloud"
+    },
+    "repo": "AgentMindCloud/xlOS",
+    "homepage": "https://github.com/AgentMindCloud/xlOS/tree/main/agents/flagship/creator-x-co-pilot",
+    "created_at": "2026-05-11T00:00:00.000Z",
+    "updated_at": "2026-05-11T00:00:00.000Z",
+    "installs": 0,
+    "featured": false
+  },
+  {
     "id": "cross-platform-reposter",
     "name": "cross-platform-reposter",
     "tagline": "Local-first cross-platform repost helper for X creators — turns a single X post into 2-3 variants per target platform (LinkedIn / Threads / Bluesky / Newsletter) with 4 official Variant Score metrics (Voice fidelity / Platform fit / Enga…",

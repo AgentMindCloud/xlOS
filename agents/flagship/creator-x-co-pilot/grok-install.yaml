@@ -1,0 +1,37 @@
+# Creator X Co-Pilot — the flagship hero experience.
+# Light-first: zero install, runs in-chat on Grok/X. The agent IS
+# light/prompt.md. A Heavy local tier (persistent brand-voice memory,
+# provenance, money context, eval loop) is on the v1.0 roadmap and is NOT
+# claimed here — Light must not imply state it does not keep.
+version: '2.14'
+name: creator-x-co-pilot
+description: >-
+  The flagship X creator co-pilot: in one chat it ideates, drafts replies and
+  threads in your voice, gives a quick analytics read, and adds cited context —
+  composing the strongest creator patterns with Living Narrative Fabric's
+  cite-everything, never-resolve-contradictions discipline. Zero install.
+runtime:
+  engine: grok
+  model: grok-4.3
+deploy:
+  targets:
+    - ide
+    - action
+category: creator-template
+extensions:
+  tier: light
+  constitution:
+    - I
+    - III
+    - VII
+  light_prompt: light/prompt.md
+  flagship: true
+  composes:
+    - content-idea-generator
+    - reply-drafter
+    - thread-builder
+    - analytics-summarizer
+    - living-narrative-fabric-light
+  heavy_roadmap: >-
+    Heavy tier (persistent brand-voice memory, append-only provenance, X Money
+    context, weekly eval loop) is planned, not shipped. Do not claim it.
