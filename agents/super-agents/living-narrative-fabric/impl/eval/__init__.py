@@ -6,7 +6,7 @@
 Built for xAI, X, Grok and the ecosystem community. ❤️
 
 This package wires Promptfoo + DeepEval into a weekly self-improvement
-loop the user can run on Windows with one PowerShell command. It:
+loop the user can run with one command. It:
 
 * Re-runs the 4 deterministic standard metrics on every persisted
   ``SynthesisVersion`` (or one explicitly passed by the caller):
@@ -31,8 +31,8 @@ Slot boundary contract
   ``self_improvement`` slot. Instead, the eval layer reads
   ``SynthesisVersion``s from the memory store and emits provenance
   events into the existing logger. This keeps Slot 6 purely additive
-  and makes ``run_weekly_eval`` runnable as a standalone PowerShell
-  cron job (``schtasks /create /sc weekly``).
+  and makes ``run_weekly_eval`` runnable as a standalone scheduled
+  job (cron, Task Scheduler, or any scheduler).
 * The composite class (``SelfImprovementLoop``) exposes the user-listed
   5 rich methods: ``run_weekly_eval``, ``score_synthesis``,
   ``suggest_prompt_updates``, ``apply_improvements``,
@@ -527,9 +527,9 @@ _SUGGESTION_TEMPLATES = {
             "missing bridges, wrong audit trigger, or empty source_ids."
         ),
         "suggested_change": (
-            "Run `safety/scanner.py` against the manifest before re-running "
-            "synthesis. In `prompts/system.md`, prepend the 5 Constitution "
-            "rules from §12 of CLAUDE.md as a non-negotiable system preamble."
+            "Run the Constitution scanner against the manifest before "
+            "re-running synthesis. In `prompts/system.md`, prepend this "
+            "agent's Constitution rules as a non-negotiable system preamble."
         ),
         "target_file": "prompts/system.md",
     },

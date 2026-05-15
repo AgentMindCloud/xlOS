@@ -93,8 +93,8 @@ Constitution rules enforced at runtime
   the first version on a topic). Slot 3's memory layer makes the rewind
   walk persistent.
 
-CLI smoke test (Windows 11 + PowerShell)
-========================================
+CLI smoke test
+==============
 
 ::
 
@@ -1372,7 +1372,7 @@ def _default_stub_sources() -> tuple[SourceClient, ...]:
 
 
 # ---------------------------------------------------------------------------
-# CLI smoke test (Windows 11 + PowerShell)
+# CLI smoke test
 # ---------------------------------------------------------------------------
 
 
@@ -1387,7 +1387,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent(
             """\
-            Examples (Windows 11 + PowerShell):
+            Examples:
 
               python orchestrator.py --topic "Grok Agent OS launch" --time-range 7d
               python orchestrator.py --topic "$XAI" --time-range 30d --audit

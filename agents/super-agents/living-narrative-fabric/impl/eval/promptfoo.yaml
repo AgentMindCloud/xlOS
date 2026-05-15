@@ -8,7 +8,7 @@
 # This YAML serves two consumers:
 #
 #   1. Promptfoo CLI — run via `npx promptfoo eval -c promptfoo.yaml` when
-#      Node.js is available on the developer's Windows box. Promptfoo
+#      Node.js is available (any OS). Promptfoo
 #      reads the `prompts` + `providers` + `tests` sections and executes
 #      its standard pipeline.
 #

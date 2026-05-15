@@ -35,7 +35,7 @@ Every tab has TWO functions:
 This means the smoke test (``python dashboard.py --smoke``) exercises
 every data builder against a real wired stack — without ``streamlit``
 on PYTHONPATH. The actual UI rendering is exercised only in the
-PowerShell launcher path.
+Streamlit launcher path.
 
 Slot boundary contract
 ======================
@@ -51,8 +51,8 @@ Slot boundary contract
 * Article V.1 disclaimer auto-attaches to every tab when the active
   topic / version contains finance subjects.
 
-CLI smoke test (Windows 11 + PowerShell)
-========================================
+CLI smoke test
+==============
 
 ::
 
@@ -1280,7 +1280,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent(
             """\
-            Examples (Windows 11 + PowerShell):
+            Examples:
 
               python -m pip install -r requirements.txt
               python dashboard.py --smoke

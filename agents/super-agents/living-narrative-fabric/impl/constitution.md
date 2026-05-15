@@ -12,8 +12,22 @@
 > This document is the single source of truth for every runtime rule
 > the Living Narrative Fabric Super Agent enforces. It is referenced
 > by `grok-agent.yaml`'s `constitution.file` field and is scanned at
-> install time by `safety/scanner.py`. Violations raise the
-> `ConstitutionViolation` exception defined in `orchestrator.py:362`.
+> install time by the Constitution scanner. Violations raise the
+> `ConstitutionViolation` exception defined in `orchestrator.py`.
+
+---
+
+> **xlOS adaptation note.** This is the agent's original v1.0
+> Constitution, retained for its substance — the rules and their
+> code-mapped enforcement points. Where the legacy text below assumes a
+> Windows-only / PowerShell runtime, a `v2.15` / `grok-agent.yaml`
+> manifest, a `CLAUDE.md`, or a `_bridges/registry.json`, that language
+> is **superseded** by xlOS: the runtime is cross-platform Python; the
+> active manifest is `grok-install.yaml` (v2.14 + the `extensions:`
+> block, validated against `spec/v2.14/schema.json`); per-user state
+> uses `platformdirs`; and the original v2.15 manifest is kept only as
+> `grok-agent.v215.reference.yaml` for provenance. The Articles'
+> substantive rules and enforcement points remain in force.
 
 ---
 
@@ -40,20 +54,20 @@ session.
 1. The agent ships under **Apache License 2.0**. Every code/config
    file in this folder MUST carry the three-line Apache 2.0 header
    in its native comment style.
-2. The agent is **Windows 11 + PowerShell** first. Every install
-   instruction, launcher, README example, and CI script that the end
-   user runs MUST be PowerShell. Bash inside `.github/workflows/*.yml`
-   on `ubuntu-latest` is permitted (CI runner choice); user-visible
-   commands are PowerShell.
+2. The agent is **cross-platform** (macOS, Linux, Windows). Every
+   install instruction, launcher, and example the end user runs is
+   Python and behaves identically on every OS. Per-user state uses the
+   platform data directory via `platformdirs` — never a hardcoded
+   OS-specific path.
 3. Every user-facing markdown file in this folder MUST carry the
    "Built for xAI, X, Grok and the ecosystem community" line — phrasing rotated, never
    copy-pasted across files.
-4. The manifest at `grok-agent.yaml` MUST declare `version: "2.15"`
-   and validate against `spec/v2.15/grok-agent.yaml`. v2.15 is
-   purely additive over v2.14 — any v2.14 manifest validates as
-   v2.15 unchanged.
-5. The 13 original repos listed in `CLAUDE.md` §13 are reference-only.
-   Functionality is **copied** into this folder, never imported.
+4. In xlOS the active manifest is `grok-install.yaml` and MUST declare
+   `version: "2.14"` and validate against `spec/v2.14/schema.json`
+   (plus the optional `extensions:` block). The original v2.15 manifest
+   is retained only as `grok-agent.v215.reference.yaml` for provenance.
+5. Upstream reference repos are reference-only. Functionality is
+   **copied** into this folder, never imported.
 
 **Enforcement points**: `safety/scanner.py` (install-time +
 PR-time); manual review.
@@ -130,8 +144,10 @@ Explorer and Provenance Reports tabs both expose rewind controls.
 
 ## Article V — Provenance Is Append-Only
 
-1. The official provenance log is the JSONL stream at
-   `$env:LOCALAPPDATA\grok-agent\living-narrative-fabric\provenance\events.jsonl`.
+1. The official provenance log is the append-only JSONL stream under
+   the platform per-user data directory (resolved via `platformdirs` /
+   `orchestrator._default_appdata_root()`), at
+   `<user-data>/living-narrative-fabric/provenance/events.jsonl`.
 2. Every event is appended exactly once. There is **no** update
    path, **no** delete path, and **no** truncation.
 3. Mirrored writes into `Mem0QdrantStore.audit_trail` use SQL
@@ -250,7 +266,7 @@ on its own. The Mem0+Qdrant memory layer, provenance log, and
 self-improvement loop are local-only. Any operation that:
 
 * Publishes a synthesis to X (or anywhere else),
-* Exports a provenance log outside `$env:LOCALAPPDATA`,
+* Exports a provenance log outside the per-user data directory,
 * Applies a `PromptSuggestion` to a real prompt file,
 * Sends a DM, posts a tweet, or moves money,
 
@@ -271,7 +287,8 @@ enumerates the four gated actions.
 
 ## Article X — Local-First and Privacy-First
 
-1. All user data lives under `$env:LOCALAPPDATA\grok-agent\living-narrative-fabric\`.
+1. All user data lives under the platform per-user data directory
+   (resolved via `platformdirs`), in a `living-narrative-fabric/` subfolder.
 2. The dashboard runs in `force_stub` mode by default — no API keys
    are sent anywhere on a fresh install.
 3. The dashboard's Settings tab displays env-var **presence** only,
@@ -335,18 +352,14 @@ Future amendments require:
 
 ---
 
-## Article VII.1 — Registry-Backed Citation Contracts
+## Article VII.1 — Cross-Agent Citation Contracts
 
-All cross-agent citations are formally encoded in
-[`templates/super-agents/_bridges/registry.json`](../_bridges/registry.json) (v1.0+).
-The registry defines which Super Agents this agent may cite, what type
-of citation (data, action, synthesis, contradiction-flag, or memory),
-and which consent gates control each citation. The registry enforces
-Article VII (≥3 bridges per synthesis) and ensures `reciprocal: true`
-citations are mutually acknowledged. The safety scanner verifies at
-install time that every bridge listed in this agent's `grok-agent.yaml`
-exists as a forward entry in the registry; reciprocal entries must
-have a matching reverse entry in the cited agent's block.
+The ≥3-bridge rule in Article VII is enforced **in code** by
+`_node_finalize` (`orchestrator.py`) and the eval metrics in
+`eval/deepeval_suite.py`. The legacy `_bridges/registry.json`
+cross-agent citation registry from the original repo is **not** part
+of xlOS and is not referenced or verified here; bridges are validated
+solely by the in-code ≥3 rule above.
 
 ---
 

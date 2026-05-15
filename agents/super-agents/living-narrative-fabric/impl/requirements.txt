@@ -19,10 +19,10 @@
 # orchestrator dispatches to a locally-running Mastra sidecar via HTTP
 # when ``MASTRA_HTTP_URL`` is set. If you want to opt into Mastra:
 #
-#   1. Install Node 20+ on Windows (winget install OpenJS.NodeJS).
+#   1. Install Node 20+ (any OS).
 #   2. Bootstrap the sidecar (sidecar template ships in Slot 4 / P112):
 #        npx create-mastra@latest grok-agent-mastra-sidecar
-#   3. ``$env:MASTRA_HTTP_URL = "http://localhost:4111/api/v1"``
+#   3. Set MASTRA_HTTP_URL=http://localhost:4111/api/v1
 #
 # When the sidecar is unreachable (or Node is not installed at all),
 # the orchestrator falls through to LangGraph in-process — the deps
