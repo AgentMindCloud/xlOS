@@ -49,6 +49,27 @@ function deriveCertifications(yamlData) {
   return Array.from(certs);
 }
 
+// Honest status: an agent is 'available' only if a real implementation is
+// present — a non-empty impl/ directory (Heavy) or a Light prompt the agent
+// actually IS. Manifest-only specifications are 'spec'. Certifications are
+// suppressed for 'spec' so the marketplace never asserts capabilities that
+// have no code behind them.
+function deriveStatus(agentAbsDir) {
+  try {
+    const implDir = path.join(agentAbsDir, 'impl');
+    if (fs.existsSync(implDir) && fs.statSync(implDir).isDirectory()) {
+      const hasCode = fs
+        .readdirSync(implDir)
+        .some((f) => f.endsWith('.py') || fs.statSync(path.join(implDir, f)).isDirectory());
+      if (hasCode) return 'available';
+    }
+    if (fs.existsSync(path.join(agentAbsDir, 'light', 'prompt.md'))) return 'available';
+  } catch {
+    /* fall through to spec */
+  }
+  return 'spec';
+}
+
 function deriveTags(yamlData) {
   const tags = new Set();
   if (Array.isArray(yamlData.tools)) {
@@ -61,19 +82,23 @@ function deriveTags(yamlData) {
   return Array.from(tags).slice(0, 12);
 }
 
-function transform(yamlData, categoryDir, agentDirName) {
+function transform(yamlData, categoryDir, agentDirName, agentAbsDir) {
   const id = slugify(yamlData.name || agentDirName);
   const desc = (yamlData.description || '').trim();
   const sourceCategory = yamlData.category;
   const category = CATEGORY_MAP[sourceCategory] || 'developer';
+  const status = deriveStatus(agentAbsDir);
   return {
     id,
     name: yamlData.name || agentDirName,
     tagline: firstSentence(desc, yamlData.name || agentDirName),
     description: desc || `${agentDirName} (no description in manifest).`,
     category,
+    status,
     tags: deriveTags(yamlData),
-    certifications: deriveCertifications(yamlData),
+    // Honesty gate: only an agent with a real implementation may carry
+    // certification badges. Specifications carry none.
+    certifications: status === 'available' ? deriveCertifications(yamlData) : [],
     creator: {
       handle: '@AgentMindCloud',
       github: 'AgentMindCloud',
@@ -115,12 +140,13 @@ function main() {
   const agents = [];
   for (const cat of listSubdirs(AGENTS_ROOT)) {
     for (const agentDir of listSubdirs(path.join(AGENTS_ROOT, cat))) {
-      const yamlPath = path.join(AGENTS_ROOT, cat, agentDir, 'grok-install.yaml');
+      const agentAbsDir = path.join(AGENTS_ROOT, cat, agentDir);
+      const yamlPath = path.join(agentAbsDir, 'grok-install.yaml');
       if (!fs.existsSync(yamlPath)) continue;
       try {
         const data = yaml.parse(fs.readFileSync(yamlPath, 'utf-8'));
         if (!data || typeof data !== 'object') continue;
-        agents.push(transform(data, cat, agentDir));
+        agents.push(transform(data, cat, agentDir, agentAbsDir));
       } catch (err) {
         console.warn(`[build-agents-index] failed to parse ${yamlPath}: ${err.message}`);
       }

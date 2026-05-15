@@ -48,12 +48,18 @@ export interface AgentVisuals {
   subheadline?: string;
 }
 
+// 'available' = implementation present (Heavy impl/ or a Light prompt) so the
+// agent genuinely runs. 'spec' = manifest-only specification, implementation
+// being rebuilt. Certifications are only asserted for 'available' agents.
+export type AgentStatus = 'available' | 'spec';
+
 export interface Agent {
   id: string;
   name: string;
   tagline: string;
   description: string;
   category: Category;
+  status: AgentStatus;
   tags: string[];
   certifications: Certification[];
   creator: AgentCreator;
